@@ -1,7 +1,7 @@
 
 from simple_quant.engine import BacktestEngine
 from simple_quant.data.csv_data import HistoricCSVDataHandler
-from simple_quant.portfolio.simple import NaivePortfolio
+from simple_quant.portfolio.simple import RobustPortfolio
 from simple_quant.execution.backtest import SimulatedExecutionHandler
 from simple_quant.strategy.std_strategies import MovingAverageCrossStrategy, RSIStrategy
 from queue import Queue
@@ -17,7 +17,7 @@ def run_strategy(strategy_cls, strategy_name, symbol_list, initial_capital=10000
     
     data_handler = HistoricCSVDataHandler(events, csv_dir, symbol_list)
     strategy = strategy_cls(data_handler, events, **kwargs)
-    portfolio = NaivePortfolio(data_handler, events, start_date, initial_capital=initial_capital)
+    portfolio = RobustPortfolio(data_handler, events, start_date, initial_capital=initial_capital)
     execution_handler = SimulatedExecutionHandler(events, data_handler)
     
     engine = BacktestEngine(data_handler, strategy, portfolio, execution_handler)
@@ -28,6 +28,8 @@ def run_strategy(strategy_cls, strategy_name, symbol_list, initial_capital=10000
     stats = portfolio.output_summary_stats()
     
     print("\nPerformance Statistics:")
+    # RobustPortfolio returns a list of tuples or list? Check implementation.
+    # It returns list of tuples [("Key", "Value"), ...]
     for s in stats:
         print(f"{s[0]}: {s[1]}")
         

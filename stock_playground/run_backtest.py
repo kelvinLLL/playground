@@ -1,7 +1,7 @@
 from simple_quant.engine import BacktestEngine
 from simple_quant.data.csv_data import HistoricCSVDataHandler
 from simple_quant.strategy.examples import MovingAverageCrossStrategy
-from simple_quant.portfolio.simple import NaivePortfolio
+from simple_quant.portfolio.simple import RobustPortfolio
 from simple_quant.execution.backtest import SimulatedExecutionHandler
 from queue import Queue
 from datetime import datetime
@@ -25,7 +25,7 @@ def run_backtest():
     strategy = MovingAverageCrossStrategy(data_handler, events, short_window=10, long_window=50)
     
     # 3. Portfolio
-    portfolio = NaivePortfolio(data_handler, events, start_date, initial_capital=initial_capital)
+    portfolio = RobustPortfolio(data_handler, events, start_date, initial_capital=initial_capital)
     
     # 4. Execution Handler
     execution_handler = SimulatedExecutionHandler(events, data_handler)
