@@ -29,11 +29,11 @@ class MovingAverageCrossStrategy(Strategy):
                     dt = self.bars.get_latest_bar_datetime(s)
                     
                     if short_sma > long_sma and self.bought[s] == 'OUT':
-                        print(f"LONG: {s} at {dt}")
+                        # print(f"LONG: {s} at {dt}")
                         self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='LONG', strength=1.0))
                         self.bought[s] = 'LONG'
                     elif short_sma < long_sma and self.bought[s] == 'LONG':
-                        print(f"EXIT: {s} at {dt}")
+                        # print(f"EXIT: {s} at {dt}")
                         self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='EXIT', strength=1.0))
                         self.bought[s] = 'OUT'
 
@@ -106,10 +106,10 @@ class RSIStrategy(Strategy):
                     dt = self.bars.get_latest_bar_datetime(s)
                     
                     if rsi < self.buy_threshold and self.bought[s] == 'OUT':
-                        print(f"LONG (RSI={rsi:.2f}): {s} at {dt}")
+                        # print(f"LONG (RSI={rsi:.2f}): {s} at {dt}")
                         self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='LONG', strength=1.0))
                         self.bought[s] = 'LONG'
                     elif rsi > self.sell_threshold and self.bought[s] == 'LONG':
-                         print(f"EXIT (RSI={rsi:.2f}): {s} at {dt}")
+                         # print(f"EXIT (RSI={rsi:.2f}): {s} at {dt}")
                          self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='EXIT', strength=1.0))
                          self.bought[s] = 'OUT'

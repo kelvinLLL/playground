@@ -1,0 +1,15 @@
+{
+  "id": "e8432217",
+  "prompt": "Simple Moving Average Crossover 5 and 20",
+  "created_at": "2026-01-21 21:17:11.728412",
+  "metrics_train": {
+    "Total Return": 0.0077,
+    "Sharpe Ratio": 0.08,
+    "Sortino Ratio": 0.12,
+    "Calmar Ratio": 0.04,
+    "Max Drawdown": 0.055,
+    "Drawdown Duration": 665.0,
+    "Stability Score": 0.07
+  },
+  "code_path": "/home/kelvin11888/my_house/playground/stock_playground/generated_strategies/strategy_20260121_211709_e8432217/strategy.py"
+}

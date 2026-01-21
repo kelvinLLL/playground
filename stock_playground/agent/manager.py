@@ -5,8 +5,9 @@ import uuid
 import sys
 from datetime import datetime
 
-# Add project root
+# Add project root and stock_playground to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 from stock_playground.agent.client import LLMClient
 from stock_playground.agent.context import StrategyContext
@@ -38,8 +39,10 @@ class StrategyManager:
         system_prompt = StrategyContext.get_system_prompt()
         current_prompt = f"Create a trading strategy based on this idea: {prompt_idea}"
         
+        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
         session_id = str(uuid.uuid4())[:8]
-        strategy_dir = os.path.join(self.output_base, f"strategy_{session_id}")
+        strategy_dir_name = f"strategy_{timestamp_str}_{session_id}"
+        strategy_dir = os.path.join(self.output_base, strategy_dir_name)
         os.makedirs(strategy_dir, exist_ok=True)
         
         file_path = os.path.join(strategy_dir, "strategy.py")
@@ -53,6 +56,12 @@ class StrategyManager:
             try:
                 # If retrying, we append the error context to the user prompt
                 code = self.client.generate_code(current_prompt, system_prompt)
+                
+                # Add timestamp header to code
+                header = f'"""\nStrategy Generated at: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\nPrompt: {prompt_idea}\n"""\n\n'
+                if not code.startswith('"""'):
+                    code = header + code
+                    
             except Exception as e:
                 print(f"LLM Error: {e}")
                 return False

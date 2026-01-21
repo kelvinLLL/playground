@@ -103,7 +103,12 @@ class RobustPortfolio(Portfolio):
                 cur_qty = self.current_positions.get(symbol, 0)
                 if cur_qty != 0:
                     exit_dir = 'SELL' if cur_qty > 0 else 'BUY'
-                    order = OrderEvent(symbol, abs(cur_qty), exit_dir, order_type)
+                    order = OrderEvent(
+                        symbol=symbol, 
+                        quantity=abs(cur_qty), 
+                        direction=exit_dir, 
+                        order_type=order_type
+                    )
                     self.events.put(order)
                 return
 
@@ -126,7 +131,12 @@ class RobustPortfolio(Portfolio):
 
             if quantity > 0:
                 order_dir = 'BUY' if direction == 'LONG' else 'SELL'
-                order = OrderEvent(symbol, quantity, order_dir, order_type)
+                order = OrderEvent(
+                    symbol=symbol, 
+                    quantity=quantity, 
+                    direction=order_dir, 
+                    order_type=order_type
+                )
                 self.events.put(order)
 
     # ========================================================

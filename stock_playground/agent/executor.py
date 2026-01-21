@@ -7,8 +7,9 @@ from queue import Queue
 from datetime import datetime
 import pandas as pd
 
-# Add project root
+# Add project root and stock_playground to path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 from stock_playground.simple_quant.engine import BacktestEngine
 from stock_playground.simple_quant.data.csv_data import HistoricCSVDataHandler

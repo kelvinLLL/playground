@@ -4,7 +4,7 @@ import sys
 from datetime import datetime, timedelta
 
 # Add project root to path to import simple_quant
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from simple_quant.data.tdx_source import TDXSource
 
