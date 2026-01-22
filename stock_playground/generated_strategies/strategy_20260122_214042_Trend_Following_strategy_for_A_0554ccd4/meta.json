@@ -1,0 +1,15 @@
+{
+  "id": "0554ccd4",
+  "prompt": "Trend Following strategy for AI sector. Use Donchian Channel (20-day High/Low) breakout. Buy when Close > 20-day High. Sell when Close < 10-day Low. Use ATR(14) for volatility sizing: position size = 1% risk / (2 * ATR). Max position size 20%.",
+  "created_at": "2026-01-22 21:41:13.460271",
+  "metrics_train": {
+    "Total Return": 0.0031,
+    "Sharpe Ratio": 0.04,
+    "Sortino Ratio": 0.06,
+    "Calmar Ratio": 0.02,
+    "Max Drawdown": 0.045899999999999996,
+    "Drawdown Duration": 662.0,
+    "Stability Score": 0.04
+  },
+  "code_path": "/home/kelvin11888/my_house/playground/stock_playground/generated_strategies/strategy_20260122_214042_Trend_Following_strategy_for_A_0554ccd4/strategy.py"
+}

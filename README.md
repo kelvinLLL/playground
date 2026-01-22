@@ -61,10 +61,15 @@ MODEL_NAME=deepseek-coder
 
 ### 3. 获取数据
 
-下载 A 股（如 茅台、平安）过去 5 年的历史数据：
+#### 按板块批量下载 (推荐)
+本项目内置了精选的板块数据获取脚本，支持 **TDX (通达信)** 高速接口，并自动降级到 **Yahoo Finance**。
 
 ```bash
-python stock_playground/scripts/fetch_tdx_data.py
+# 获取 AI/硬科技板块 (科大讯飞, 工业富联等)
+python stock_playground/scripts/fetch_sector_data.py --sector ai
+
+# 获取 稳健/高股息板块 (茅台, 长江电力等)
+python stock_playground/scripts/fetch_sector_data.py --sector stable
 ```
 
 ### 4. 运行 AI 策略代理
@@ -78,18 +83,22 @@ python stock_playground/agent/manager.py "写一个基于 RSI 超买超卖的均
 
 ### 5. 探索最佳参数
 
-对现有策略（如双均线）进行参数挖掘和稳健性测试：
+对 AI 板块进行参数挖掘和稳健性测试：
 
 ```bash
-python stock_playground/explore_strategies.py
+python stock_playground/explore_strategies.py --data_dir stock_playground/data/ai
 ```
 
-### 6. 通用回测
+### 6. 策略可视化
 
-对本地所有数据文件运行基准策略回测：
+将回测结果可视化为图表，直观查看买卖点：
 
 ```bash
-python stock_playground/run_universal_backtest.py
+python stock_playground/visualize_strategy.py \
+    stock_playground/generated_strategies/YOUR_STRATEGY_FOLDER/strategy.py \
+    --data stock_playground/data/ai \
+    --symbol 002230.SZ \
+    --output result.png
 ```
 
 ---
@@ -106,12 +115,15 @@ playground/
 │   │   ├── portfolio/         # 投资组合与资金管理 (RobustPortfolio)
 │   │   ├── execution/         # 订单执行模拟
 │   │   └── engine.py          # 事件驱动回测引擎
-│   ├── scripts/               # 数据获取脚本
+│   ├── scripts/               # 数据获取脚本 (fetch_sector_data.py)
 │   ├── generated_strategies/  # AI 生成的策略仓库
 │   ├── explore_strategies.py  # 参数探索脚本
-│   └── run_universal_backtest.py # 通用回测入口
+│   └── visualize_strategy.py  # 可视化工具
 ├── data/                      # 历史行情数据 (.csv)
-├── docs/                      # 文档
+├── docs/                      # 详细文档
+│   ├── STRATEGY_GUIDE.md      # 策略指南 & Agent Prompt 手册
+│   ├── QUANT_INDICATORS_GUIDE.md # 指标深度解析
+│   └── DATA_SELECTION_STRATEGY.md # 选品策略
 ├── .env                       # 环境变量配置
 └── requirements.txt           # 项目依赖
 ```

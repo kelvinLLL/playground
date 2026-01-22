@@ -1,0 +1,15 @@
+{
+  "id": "2f897884",
+  "prompt": "Dual SMA (10, 50) strategy with ATR(14) trailing stop loss of 3.0 times ATR.",
+  "created_at": "2026-01-22 00:24:54.889641",
+  "metrics_train": {
+    "Total Return": 0.0077,
+    "Sharpe Ratio": 0.08,
+    "Sortino Ratio": 0.12,
+    "Calmar Ratio": 0.04,
+    "Max Drawdown": 0.055,
+    "Drawdown Duration": 665.0,
+    "Stability Score": 0.07
+  },
+  "code_path": "/home/kelvin11888/my_house/playground/stock_playground/generated_strategies/strategy_20260122_002453_Dual_SMA_10_50_strategy_wit_2f897884/strategy.py"
+}

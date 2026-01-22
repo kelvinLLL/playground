@@ -15,11 +15,17 @@ from stock_playground.simple_quant.portfolio.simple import RobustPortfolio
 from stock_playground.simple_quant.execution.backtest import SimulatedExecutionHandler
 from stock_playground.simple_quant.strategy.std_strategies import MovingAverageCrossStrategy
 
-def evaluate_strategy(strategy_cls, params, symbol_list, start_date, end_date, initial_capital=100000.0):
+import argparse
+
+def evaluate_strategy(strategy_cls, params, symbol_list, start_date, end_date, initial_capital=100000.0, data_dir=None):
     """
     Runs a backtest and returns performance metrics.
     """
-    csv_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
+    if data_dir is None:
+        csv_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
+    else:
+        csv_dir = data_dir
+        
     events = Queue()
     
     # Setup components
@@ -58,8 +64,30 @@ def evaluate_strategy(strategy_cls, params, symbol_list, start_date, end_date, i
 def main():
     print("=== Strategy Exploration Agent ===")
     
+    parser = argparse.ArgumentParser(description='Explore strategy parameters.')
+    parser.add_argument('--data_dir', type=str, default=None, help='Path to data directory (e.g. data/ai)')
+    args = parser.parse_args()
+    
     # 1. Configuration
-    symbol_list = ["600519.SS", "601318.SS", "000001.SZ"]
+    # Auto-discover symbols in the specified or default directory
+    if args.data_dir:
+        base_data_dir = args.data_dir
+    else:
+        base_data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data'))
+        
+    if not os.path.exists(base_data_dir):
+        print(f"Error: Data directory {base_data_dir} does not exist.")
+        return
+
+    files = [f for f in os.listdir(base_data_dir) if f.endswith('.csv')]
+    symbol_list = [f.replace('.csv', '') for f in files]
+    
+    if not symbol_list:
+        print(f"No CSV data found in {base_data_dir}")
+        return
+        
+    print(f"Target Data Directory: {base_data_dir}")
+    print(f"Symbols ({len(symbol_list)}): {symbol_list}")
     
     # Train/Test Split
     train_start = "2020-01-01"
@@ -70,7 +98,6 @@ def main():
     
     print(f"Training Period: {train_start} to {train_end}")
     print(f"Testing Period:  {test_start} to {test_end}")
-    print(f"Symbols: {symbol_list}")
     
     # 2. Define Grid Search Space
     # Moving Average Cross: Short (5-20), Long (20-60)
@@ -94,7 +121,8 @@ def main():
                 params, 
                 symbol_list, 
                 train_start, 
-                train_end
+                train_end,
+                data_dir=base_data_dir
             )
             
             score = stats.get('Stability Score', 0.0)
@@ -133,7 +161,8 @@ def main():
                 params,
                 symbol_list,
                 test_start,
-                test_end
+                test_end,
+                data_dir=base_data_dir
             )
             test_score = test_stats.get('Stability Score', 0.0)
             test_ret = test_stats.get('Total Return', 0.0)

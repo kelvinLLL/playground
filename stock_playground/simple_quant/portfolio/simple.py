@@ -30,6 +30,8 @@ class RobustPortfolio(Portfolio):
         # 使用 Dict 维护当前实时状态
         self.current_positions = dict((s, 0) for s in self.symbol_list)
         self.current_holdings = self.construct_current_holdings()
+        self.equity_curve = None
+        self.trade_history = []  # Store individual trade details for analysis/visualization
 
     def construct_all_positions(self):
         d = dict((k, v) for k, v in [(s, 0) for s in self.symbol_list])
@@ -163,6 +165,17 @@ class RobustPortfolio(Portfolio):
             cost = fill_dir * fill_price * event.quantity
             self.current_holdings['cash'] -= (cost + event.commission)
             self.current_holdings['commission'] += event.commission
+            
+            # Record trade for visualization
+            self.trade_history.append({
+                'datetime': self.bars.get_latest_bar_datetime(event.symbol),
+                'symbol': event.symbol,
+                'action': event.direction, # 'BUY' or 'SELL'
+                'quantity': event.quantity,
+                'price': fill_price,
+                'commission': event.commission,
+                'cost': cost
+            })
             
             # 注意：这里不再去重算 'total' equity。
             # 因为 'total' 包含浮动盈亏，应该由 update_timeindex 在日结时统一计算，

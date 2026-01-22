@@ -39,9 +39,16 @@ class StrategyManager:
         system_prompt = StrategyContext.get_system_prompt()
         current_prompt = f"Create a trading strategy based on this idea: {prompt_idea}"
         
+        # Sanitize prompt for folder name (alphanumeric only, limited length)
+        safe_name = "".join([c if c.isalnum() else "_" for c in prompt_idea[:30]]).strip("_")
+        while "__" in safe_name:
+            safe_name = safe_name.replace("__", "_")
+            
         timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
         session_id = str(uuid.uuid4())[:8]
-        strategy_dir_name = f"strategy_{timestamp_str}_{session_id}"
+        
+        # New folder format: strategy_{timestamp}_{sanitized_prompt}_{id}
+        strategy_dir_name = f"strategy_{timestamp_str}_{safe_name}_{session_id}"
         strategy_dir = os.path.join(self.output_base, strategy_dir_name)
         os.makedirs(strategy_dir, exist_ok=True)
         
