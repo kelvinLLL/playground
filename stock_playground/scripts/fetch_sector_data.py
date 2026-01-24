@@ -9,7 +9,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import yfinance as yf
 import pandas as pd
-from simple_quant.data.tdx_source import TDXSource
+try:
+    from simple_quant.data.tdx_source import TDXSource
+except ImportError:
+    class TDXSource:
+        def __init__(self):
+            self.available = False
+        def fetch_daily_bars(self, *args, **kwargs):
+            return pd.DataFrame()
 
 def fetch_via_yahoo(symbol, start_date, end_date):
     """

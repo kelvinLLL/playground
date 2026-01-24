@@ -1,0 +1,15 @@
+{
+  "id": "36a48519",
+  "prompt": "Test Strategy",
+  "created_at": "2026-01-24 17:15:23.090753",
+  "metrics_train": {
+    "Total Return": 0.12179999999999999,
+    "Sharpe Ratio": 0.66,
+    "Sortino Ratio": 0.94,
+    "Calmar Ratio": 0.35,
+    "Max Drawdown": 0.0832,
+    "Drawdown Duration": 473.0,
+    "Stability Score": 0.6
+  },
+  "code_path": "/Users/haojunliu/Easy/Projects/playground/stock_playground/generated_strategies/strategy_20260124_171522_Test_Strategy_36a48519/strategy.py"
+}

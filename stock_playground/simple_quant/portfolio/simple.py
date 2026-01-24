@@ -115,8 +115,11 @@ class RobustPortfolio(Portfolio):
                 return
 
             # --- 2. 处理开仓 (LONG/SHORT) ---
-            # 示例：固定金额法（每次买入 5000 元的货），而不是固定股数
-            target_amount = 5000.0 
+            # 动态仓位：使用当前可用现金的 95% 进行买入
+            # 这样可以在单标的回测中最大化资金利用率，真实反映策略收益
+            cash = self.current_holdings['cash']
+            target_amount = cash * 0.95
+            
             price_estimate = self.bars.get_latest_bar_value(symbol, "Close")
             
             if price_estimate is None or price_estimate == 0:
