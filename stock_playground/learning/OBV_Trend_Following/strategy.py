@@ -19,7 +19,8 @@ class OBVTrendStrategy(Strategy):
         self.events = events
         self.obv_window = obv_window
         self.symbol_list = self.bars.symbol_list
-        self.bought = dict((s, 'OUT') for s in self.symbol_list)
+        # Store current target weight (float) instead of string status
+        self.bought = dict((s, 0.0) for s in self.symbol_list)
         
     def calculate_obv(self, prices, volumes):
         """
@@ -80,18 +81,61 @@ class OBVTrendStrategy(Strategy):
                 
                 dt = self.bars.get_latest_bar_datetime(s)
                 
-                # 4. Signal Logic: Crossover
+                # 4. Signal Logic: Dynamic Weighting (Modern Method)
                 
-                # GOLDEN CROSS: OBV goes above MA
-                if current_obv > current_obv_ma and prev_obv <= prev_obv_ma:
-                    if self.bought[s] == 'OUT':
-                        print(f"LONG (OBV Breakout): {s} at {dt} | OBV: {current_obv:.0f} > MA: {current_obv_ma:.0f}")
-                        self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='LONG', strength=1.0))
-                        self.bought[s] = 'LONG'
-                        
-                # DEATH CROSS: OBV falls below MA
-                elif current_obv < current_obv_ma and prev_obv >= prev_obv_ma:
-                    if self.bought[s] == 'LONG':
-                        print(f"EXIT (OBV Breakdown): {s} at {dt} | OBV: {current_obv:.0f} < MA: {current_obv_ma:.0f}")
-                        self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='EXIT', strength=1.0))
-                        self.bought[s] = 'OUT'
+                # Calculate Price SMA
+                price_window = 60
+                price_sma_60 = 0.0
+                current_price = 0.0
+                trend_confirmed = False
+                
+                if len(closes) >= price_window:
+                    price_sma_60 = np.mean(closes[-price_window:])
+                    current_price = closes[-1]
+                    trend_confirmed = current_price > price_sma_60
+
+                # --- Decision Logic ---
+                target_weight = 0.0
+                action_label = "WAIT"
+                
+                # Check OBV Trend (Short-term Money Flow)
+                obv_bullish = current_obv > current_obv_ma
+                
+                if obv_bullish:
+                    if trend_confirmed:
+                        # [Aggressive] Money Flow + Price Trend = Heavy Position
+                        target_weight = 0.20 
+                        action_label = "STRONG LONG (Target 20%)"
+                    else:
+                        # [Conservative] Money Flow only = Base Position
+                        target_weight = 0.10
+                        action_label = "WEAK LONG (Target 10%)"
+                else:
+                    # Money Flow Breakdown = Clear
+                    target_weight = 0.0
+                    action_label = "EXIT (Target 0%)"
+
+                # --- Send Signal Only If Changed ---
+                # To prevent spamming signals every day, we track current logic state
+                # But our Portfolio's 'rebalance' logic handles "no change needed" efficiently.
+                # However, sending signal every bar ensures we track weight changes (e.g. 10% -> 20%)
+                
+                # Current simple check: compare with last *trade* direction won't work well for scaling
+                # So we just send signal if the *target tier* changes.
+                # For simplicity in this demo, let's just emit if target > 0 or if we hold it and need to sell.
+                
+                # Simplify: Emit signal if logic implies holding (rebalance will handle sizing) 
+                # or if logic implies exit and we firmly hold it.
+                
+                # Actually, simplest "modern" way: Always emit target weight. 
+                # The Portfolio calculates difference. If difference is small, it won't trade much.
+                # But to keep logs clean, we filter slightly.
+                
+                prev_weight = self.bought.get(s, 0.0)
+                
+                # If target changed significantly (e.g. 0->0.1, 0.1->0.2, 0.2->0), send signal
+                if abs(target_weight - prev_weight) > 0.01:
+                     print(f"{action_label}: {s} at {dt} | OBV_Diff: {current_obv - current_obv_ma:.0f} | Price vs SMA60: {current_price:.2f}/{price_sma_60:.2f}")
+                     self.events.put(SignalEvent(symbol=s, datetime=dt, signal_type='ADJUST', strength=target_weight))
+                     self.bought[s] = target_weight
+

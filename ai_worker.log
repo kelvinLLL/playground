@@ -1,0 +1,1542 @@
+2026-01-26 00:57:21 [INFO] __main__: Starting AI Worker...
+2026-01-26 00:57:21 [INFO] __main__: Initialized workers: ['default', 'intel', 'strategy', 'research']
+2026-01-26 00:57:21 [WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+2026-01-26 00:57:21 [INFO] ai_worker.adapters.discord_adapter: Starting Discord adapter...
+2026-01-26 00:57:21 [INFO] discord.client: logging in using static token
+2026-01-26 00:57:23 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 7a859cc7ed572f5b135c4dadbcd06ed1).
+2026-01-26 00:57:25 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 01:10:59 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 01:11:05 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 1fb14c147a6a9c71d7c1faed1cb93dd6).
+2026-01-26 01:11:07 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 01:12:04 [INFO] discord.gateway: Shard ID None has successfully RESUMED session 1fb14c147a6a9c71d7c1faed1cb93dd6.
+2026-01-26 01:30:47 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 01:30:53 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 3b4885b8f1f5750699a954ea28196cf2).
+2026-01-26 01:30:55 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 01:46:55 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 01:47:01 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: f1c39c353c1322edfeeb0120a58ddbe7).
+2026-01-26 01:47:03 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 02:06:33 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 02:06:34 [ERROR] discord.client: Attempting a reconnect in 1.25s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1313, in _wrap_create_connection
+    return await self._loop.create_connection(*args, **kwargs, sock=sock)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 1159, in create_connection
+    transport, protocol = await self._create_connection_transport(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 1192, in _create_connection_transport
+    await waiter
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/sslproto.py", line 581, in _on_handshake_complete
+    raise handshake_exc
+ConnectionResetError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host gateway-us-east1-b.discord.gg:443 ssl:default [None]
+2026-01-26 02:06:36 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 02:22:50 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 02:22:56 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 4ebc19d849a5245669c932a7444cc266).
+2026-01-26 02:22:58 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 02:27:41 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 02:27:47 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: d2344402354163bd410724f98021d21b).
+2026-01-26 02:27:49 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 02:43:46 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 02:43:52 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 216d28c388092ee24b536e0456e66e81).
+2026-01-26 02:43:54 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 03:00:21 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 03:00:27 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 2d4651a9e1f993180da71a17eaa64a45).
+2026-01-26 03:00:29 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 03:12:42 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 03:12:48 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 3abd3dece55879598b37cb4a74180e4a).
+2026-01-26 03:12:50 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 03:13:24 [ERROR] discord.client: Attempting a reconnect in 3.56s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1313, in _wrap_create_connection
+    return await self._loop.create_connection(*args, **kwargs, sock=sock)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 1159, in create_connection
+    transport, protocol = await self._create_connection_transport(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 1192, in _create_connection_transport
+    await waiter
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/selector_events.py", line 988, in _read_ready__get_buffer
+    nbytes = self._sock.recv_into(buf)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: [Errno 60] Operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host gateway-us-east1-b.discord.gg:443 ssl:default [Operation timed out]
+2026-01-26 03:13:58 [ERROR] discord.client: Attempting a reconnect in 1.10s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:14:30 [ERROR] discord.client: Attempting a reconnect in 15.48s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:15:16 [ERROR] discord.client: Attempting a reconnect in 5.44s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:15:52 [ERROR] discord.client: Attempting a reconnect in 34.35s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:16:57 [ERROR] discord.client: Attempting a reconnect in 79.34s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:18:47 [ERROR] discord.client: Attempting a reconnect in 117.79s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:21:15 [ERROR] discord.client: Attempting a reconnect in 316.61s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:27:02 [ERROR] discord.client: Attempting a reconnect in 516.47s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 03:36:09 [ERROR] discord.client: Attempting a reconnect in 1021.12s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 04:05:52 [ERROR] discord.client: Attempting a reconnect in 148.58s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 04:08:51 [ERROR] discord.client: Attempting a reconnect in 550.04s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 06:01:07 [ERROR] discord.client: Attempting a reconnect in 348.61s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 07:54:26 [ERROR] discord.client: Attempting a reconnect in 819.68s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 12:42:26 [ERROR] discord.client: Attempting a reconnect in 690.25s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/selector_events.py", line 651, in sock_connect
+    return await fut
+           ^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 12:54:27 [ERROR] discord.client: Attempting a reconnect in 502.48s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/selector_events.py", line 651, in sock_connect
+    return await fut
+           ^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 13:03:20 [ERROR] discord.client: Attempting a reconnect in 999.18s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/selector_events.py", line 651, in sock_connect
+    return await fut
+           ^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 13:20:30 [ERROR] discord.client: Attempting a reconnect in 302.04s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 13:26:03 [ERROR] discord.client: Attempting a reconnect in 38.98s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 13:27:12 [ERROR] discord.client: Attempting a reconnect in 417.23s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 13:37:20 [ERROR] discord.client: Attempting a reconnect in 930.70s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/impl.py", line 87, in start_connection
+    sock, _, _ = await _staggered.staggered_race(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 165, in staggered_race
+    done = await _wait_one(
+           ^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohappyeyeballs/_staggered.py", line 46, in _wait_one
+    return await wait_next
+           ^^^^^^^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1295, in _wrap_create_connection
+    async with ceil_timeout(
+               ^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 738, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host wss://gateway-us-east1-b.discord.gg/?v=10&encoding=json&compress=zlib-stream
+2026-01-26 18:03:37 [ERROR] discord.client: Attempting a reconnect in 769.87s
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1562, in _create_direct_connection
+    hosts = await self._resolve_host(host, port, traces=traces)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1178, in _resolve_host
+    return await asyncio.shield(resolved_host_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1209, in _resolve_host_with_throttle
+    addrs = await self._resolver.resolve(host, port, family=self._family)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/resolver.py", line 40, in resolve
+    infos = await self._loop.getaddrinfo(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 905, in getaddrinfo
+    return await self.run_in_executor(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/socket.py", line 978, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1568, in _create_direct_connection
+    raise ClientConnectorDNSError(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host gateway-us-east1-b.discord.gg:443 ssl:default [nodename nor servname provided, or not known]
+2026-01-26 18:16:28 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 18:16:34 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 31986f01f662ec2ece6d93e5f122bc73).
+2026-01-26 18:16:36 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 18:29:34 [INFO] __main__: [discord] kelvin.l9642: 你好
+2026-01-26 18:29:34 [INFO] openai._base_client: Retrying request to /chat/completions in 0.485713 seconds
+2026-01-26 18:29:34 [INFO] openai._base_client: Retrying request to /chat/completions in 0.783515 seconds
+2026-01-26 18:29:35 [INFO] openai._base_client: Retrying request to /chat/completions in 1.735543 seconds
+2026-01-26 18:29:37 [INFO] openai._base_client: Retrying request to /chat/completions in 3.043642 seconds
+2026-01-26 18:29:40 [INFO] openai._base_client: Retrying request to /chat/completions in 7.796539 seconds
+2026-01-26 18:29:48 [ERROR] ai_worker.llm.openai_client: OpenAI API error: Connection error.
+2026-01-26 18:29:48 [ERROR] ai_worker.workers.default: Error in DefaultWorker: Connection error.
+lf._loop.getaddrinfo(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 905, in getaddrinfo
+    return await self.run_in_executor(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/socket.py", line 978, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/client.py", line 724, in connect
+    self.ws = await asyncio.wait_for(coro, timeout=60.0)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/.local/share/uv/python/cpython-3.12.10-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/gateway.py", line 383, in from_client
+    socket = await client.http.ws_connect(str(url))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/discord/http.py", line 566, in ws_connect
+    return await self.__session.ws_connect(url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 1076, in _ws_connect
+    resp = await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/lib/python3.12/site-packages/aiohttp/connector.py", line 1568, in _create_direct_connection
+    raise ClientConnectorDNSError(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host gateway-us-east1-b.discord.gg:443 ssl:default [nodename nor servname provided, or not known]
+2026-01-26 18:16:28 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 18:16:34 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 31986f01f662ec2ece6d93e5f122bc73).
+2026-01-26 18:16:36 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 18:29:34 [INFO] __main__: [discord] kelvin.l9642: 你好
+2026-01-26 18:29:34 [INFO] openai._base_client: Retrying request to /chat/completions in 0.485713 seconds
+2026-01-26 18:29:34 [INFO] openai._base_client: Retrying request to /chat/completions in 0.783515 seconds
+2026-01-26 18:29:35 [INFO] openai._base_client: Retrying request to /chat/completions in 1.735543 seconds
+2026-01-26 18:29:37 [INFO] openai._base_client: Retrying request to /chat/completions in 3.043642 seconds
+2026-01-26 18:29:40 [INFO] openai._base_client: Retrying request to /chat/completions in 7.796539 seconds
+2026-01-26 18:29:48 [ERROR] ai_worker.llm.openai_client: OpenAI API error: Connection error.
+2026-01-26 18:29:48 [ERROR] ai_worker.workers.default: Error in DefaultWorker: Connection error.

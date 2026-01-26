@@ -1,0 +1,23 @@
+2026-01-26 00:47:48 [INFO] __main__: Starting AI Worker...
+2026-01-26 00:47:48 [INFO] __main__: Initialized workers: ['default', 'intel', 'strategy', 'research']
+2026-01-26 00:47:48 [WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+2026-01-26 00:47:48 [INFO] ai_worker.adapters.discord_adapter: Starting Discord adapter...
+2026-01-26 00:47:48 [INFO] discord.client: logging in using static token
+2026-01-26 00:47:52 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: faa3b9016a3a710d8c8096183020c42d).
+2026-01-26 00:47:54 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 00:48:14 [INFO] __main__: [discord] kelvin.l9642: 你好
+2026-01-26 00:48:25 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-01-26 00:48:25 [INFO] openai._base_client: Retrying request to /chat/completions in 0.436378 seconds
+2026-01-26 00:48:25 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 503 Service Unavailable"
+2026-01-26 00:48:25 [INFO] openai._base_client: Retrying request to /chat/completions in 0.954897 seconds
+2026-01-26 00:48:26 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 503 Service Unavailable"
+2026-01-26 00:48:26 [ERROR] ai_worker.llm.openai_client: OpenAI API error: Token error: All accounts are currently limited. Please wait 8s.
+2026-01-26 00:48:26 [ERROR] ai_worker.workers.default: Error in DefaultWorker: Token error: All accounts are currently limited. Please wait 8s.
+2026-01-26 00:48:40 [INFO] __main__: [discord] kelvin.l9642: Please analyze this paper: https://arxiv.org/abs/1706.03762
+2026-01-26 00:48:40 [INFO] __main__: Routing to ResearchWorker (PDF/Arxiv detected)
+2026-01-26 00:48:57 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 200 OK"
+2026-01-26 00:48:57 [ERROR] ai_worker.adapters.discord_adapter: Failed to reply: 400 Bad Request (error code: 50035): Invalid Form Body
+In content: Must be 4000 or fewer in length.
+2026-01-26 00:50:28 [INFO] __main__: Received signal 15
+2026-01-26 00:50:28 [INFO] __main__: Shutting down AI Worker...
+2026-01-26 00:50:28 [INFO] ai_worker.adapters.discord_adapter: Stopping Discord adapter...

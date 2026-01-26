@@ -95,54 +95,91 @@ class RobustPortfolio(Portfolio):
     # 核心修改：生成订单逻辑 (加入风控)
     # ========================================================
     def update_signal(self, event: SignalEvent):
+        """
+        Handles SignalEvent by rebalancing the portfolio to the target weight.
+        
+        Logic:
+        1. Calculate Current Total Equity (Cash + Market Value of all positions).
+        2. Determine Target Value for the symbol: Total Equity * event.strength.
+           (If type is EXIT, target is 0).
+        3. Calculate Current Value for the symbol.
+        4. Determine Difference (Target - Current).
+        5. Generate Order (Buy/Sell) to close the gap.
+        """
         if event.type == EventType.SIGNAL:
-            order_type = 'MKT'
-            direction = event.signal_type
             symbol = event.symbol
+            order_type = 'MKT'
             
-            # --- 1. 处理平仓 (EXIT) ---
-            if direction == 'EXIT':
-                cur_qty = self.current_positions.get(symbol, 0)
-                if cur_qty != 0:
-                    exit_dir = 'SELL' if cur_qty > 0 else 'BUY'
-                    order = OrderEvent(
-                        symbol=symbol, 
-                        quantity=abs(cur_qty), 
-                        direction=exit_dir, 
-                        order_type=order_type
-                    )
-                    self.events.put(order)
+            # 1. Get Current Price
+            current_price = self.bars.get_latest_bar_value(symbol, "Close")
+            if current_price is None or current_price == 0:
+                return # Cannot trade without price
+
+            # 2. Calculate Total Equity
+            # We assume self.current_holdings['total'] is updated daily. 
+            # Ideally, for intraday rebalancing, we should recalc total equity using live prices.
+            # Here we recalc it quickly to be safe.
+            current_equity = self.current_holdings['cash']
+            for s in self.symbol_list:
+                price = self.bars.get_latest_bar_value(s, "Close")
+                qty = self.current_positions.get(s, 0)
+                if price and qty != 0:
+                    current_equity += qty * price
+            
+            # 3. Determine Target Weight & Value
+            if event.signal_type == 'EXIT':
+                target_weight = 0.0
+            else:
+                # Interpret 'strength' as target portfolio percentage (e.g. 0.10 for 10%)
+                target_weight = event.strength
+                
+            target_value = current_equity * target_weight
+            
+            # 4. Calculate Current Value
+            current_qty = self.current_positions.get(symbol, 0)
+            current_value = current_qty * current_price
+            
+            # 5. Calculate Difference
+            diff_value = target_value - current_value
+            
+            # 6. Generate Order
+            # Calculate quantity needed to change
+            # Use int() to truncate to whole shares (or 100s if market requires)
+            quantity_to_trade = int(diff_value / current_price)
+            
+            # Round to nearest 100 for A-shares style (optional, but good for realism)
+            # For this 'learning' phase, simpler is better, but let's stick to 100 if buying.
+            # Selling odd lots is usually allowed, buying usually 100 multiples.
+            # Let's just use raw integer quantity for precision in backtest.
+            
+            if quantity_to_trade == 0:
                 return
 
-            # --- 2. 处理开仓 (LONG/SHORT) ---
-            # 动态仓位：使用当前可用现金的 95% 进行买入
-            # 这样可以在单标的回测中最大化资金利用率，真实反映策略收益
-            cash = self.current_holdings['cash']
-            target_amount = cash * 0.95
-            
-            price_estimate = self.bars.get_latest_bar_value(symbol, "Close")
-            
-            if price_estimate is None or price_estimate == 0:
-                return # 没价格，不买
+            if quantity_to_trade > 0:
+                direction = 'BUY'
+                # Check cash constraint
+                cost = quantity_to_trade * current_price
+                if cost > self.current_holdings['cash']:
+                    # Adjust to max affordable
+                    quantity_to_trade = int(self.current_holdings['cash'] / current_price)
+                    if quantity_to_trade == 0:
+                        return
+            else:
+                direction = 'SELL'
+                quantity_to_trade = abs(quantity_to_trade)
+                # Cap sell at current holding (just in case of float errors)
+                if quantity_to_trade > abs(current_qty):
+                    quantity_to_trade = abs(current_qty)
 
-            # 计算可买数量（向下取整到 100 股）
-            quantity = int(target_amount // price_estimate // 100) * 100
-            
-            # 简单的风控：如果是买入，检查现金是否足够
-            est_cost = quantity * price_estimate
-            if direction == 'LONG' and self.current_holdings['cash'] < est_cost:
-                print(f"[Risk] 现金不足，放弃买入 {symbol}. 需要 {est_cost}, 余额 {self.current_holdings['cash']}")
-                return 
-
-            if quantity > 0:
-                order_dir = 'BUY' if direction == 'LONG' else 'SELL'
+            if quantity_to_trade > 0:
                 order = OrderEvent(
                     symbol=symbol, 
-                    quantity=quantity, 
-                    direction=order_dir, 
+                    quantity=quantity_to_trade, 
+                    direction=direction, 
                     order_type=order_type
                 )
                 self.events.put(order)
+                print(f"[Rebalance] {symbol}: CurPct={current_value/current_equity:.1%} -> TgtPct={target_weight:.1%} | Action: {direction} {quantity_to_trade} @ {current_price:.2f}")
 
     # ========================================================
     # 核心修改：成交更新逻辑 (使用真实价格)
