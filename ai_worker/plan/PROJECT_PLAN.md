@@ -171,17 +171,24 @@ ai_worker/
 
 **验收标准**：上传 PDF，Worker 返回详细阅读报告
 
-### Phase 6: Web Search Worker ✅ COMPLETED
-**目标**：实时网络搜索能力
+### Phase 6: Web Search & Game Guide ✅ COMPLETED
+**目标**：实时网络搜索与垂直领域攻略
 
 | 步骤 | 任务 | 状态 |
 |------|------|------|
 | 6.1 | WebSearchTool - 支持 Tavily/DuckDuckGo | [x] |
-| 6.2 | WebSearchWorker - 搜索并分析结果 | [x] |
-| 6.3 | 路由更新 - search/lookup/find/what is 触发 | [x] |
-| 6.4 | 配置更新 - TAVILY_API_KEY 环境变量 | [x] |
+| 6.2 | WebSearchWorker - 通用搜索情报员 | [x] |
+| 6.3 | GameWorker - 游戏攻略专员 (Prompt Engineering) | [x] |
+| 6.4 | 路由优化 - 区分 search(通用) 与 guide(游戏) | [x] |
 
-**验收标准**：发送 "search latest AI news"，Worker 返回实时搜索结果
+**技术实现**：
+- **WebSearchWorker**: 处理 "search", "news" 等通用查询。
+- **GameWorker**: 复用搜索工具，但通过 Prompt 扮演 "Wiki 编辑"，强制输出结构化攻略 (Boss打法/配装推荐)。
+- **路由逻辑**: 自动识别 "攻略", "build", "boss" 等游戏术语。
+
+**验收标准**：
+- 通用搜索: "search latest AI news" -> 返回新闻摘要
+- 游戏攻略: "Elden Ring Malenia 攻略" -> 返回 Boss 技能解析与打法
 
 ### Phase 7: Memory System ✅ COMPLETED
 **目标**：对话记忆与用户偏好持久化

@@ -20,6 +20,7 @@ from ai_worker.workers.quant.intel_worker import IntelWorker
 from ai_worker.workers.quant.strategy_worker import StrategyWorker
 from ai_worker.workers.research_worker import ResearchWorker
 from ai_worker.workers.web_search_worker import WebSearchWorker
+from ai_worker.workers.game_worker import GameWorker
 from ai_worker.memory import ConversationMemory, PersistentMemory
 
 # Configure logging
@@ -76,6 +77,10 @@ class AIWorkerApp:
             llm,
             tavily_api_key=self.settings.search.tavily_api_key or None
         )
+        game_worker = GameWorker(
+            llm,
+            tavily_api_key=self.settings.search.tavily_api_key or None
+        )
         
         self.workers = {
             "default": self.default_worker,
@@ -83,6 +88,7 @@ class AIWorkerApp:
             "strategy": strategy_worker,
             "research": research_worker,
             "web_search": web_search_worker,
+            "game": game_worker,
         }
         
         logger.info(f"Initialized workers: {list(self.workers.keys())}")
@@ -146,7 +152,16 @@ class AIWorkerApp:
             target_worker = self.workers["research"]
             logger.info("Routing to ResearchWorker (Intent detected)")
         
-        # 3. Web search routing
+        # 3. Game Strategy routing
+        elif any(kw in content_lower for kw in [
+            "guide", "walkthrough", "build", "boss", "level", 
+            "zelda", "mario", "elden ring", "pokemon", "game",
+            "攻略", "怎么打", "通关"
+        ]):
+            target_worker = self.workers["game"]
+            logger.info("Routing to GameWorker")
+            
+        # 4. Web search routing
         elif any(kw in content_lower for kw in [
             "search", "look up", "lookup", "find", "google",
             "what is", "who is", "latest", "news", "current"

@@ -1540,3 +1540,29 @@ aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host gatewa
 2026-01-26 18:29:40 [INFO] openai._base_client: Retrying request to /chat/completions in 7.796539 seconds
 2026-01-26 18:29:48 [ERROR] ai_worker.llm.openai_client: OpenAI API error: Connection error.
 2026-01-26 18:29:48 [ERROR] ai_worker.workers.default: Error in DefaultWorker: Connection error.
+2026-01-26 20:08:22 [INFO] __main__: Starting AI Worker...
+2026-01-26 20:08:22 [INFO] __main__: Initialized workers: ['default', 'intel', 'strategy', 'research', 'web_search', 'game']
+2026-01-26 20:08:22 [WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+2026-01-26 20:08:22 [INFO] ai_worker.adapters.discord_adapter: Starting Discord adapter...
+2026-01-26 20:08:22 [INFO] discord.client: logging in using static token
+2026-01-26 20:08:24 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 85b2905314ff0e2ca76f2f3607fe2cde).
+2026-01-26 20:08:26 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 20:31:09 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 20:31:15 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 39f0047bf29ab67ced1d8180378e8016).
+2026-01-26 20:31:17 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 20:33:25 [INFO] __main__: Received signal 15
+2026-01-26 20:33:25 [INFO] __main__: Shutting down AI Worker...
+2026-01-26 20:33:25 [INFO] ai_worker.adapters.discord_adapter: Stopping Discord adapter...
+2026-01-26 20:33:28 [INFO] __main__: Starting AI Worker...
+2026-01-26 20:33:28 [INFO] __main__: Initialized workers: ['default', 'intel', 'strategy', 'research', 'web_search', 'game']
+2026-01-26 20:33:28 [WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+2026-01-26 20:33:28 [INFO] ai_worker.adapters.discord_adapter: Starting Discord adapter...
+2026-01-26 20:33:28 [INFO] discord.client: logging in using static token
+2026-01-26 20:33:30 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: ad0ccc847d690e4837311c9e3f64ed95).
+2026-01-26 20:33:32 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-26 20:33:50 [INFO] __main__: [discord] kelvin.l9642: !ping
+2026-01-26 20:35:09 [INFO] __main__: [discord] kelvin.l9642: 恶意不息有什么推荐的新手流派
+2026-01-26 20:35:27 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 200 OK"
+2026-01-26 20:53:19 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-26 20:53:25 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: c9ddbdd19a2185b00a9e71f0c6cc3d8f).
+2026-01-26 20:53:27 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
