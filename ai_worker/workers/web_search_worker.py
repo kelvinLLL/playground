@@ -14,7 +14,7 @@ from ai_worker.core.message import (
 )
 from ai_worker.llm.base import BaseLLM, Message
 from ai_worker.workers.base import BaseWorker, WorkerConfig
-from ai_worker.tools.web_search import WebSearchTool
+from ai_worker.tools.registry import ToolRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,12 @@ class WebSearchWorker(BaseWorker):
         super().__init__(config)
         self.llm = llm
 
-        tool = WebSearchTool(tavily_api_key=tavily_api_key)
+        # Use registry to create tool with configuration
+        tool_config = {}
+        if tavily_api_key:
+            tool_config["tavily_api_key"] = tavily_api_key
+            
+        tool = ToolRegistry.create_tool("web_search", config=tool_config)
         self._tools[tool.name] = tool
 
     async def process(

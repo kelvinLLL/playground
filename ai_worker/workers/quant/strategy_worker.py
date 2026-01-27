@@ -13,7 +13,7 @@ from ai_worker.core.message import (
 )
 from ai_worker.llm.base import BaseLLM, Message
 from ai_worker.workers.base import BaseWorker, WorkerConfig
-from ai_worker.tools import BacktestTool
+from ai_worker.tools.registry import ToolRegistry
 
 from typing import Any, Callable, Optional
 
@@ -43,7 +43,8 @@ class StrategyWorker(BaseWorker):
         self.llm = llm
         
         # Register tools
-        self.register_tool(BacktestTool())
+        tool = ToolRegistry.create_tool("run_backtest")
+        self.register_tool(tool)
 
     async def process(
         self, 

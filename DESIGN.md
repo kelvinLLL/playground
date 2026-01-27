@@ -1,44 +1,36 @@
 # Design Document: opencode_extensions
 
 ## 1. Core Concepts
-The `opencode_extensions` system is designed as a lightweight, "plug and play" framework for adding auxiliary functionality to the core application without introducing heavy dependencies or tightly coupled logic.
+The `opencode_extensions` system is a lightweight framework for adding cross-platform auxiliary features (sound, voice, notifications) to a CLI environment. It follows a modular design to ensure zero impact on core application stability.
 
 ### 1.1 Architecture: Observer Pattern
-At the heart of the system is the `PluginManager`, which implements a variation of the **Observer Pattern**. 
-- **Manager (Subject)**: Maintains a registry of plugin instances and broadcasts events.
-- **Plugins (Observers)**: Objects that implement specific hook methods (e.g., `on_start`, `on_finish`).
-- **Decoupling**: The manager does not require plugins to inherit from a specific base class; it uses duck typing to check for the existence of callable hook methods. This simplifies plugin creation and reduces boilerplate.
+The system uses the **Observer Pattern** to manage events:
+- **`PluginManager`**: Acts as the central hub (Subject). It manages a registry of plugins and broadcasts events (e.g., `on_start`, `on_finish`, `on_error`).
+- **Plugins**: Decoupled modules that implement specific event hooks. The manager uses duck typing, allowing any class with matching method names to function as a plugin.
 
 ## 2. Portability: The "Native Bridge" Pattern
-One of the primary design goals is to remain "universal" and lightweight. To achieve this, we avoid heavy third-party libraries for simple system tasks (like playing audio).
+To remain truly "universal" and lightweight, we employ a **Native Bridge** strategy.
 
-### 2.1 Dependency-Free Execution
-Instead of using libraries like `playsound` (which often require complex native dependencies like GStreamer or platform-specific backends), we use a **Native Bridge** approach via the `subprocess` module.
-- **Mechanism**: The application detects the host OS (`sys.platform`) and calls native command-line utilities.
-- **Mac**: `afplay`
-- **Windows**: PowerShell (`Media.SoundPlayer`)
-- **Linux**: `aplay` or `paplay`
-- **Benefit**: This avoids "dependency hell" and ensures the extension system works immediately upon cloning the repository on any major OS.
+### 2.1 Subprocess vs. Libraries
+Instead of relying on heavy Python libraries (like `playsound` or `pyaudio`), we prioritize calling native OS utilities via `subprocess`.
+- **macOS**: Uses `afplay` (built-in).
+- **Windows**: Uses PowerShell's `System.Media.SoundPlayer` (built-in).
+- **Linux**: Uses `aplay` (ALSA) or `paplay` (PulseAudio).
+- **Why?**: This avoids "dependency hell," reduces install size, and ensures the extension system works "out of the box" on minimal environments.
 
-## 3. Technical Stack
-- **Language**: Python 3.8+
-- **Standard Library**: Primary reliance on `subprocess`, `threading`, `logging`, and `typing`.
-- **Environment Management**: [uv](https://github.com/astral-sh/uv) is the recommended tool for managing the environment, ensuring fast and reproducible setups.
+## 3. Dependency Management: uv Workflow
+While we favor native tools, some advanced features (like `VoicePlugin`) may eventually require external libraries.
+- **`uv` Integration**: We use [uv](https://github.com/astral-sh/uv) for lightning-fast dependency resolution and virtual environment management.
+- **Conditional Imports**: Plugins are designed with "Graceful Degradation." If a library like `speech_recognition` is missing, the plugin automatically enters a "Mock Mode" or disables itself with a clear warning, rather than crashing the application.
 
 ## 4. Extension Guide
-### 4.1 Adding New Events
-To introduce a new event (e.g., `on_error`):
-1.  Identify where the event occurs in the main application.
-2.  Call `manager.trigger("on_error", error=e)`.
-3.  Implement `on_error(self, error)` in any plugin that needs to respond.
-
-### 4.2 Adding New Platforms
-For features like the `SoundPlugin`, adding support for a new OS involves:
-1.  Checking `sys.platform`.
-2.  Identifying a built-in CLI tool for the task on that OS.
-3.  Implementing a private `_play_<os>` method using `subprocess`.
+### 4.1 Adding New Platforms
+Adding support for new environments is straightforward:
+1.  **Detection**: Use `sys.platform` to identify the environment.
+2.  **Native Tooling**: Find a built-in command for the desired action (e.g., `termux-tts-speak` for Android via Termux).
+3.  **Implementation**: Add a private handler method in the relevant plugin (e.g., `_play_android`) and call it via `subprocess.run()`.
 
 ## 5. Future Roadmap
-- **Dynamic Loading**: Support for loading plugins from a dedicated directory without manual registration.
-- **Priority System**: Allowing plugins to define execution order for specific events.
-- **Asynchronous Hooks**: Support for `asyncio` based event hooks for non-blocking I/O intensive plugins.
+- **Dynamic Plugin Discovery**: Automatically loading files from `plugins/` directory.
+- **Web-based Dashboard**: A local web UI for toggling plugins.
+- **Asynchronous Execution**: Native `asyncio` support for high-concurrency event handling.

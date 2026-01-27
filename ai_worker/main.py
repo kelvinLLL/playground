@@ -15,6 +15,8 @@ from ai_worker.config import get_settings
 from ai_worker.adapters.discord_adapter import DiscordAdapter
 from ai_worker.core.message import StandardMessage, StandardResponse
 from ai_worker.llm.openai_client import OpenAIClient
+# Import tools to trigger registration
+import ai_worker.tools  # noqa: F401
 from ai_worker.workers.default import DefaultWorker
 from ai_worker.workers.quant.intel_worker import IntelWorker
 from ai_worker.workers.quant.strategy_worker import StrategyWorker
@@ -22,6 +24,7 @@ from ai_worker.workers.research_worker import ResearchWorker
 from ai_worker.workers.web_search_worker import WebSearchWorker
 from ai_worker.workers.game_worker import GameWorker
 from ai_worker.memory import ConversationMemory, PersistentMemory
+from ai_worker.mcp_client import MCPClientManager
 
 # Configure logging
 logging.basicConfig(
@@ -55,6 +58,9 @@ class AIWorkerApp:
             max_age_seconds=3600,
         )
         self.persistent_memory = PersistentMemory()
+        
+        # MCP Client Manager
+        self.mcp_client_manager = MCPClientManager()
         
         # Workers map
         self.workers = {}
@@ -280,6 +286,44 @@ class AIWorkerApp:
             self.conversation_memory.clear_conversation(user_id, channel_id)
             await ctx.send("Your conversation history in this channel has been cleared.")
 
+        @adapter.bot.command(name="tools")
+        async def tools_command(ctx):
+            """List all registered tools (local + MCP)."""
+            from ai_worker.tools.registry import ToolRegistry
+            tools = ToolRegistry.list_tools()
+            local_tools = [t for t in tools if "__" not in t]
+            mcp_tools = [t for t in tools if "__" in t]
+            
+            msg = f"**Local Tools ({len(local_tools)}):** {', '.join(local_tools)}\n"
+            msg += f"**MCP Tools ({len(mcp_tools)}):** {', '.join(mcp_tools)}"
+            await ctx.send(msg)
+
+        @adapter.bot.command(name="mcp_test")
+        async def mcp_test_command(ctx, *, query: str = "Python programming"):
+            """Test MCP tool call. Usage: !mcp_test <query>"""
+            from ai_worker.tools.registry import ToolRegistry
+            
+            await ctx.send(f"🔄 Testing MCP tool `self_hosted__web_search` with query: `{query}`...")
+            
+            try:
+                # Get the MCP proxy tool
+                tool = ToolRegistry.create_tool("self_hosted__web_search")
+                
+                # Call the tool
+                result = await tool.execute(query=query, max_results=3)
+                
+                if result.success:
+                    # Truncate if too long
+                    data = str(result.data)
+                    if len(data) > 1800:
+                        data = data[:1800] + "...(truncated)"
+                    await ctx.send(f"✅ **MCP Tool Success!**\n```\n{data}\n```")
+                else:
+                    await ctx.send(f"❌ **MCP Tool Error:** {result.error}")
+                    
+            except Exception as e:
+                await ctx.send(f"❌ **Exception:** {str(e)}")
+
         return adapter
 
     async def run(self) -> None:
@@ -292,7 +336,13 @@ class AIWorkerApp:
             for error in errors:
                 logger.warning(f"Configuration warning: {error}")
 
-        # Set up workers
+        # Start MCP Client Manager FIRST (so MCP tools are registered before workers)
+        try:
+            await self.mcp_client_manager.start()
+        except Exception as e:
+            logger.error(f"Failed to start MCP Client Manager: {e}")
+
+        # Set up workers (now they can use MCP tools via ToolRegistry)
         self.setup_workers()
 
         # Set up adapters
@@ -317,6 +367,13 @@ class AIWorkerApp:
     async def shutdown(self) -> None:
         """Gracefully shutdown all adapters."""
         logger.info("Shutting down AI Worker...")
+        
+        # Stop MCP Client Manager
+        try:
+            await self.mcp_client_manager.stop()
+        except Exception as e:
+            logger.error(f"Error stopping MCP Client Manager: {e}")
+            
         for adapter in self.adapters:
             try:
                 await adapter.stop()

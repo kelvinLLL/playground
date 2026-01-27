@@ -2,11 +2,18 @@
 Lightweight plugin system for opencode_extensions.
 """
 
+import json
 import logging
-from typing import Any, List
+import os
+from typing import Any, Dict, List
 
 
 logger = logging.getLogger(__name__)
+
+CONFIG_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "plugins_config.json"
+)
 
 
 class PluginManager:
@@ -16,17 +23,38 @@ class PluginManager:
 
     def __init__(self) -> None:
         """
-        Initializes the PluginManager with an empty list of plugins.
+        Initializes the PluginManager and loads plugin configuration.
         """
         self.plugins: List[Any] = []
+        self.config: Dict[str, bool] = self.load_config()
+
+    def load_config(self) -> Dict[str, bool]:
+        """
+        Loads plugin configuration from JSON file.
+
+        Returns:
+            Dict mapping plugin class names to enabled status.
+        """
+        if os.path.exists(CONFIG_PATH):
+            try:
+                with open(CONFIG_PATH, "r") as f:
+                    return json.load(f)
+            except Exception as e:
+                logger.error("Failed to load plugin config: %s", e)
+        return {}
 
     def register_plugin(self, plugin: Any) -> None:
         """
-        Registers a plugin instance.
+        Registers a plugin instance if it is enabled in the configuration.
 
         Args:
             plugin: An object instance that may implement event hooks.
         """
+        plugin_name = type(plugin).__name__
+        if not self.config.get(plugin_name, True):
+            logger.info("Skipping disabled plugin: %s", plugin_name)
+            return
+
         self.plugins.append(plugin)
         logger.debug("Plugin registered: %s", plugin)
 

@@ -11,10 +11,12 @@ from typing import Any, Optional
 import aiohttp
 
 from ai_worker.tools.base import BaseTool, ToolResult
+from ai_worker.tools.registry import ToolRegistry
 
 logger = logging.getLogger(__name__)
 
 
+@ToolRegistry.register("web_search")
 class WebSearchTool(BaseTool):
     """
     Tool for searching the web.

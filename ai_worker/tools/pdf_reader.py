@@ -11,8 +11,10 @@ from typing import Any
 from pypdf import PdfReader
 
 from ai_worker.tools.base import BaseTool, ToolResult
+from ai_worker.tools.registry import ToolRegistry
 
 
+@ToolRegistry.register("read_pdf")
 class PDFReaderTool(BaseTool):
     """Tool for reading text from PDF files."""
 

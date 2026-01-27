@@ -16,8 +16,10 @@ if PROJECT_ROOT not in sys.path:
 
 from stock_playground.scripts.fetch_data import fetch_data
 from ai_worker.tools.base import BaseTool, ToolResult
+from ai_worker.tools.registry import ToolRegistry
 
 
+@ToolRegistry.register("fetch_market_data")
 class MarketDataTool(BaseTool):
     """Tool for fetching historical market data."""
 

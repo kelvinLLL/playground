@@ -202,16 +202,52 @@ ai_worker/
 
 **验收标准**：Bot 能记住用户偏好，跨会话保持上下文
 
-### Phase 8: 高级功能 (Future)
+### Phase 8: 架构重构 - Tool Registry ✅ COMPLETED
+**目标**：解耦工具与Worker，为MCP迁移做准备
+
+| 步骤 | 任务 | 状态 |
+|------|------|------|
+| 8.1 | ToolRegistry - 实现工具注册中心 | [x] |
+| 8.2 | Decorator Pattern - @register_tool 自动注册 | [x] |
+| 8.3 | Worker Refactor - 使用 Registry 替代硬编码实例化 | [x] |
+| 8.4 | Config Injection - 统一配置注入 | [x] |
+
+**验收标准**：工具通过装饰器注册，Worker 通过名称加载工具，无需修改 Worker 代码即可新增工具。
+
+### Phase 9: MCP Integration ✅ COMPLETED
+**目标**：将工具暴露为 MCP Server，实现对外标准化接口
+
+| 步骤 | 任务 | 状态 |
+|------|------|------|
+| 9.1 | MCP Server Entrypoint - 创建 ai_worker/mcp_server.py | [x] |
+| 9.2 | Tool Wrappers - 使用 @mcp.tool 包装现有工具 | [x] |
+| 9.3 | StdIO Transport - 支持标准输入输出通信 | [x] |
+
+**验收标准**：可以通过 MCP Client (如 Claude Desktop) 连接并调用所有工具。
+
+### Phase 10: MCP Client Manager ✅ COMPLETED
+**目标**：连接外部 MCP Server，实现能力无限扩展
+
+| 步骤 | 任务 | 状态 |
+|------|------|------|
+| 10.1 | Config Design - mcp_servers.json 配置文件 | [x] |
+| 10.2 | MCPClientManager - 管理多 Server 连接 (StdIO) | [x] |
+| 10.3 | MCPProxyTool - 远程工具本地代理 | [x] |
+| 10.4 | Dynamic Registration - 自动注册到 ToolRegistry | [x] |
+| 10.5 | Integration - main.py 启动时加载 | [x] |
+
+**验收标准**：Bot 启动时自动连接 mcp_servers.json 中定义的 Server，并能调用远程工具。
+
+### Phase 11: 高级功能 (Future)
 **目标**：生产级增强
 
 | 步骤 | 任务 | 状态 |
 |------|------|------|
-| 8.1 | 员工间协作 - Agent间自动流转任务 | [ ] |
-| 8.2 | 卡片交互 (飞书) - 按钮/表单交互 | [ ] |
-| 8.3 | Slash Commands (Discord) - /backtest 命令 | [ ] |
-| 8.4 | Code Execution Worker - 安全沙箱代码执行 | [ ] |
-| 8.5 | News/Sentiment Worker - 市场情绪分析 | [ ] |
+| 11.1 | 员工间协作 - Agent间自动流转任务 | [ ] |
+| 11.2 | 卡片交互 (飞书) - 按钮/表单交互 | [ ] |
+| 11.3 | Slash Commands (Discord) - /backtest 命令 | [ ] |
+| 11.4 | Code Execution Worker - 安全沙箱代码执行 | [ ] |
+| 11.5 | News/Sentiment Worker - 市场情绪分析 | [ ] |
 
 ---
 

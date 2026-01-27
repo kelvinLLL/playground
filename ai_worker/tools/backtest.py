@@ -22,6 +22,7 @@ if STOCK_PLAYGROUND_DIR not in sys.path:
     sys.path.append(STOCK_PLAYGROUND_DIR)
 
 from ai_worker.tools.base import BaseTool, ToolResult
+from ai_worker.tools.registry import ToolRegistry
 
 # Import stock_playground components
 # Note: These imports might fail if dependencies aren't installed in the environment
@@ -37,6 +38,7 @@ except ImportError:
     STOCK_PLAYGROUND_AVAILABLE = False
 
 
+@ToolRegistry.register("run_backtest")
 class BacktestTool(BaseTool):
     """Tool for running strategy backtests."""
 

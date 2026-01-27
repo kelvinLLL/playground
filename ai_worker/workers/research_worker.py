@@ -13,7 +13,7 @@ from ai_worker.core.message import (
 )
 from ai_worker.llm.base import BaseLLM, Message
 from ai_worker.workers.base import BaseWorker, WorkerConfig
-from ai_worker.tools.pdf_reader import PDFReaderTool
+from ai_worker.tools.registry import ToolRegistry
 
 from typing import Any, Callable, Optional
 
@@ -47,8 +47,9 @@ class ResearchWorker(BaseWorker):
         super().__init__(config)
         self.llm = llm
         
-        # Register tools
-        self.register_tool(PDFReaderTool())
+        # Register tools via registry
+        tool = ToolRegistry.create_tool("read_pdf")
+        self.register_tool(tool)
 
     async def process(
         self, 
