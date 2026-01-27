@@ -53,15 +53,21 @@ class BaseWorker(ABC):
         """Get the system prompt for this worker."""
         return self.config.system_prompt
 
-    def register_tool(self, tool: BaseTool) -> None:
+    def register_tool(self, tool: BaseTool, as_name: Optional[str] = None) -> None:
         """
         Register a tool for this worker to use.
 
         Args:
             tool: Tool instance to register
+            as_name: Override name to use as key (for MCP tools with namespaced names)
         """
-        if tool.name in self.config.tools:
-            self._tools[tool.name] = tool
+        # Determine the key to use for registration
+        key = as_name or tool.name
+        
+        # Check if this tool (or its base name) is in allowed tools
+        base_name = tool.name.split("__")[-1] if "__" in tool.name else tool.name
+        if base_name in self.config.tools or key in self.config.tools:
+            self._tools[key] = tool
 
     def has_permission(self, permission: str) -> bool:
         """

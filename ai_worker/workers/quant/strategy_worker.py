@@ -44,7 +44,7 @@ class StrategyWorker(BaseWorker):
         
         # Register tools
         tool = ToolRegistry.create_tool("run_backtest")
-        self.register_tool(tool)
+        self.register_tool(tool, as_name="run_backtest")
 
     async def process(
         self, 

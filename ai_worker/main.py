@@ -286,6 +286,31 @@ class AIWorkerApp:
             self.conversation_memory.clear_conversation(user_id, channel_id)
             await ctx.send("Your conversation history in this channel has been cleared.")
 
+        @adapter.bot.command(name="clearall")
+        async def clearall_command(ctx):
+            """Clear ALL your memory (conversation + persistent + worker memory)."""
+            user_id = str(ctx.author.id)
+            channel_id = str(ctx.channel.id)
+            
+            # 1. Clear conversation memory for this channel
+            self.conversation_memory.clear_conversation(user_id, channel_id)
+            
+            # 2. Clear persistent memory (SQLite)
+            deleted_count = self.persistent_memory.clear_all_user(user_id)
+            
+            # 3. Clear worker internal memory
+            for worker in self.workers.values():
+                worker.clear_memory()
+            if self.default_worker:
+                self.default_worker.clear_memory()
+            
+            await ctx.send(
+                f"🧹 **Memory cleared!**\n"
+                f"- Conversation history: cleared\n"
+                f"- Persistent memories: {deleted_count} items deleted\n"
+                f"- Worker memory: all cleared"
+            )
+
         @adapter.bot.command(name="tools")
         async def tools_command(ctx):
             """List all registered tools (local + MCP)."""

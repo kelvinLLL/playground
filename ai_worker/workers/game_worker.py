@@ -56,7 +56,8 @@ class GameWorker(BaseWorker):
             tool_config["tavily_api_key"] = tavily_api_key
             
         tool = ToolRegistry.create_tool("web_search", config=tool_config)
-        self._tools[tool.name] = tool
+        # Store with original name "web_search" for consistent access
+        self._tools["web_search"] = tool
 
     async def process(
         self,

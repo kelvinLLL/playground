@@ -44,7 +44,7 @@ class IntelWorker(BaseWorker):
         
         # Register tools
         tool = ToolRegistry.create_tool("fetch_market_data")
-        self.register_tool(tool)
+        self.register_tool(tool, as_name="fetch_market_data")
 
     async def process(
         self, 

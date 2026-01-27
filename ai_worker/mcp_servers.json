@@ -10,6 +10,43 @@
         "PYTHONUNBUFFERED": "1",
         "PYTHONPATH": "/Users/haojunliu/Easy/Projects/playground"
       }
+    },
+
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/haojunliu/Easy/Projects/playground/ai_worker/reports"
+      ]
+    },
+
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--headless",
+        "--browser",
+        "chromium"
+      ]
+    },
+
+    "duckduckgo": {
+      "command": "uvx",
+      "args": [
+        "duckduckgo-mcp-server"
+      ]
+    },
+
+    "brave_search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@brave/brave-search-mcp-server",
+        "--brave-api-key",
+        "${BRAVE_API_KEY}"
+      ]
     }
   }
 }

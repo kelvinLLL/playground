@@ -49,7 +49,7 @@ class ResearchWorker(BaseWorker):
         
         # Register tools via registry
         tool = ToolRegistry.create_tool("read_pdf")
-        self.register_tool(tool)
+        self.register_tool(tool, as_name="read_pdf")
 
     async def process(
         self, 

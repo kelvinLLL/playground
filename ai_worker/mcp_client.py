@@ -8,14 +8,22 @@ import asyncio
 import json
 import logging
 import os
+import re
 from contextlib import AsyncExitStack
 from typing import Any, Dict, Optional
 
+from dotenv import load_dotenv
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 from ai_worker.tools.base import BaseTool, ToolResult
 from ai_worker.tools.registry import ToolRegistry
+
+# Load environment variables from ai_worker/.env
+_package_dir = os.path.dirname(os.path.abspath(__file__))
+_env_path = os.path.join(_package_dir, ".env")
+if os.path.exists(_env_path):
+    load_dotenv(_env_path)
 
 logger = logging.getLogger(__name__)
 
@@ -115,17 +123,36 @@ class MCPClientManager:
         try:
             command = config.get("command")
             args = config.get("args", [])
-            env = config.get("env", {})
+            env_config = config.get("env", {})
             
-            # Merge current env with config env
+            # Expand ${VAR} references in args
+            expanded_args = []
+            for arg in args:
+                if isinstance(arg, str) and "${" in arg:
+                    # Extract variable name and expand
+                    def expand_var(match):
+                        var_name = match.group(1)
+                        return os.environ.get(var_name, "")
+                    expanded_arg = re.sub(r'\$\{(\w+)\}', expand_var, arg)
+                    expanded_args.append(expanded_arg)
+                else:
+                    expanded_args.append(arg)
+            
+            # Merge current env with config env, expanding ${VAR} references
             full_env = os.environ.copy()
-            full_env.update(env)
+            for key, value in env_config.items():
+                if isinstance(value, str) and value.startswith("${") and value.endswith("}"):
+                    # Expand environment variable reference
+                    var_name = value[2:-1]
+                    full_env[key] = os.environ.get(var_name, "")
+                else:
+                    full_env[key] = value
 
-            logger.info(f"Connecting to MCP server: {name} ({command} {' '.join(args)})")
+            logger.info(f"Connecting to MCP server: {name} ({command} {' '.join(expanded_args)})")
 
             server_params = StdioServerParameters(
                 command=command,
-                args=args,
+                args=expanded_args,
                 env=full_env
             )
 
