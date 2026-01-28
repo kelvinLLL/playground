@@ -48,6 +48,17 @@ class SearchConfig:
 
 
 @dataclass
+class SchedulerConfig:
+    """Scheduler configuration for automated tasks."""
+
+    daily_brief_hour: int = 8
+    daily_brief_minute: int = 0
+    notification_channel_id: str = ""
+    daily_brief_enabled: bool = False
+    timezone: str = "Asia/Shanghai"
+
+
+@dataclass
 class Settings:
     """
     Main settings class for AI Worker.
@@ -59,6 +70,7 @@ class Settings:
     feishu: FeishuConfig = field(default_factory=FeishuConfig)
     openai: OpenAIConfig = field(default_factory=OpenAIConfig)
     search: SearchConfig = field(default_factory=SearchConfig)
+    scheduler: SchedulerConfig = field(default_factory=SchedulerConfig)
     debug: bool = False
 
     @classmethod
@@ -98,6 +110,13 @@ class Settings:
             ),
             search=SearchConfig(
                 tavily_api_key=os.getenv("TAVILY_API_KEY", ""),
+            ),
+            scheduler=SchedulerConfig(
+                daily_brief_hour=int(os.getenv("DAILY_BRIEF_HOUR", "8")),
+                daily_brief_minute=int(os.getenv("DAILY_BRIEF_MINUTE", "0")),
+                notification_channel_id=os.getenv("NOTIFICATION_CHANNEL_ID", ""),
+                daily_brief_enabled=os.getenv("DAILY_BRIEF_ENABLED", "false").lower() == "true",
+                timezone=os.getenv("SCHEDULER_TIMEZONE", "Asia/Shanghai"),
             ),
             debug=os.getenv("DEBUG", "false").lower() == "true",
         )

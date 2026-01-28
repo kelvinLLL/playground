@@ -199,7 +199,17 @@ class DiscordAdapter(BaseAdapter):
                 embed_data = response.extras["embed"]
                 embed = discord.Embed(**embed_data)
 
-            await channel.send(content=content, embed=embed)
+            # Handle file attachment
+            file_obj = None
+            if response.message_type == MessageType.FILE and "file_path" in response.extras:
+                file_path = response.extras["file_path"]
+                try:
+                    file_obj = discord.File(file_path)
+                except Exception as e:
+                    logger.error(f"Failed to create file attachment: {e}")
+                    content += f"\n\n📁 File saved to: `{file_path}`"
+
+            await channel.send(content=content, embed=embed, file=file_obj)
             return True
 
         except Exception as e:
@@ -241,18 +251,28 @@ class DiscordAdapter(BaseAdapter):
                 embed_data = response.extras["embed"]
                 embed = discord.Embed(**embed_data)
 
+            # Handle file attachment
+            file_obj = None
+            if response.message_type == MessageType.FILE and "file_path" in response.extras:
+                file_path = response.extras["file_path"]
+                try:
+                    file_obj = discord.File(file_path)
+                except Exception as e:
+                    logger.error(f"Failed to create file attachment: {e}")
+                    content += f"\n\n📁 File saved to: `{file_path}`"
+
             # Split message if too long (Discord limit is 2000 chars)
             if len(content) > 2000:
                 chunks = [content[i:i+2000] for i in range(0, len(content), 2000)]
                 
                 # Reply to the first chunk
-                await discord_msg.reply(content=chunks[0], embed=embed)
+                await discord_msg.reply(content=chunks[0], embed=embed, file=file_obj)
                 
                 # Send remaining chunks to the same channel
                 for chunk in chunks[1:]:
                     await discord_msg.channel.send(content=chunk)
             else:
-                await discord_msg.reply(content=content, embed=embed)
+                await discord_msg.reply(content=content, embed=embed, file=file_obj)
                 
             return True
 

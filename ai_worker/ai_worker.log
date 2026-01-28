@@ -72,3 +72,194 @@
 2026-01-27 21:39:45 [INFO] __main__: Received signal 15
 2026-01-27 21:39:45 [INFO] __main__: Shutting down AI Worker...
 2026-01-27 21:39:46 [INFO] ai_worker.adapters.discord_adapter: Stopping Discord adapter...
+2026-01-27 22:23:29 [INFO] __main__: Starting AI Worker...
+2026-01-27 22:23:29 [INFO] ai_worker.mcp_client: Found 5 MCP servers in config
+2026-01-27 22:23:29 [INFO] ai_worker.mcp_client: Connecting to MCP server: self_hosted (/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/bin/python -m ai_worker.mcp_server)
+2026-01-27 22:23:30 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__web_search (Remote: web_search)
+2026-01-27 22:23:30 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__read_pdf (Remote: read_pdf)
+2026-01-27 22:23:30 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__fetch_market_data (Remote: fetch_market_data)
+2026-01-27 22:23:30 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__run_backtest (Remote: run_backtest)
+2026-01-27 22:23:30 [INFO] ai_worker.mcp_client: Connected to MCP server: self_hosted
+2026-01-27 22:23:30 [INFO] ai_worker.mcp_client: Connecting to MCP server: filesystem (npx -y @modelcontextprotocol/server-filesystem /Users/haojunliu/Easy/Projects/playground/ai_worker/reports)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_file (Remote: read_file)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_text_file (Remote: read_text_file)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_media_file (Remote: read_media_file)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_multiple_files (Remote: read_multiple_files)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__write_file (Remote: write_file)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__edit_file (Remote: edit_file)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__create_directory (Remote: create_directory)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__list_directory (Remote: list_directory)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__list_directory_with_sizes (Remote: list_directory_with_sizes)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__directory_tree (Remote: directory_tree)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__move_file (Remote: move_file)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__search_files (Remote: search_files)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__get_file_info (Remote: get_file_info)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__list_allowed_directories (Remote: list_allowed_directories)
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Connected to MCP server: filesystem
+2026-01-27 22:23:31 [INFO] ai_worker.mcp_client: Connecting to MCP server: playwright (npx -y @playwright/mcp@latest --headless --browser chromium)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_close (Remote: browser_close)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_resize (Remote: browser_resize)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_console_messages (Remote: browser_console_messages)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_handle_dialog (Remote: browser_handle_dialog)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_evaluate (Remote: browser_evaluate)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_file_upload (Remote: browser_file_upload)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_fill_form (Remote: browser_fill_form)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_install (Remote: browser_install)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_press_key (Remote: browser_press_key)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_type (Remote: browser_type)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_navigate (Remote: browser_navigate)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_navigate_back (Remote: browser_navigate_back)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_network_requests (Remote: browser_network_requests)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_run_code (Remote: browser_run_code)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_take_screenshot (Remote: browser_take_screenshot)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_snapshot (Remote: browser_snapshot)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_click (Remote: browser_click)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_drag (Remote: browser_drag)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_hover (Remote: browser_hover)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_select_option (Remote: browser_select_option)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_tabs (Remote: browser_tabs)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_wait_for (Remote: browser_wait_for)
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Connected to MCP server: playwright
+2026-01-27 22:23:33 [INFO] ai_worker.mcp_client: Connecting to MCP server: duckduckgo (uvx duckduckgo-mcp-server)
+2026-01-27 22:23:34 [INFO] ai_worker.mcp_client: Discovered remote tool: duckduckgo__search (Remote: search)
+2026-01-27 22:23:34 [INFO] ai_worker.mcp_client: Discovered remote tool: duckduckgo__fetch_content (Remote: fetch_content)
+2026-01-27 22:23:34 [INFO] ai_worker.mcp_client: Connected to MCP server: duckduckgo
+2026-01-27 22:23:34 [INFO] ai_worker.mcp_client: Connecting to MCP server: brave_search (npx -y @brave/brave-search-mcp-server --brave-api-key BSArZFCXk0bGtdRxR6I2Y2NsEOpxyyg)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_web_search (Remote: brave_web_search)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_local_search (Remote: brave_local_search)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_video_search (Remote: brave_video_search)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_image_search (Remote: brave_image_search)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_news_search (Remote: brave_news_search)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_summarizer (Remote: brave_summarizer)
+2026-01-27 22:23:35 [INFO] ai_worker.mcp_client: Connected to MCP server: brave_search
+2026-01-27 22:23:35 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__fetch_market_data' instead of local 'fetch_market_data'
+2026-01-27 22:23:35 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__run_backtest' instead of local 'run_backtest'
+2026-01-27 22:23:35 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__read_pdf' instead of local 'read_pdf'
+2026-01-27 22:23:35 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__web_search' instead of local 'web_search'
+2026-01-27 22:23:35 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__web_search' instead of local 'web_search'
+2026-01-27 22:23:35 [INFO] ai_worker.workers.daily_brief_worker: Registered duckduckgo__search
+2026-01-27 22:23:35 [INFO] ai_worker.workers.daily_brief_worker: Registered playwright__browser_navigate
+2026-01-27 22:23:35 [INFO] ai_worker.workers.daily_brief_worker: Registered playwright__browser_snapshot
+2026-01-27 22:23:35 [INFO] ai_worker.workers.daily_brief_worker: Registered filesystem__write_file
+2026-01-27 22:23:35 [INFO] __main__: Initialized workers: ['default', 'intel', 'strategy', 'research', 'web_search', 'game', 'daily_brief']
+2026-01-27 22:23:35 [WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+2026-01-27 22:23:35 [INFO] apscheduler.scheduler: Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-01-27 22:23:35 [INFO] apscheduler.scheduler: Added job "Daily Intelligence Brief" to job store "default"
+2026-01-27 22:23:35 [INFO] apscheduler.scheduler: Scheduler started
+2026-01-27 22:23:35 [INFO] __main__: Scheduler started. Daily brief scheduled for 8:00 AM
+2026-01-27 22:23:35 [INFO] ai_worker.adapters.discord_adapter: Starting Discord adapter...
+2026-01-27 22:23:35 [INFO] discord.client: logging in using static token
+2026-01-27 22:23:38 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 7c0d4f3b50961a9582bcc242667f83a4).
+2026-01-27 22:23:40 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-27 22:35:30 [WARNING] discord.gateway: Can't keep up, shard ID None websocket is 27.1s behind.
+2026-01-27 22:36:03 [INFO] discord.gateway: Shard ID None has successfully RESUMED session 7c0d4f3b50961a9582bcc242667f83a4.
+2026-01-27 22:43:23 [INFO] __main__: [discord] lifuyaq: 
+2026-01-27 22:43:57 [INFO] __main__: [discord] lifuyaq: 你好
+2026-01-27 22:44:00 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 200 OK"
+2026-01-27 22:44:12 [INFO] __main__: [discord] kelvin.l9642: !tools
+2026-01-27 22:54:25 [INFO] __main__: [discord] kelvin.l9642: !aihelp
+2026-01-27 22:54:25 [ERROR] discord.ext.commands.bot: Ignoring exception in command None
+discord.ext.commands.errors.CommandNotFound: Command "aihelp" is not found
+2026-01-27 22:56:06 [INFO] __main__: [discord] kelvin.l9642: !aihelp
+2026-01-27 22:56:06 [ERROR] discord.ext.commands.bot: Ignoring exception in command None
+discord.ext.commands.errors.CommandNotFound: Command "aihelp" is not found
+2026-01-27 23:05:13 [INFO] __main__: Received signal 15
+2026-01-27 23:05:13 [INFO] __main__: Shutting down AI Worker...
+2026-01-27 23:05:13 [INFO] __main__: Scheduler stopped
+2026-01-27 23:05:13 [INFO] apscheduler.scheduler: Scheduler has been shut down
+2026-01-27 23:05:13 [INFO] ai_worker.adapters.discord_adapter: Stopping Discord adapter...
+2026-01-27 23:05:16 [INFO] __main__: Starting AI Worker...
+2026-01-27 23:05:16 [INFO] ai_worker.mcp_client: Found 5 MCP servers in config
+2026-01-27 23:05:16 [INFO] ai_worker.mcp_client: Connecting to MCP server: self_hosted (/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/bin/python -m ai_worker.mcp_server)
+2026-01-27 23:05:17 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__web_search (Remote: web_search)
+2026-01-27 23:05:17 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__read_pdf (Remote: read_pdf)
+2026-01-27 23:05:17 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__fetch_market_data (Remote: fetch_market_data)
+2026-01-27 23:05:17 [INFO] ai_worker.mcp_client: Discovered remote tool: self_hosted__run_backtest (Remote: run_backtest)
+2026-01-27 23:05:17 [INFO] ai_worker.mcp_client: Connected to MCP server: self_hosted
+2026-01-27 23:05:17 [INFO] ai_worker.mcp_client: Connecting to MCP server: filesystem (npx -y @modelcontextprotocol/server-filesystem /Users/haojunliu/Easy/Projects/playground/ai_worker/reports)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_file (Remote: read_file)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_text_file (Remote: read_text_file)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_media_file (Remote: read_media_file)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__read_multiple_files (Remote: read_multiple_files)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__write_file (Remote: write_file)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__edit_file (Remote: edit_file)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__create_directory (Remote: create_directory)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__list_directory (Remote: list_directory)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__list_directory_with_sizes (Remote: list_directory_with_sizes)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__directory_tree (Remote: directory_tree)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__move_file (Remote: move_file)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__search_files (Remote: search_files)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__get_file_info (Remote: get_file_info)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Discovered remote tool: filesystem__list_allowed_directories (Remote: list_allowed_directories)
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Connected to MCP server: filesystem
+2026-01-27 23:05:18 [INFO] ai_worker.mcp_client: Connecting to MCP server: playwright (npx -y @playwright/mcp@latest --headless --browser chromium)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_close (Remote: browser_close)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_resize (Remote: browser_resize)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_console_messages (Remote: browser_console_messages)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_handle_dialog (Remote: browser_handle_dialog)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_evaluate (Remote: browser_evaluate)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_file_upload (Remote: browser_file_upload)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_fill_form (Remote: browser_fill_form)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_install (Remote: browser_install)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_press_key (Remote: browser_press_key)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_type (Remote: browser_type)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_navigate (Remote: browser_navigate)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_navigate_back (Remote: browser_navigate_back)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_network_requests (Remote: browser_network_requests)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_run_code (Remote: browser_run_code)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_take_screenshot (Remote: browser_take_screenshot)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_snapshot (Remote: browser_snapshot)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_click (Remote: browser_click)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_drag (Remote: browser_drag)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_hover (Remote: browser_hover)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_select_option (Remote: browser_select_option)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_tabs (Remote: browser_tabs)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Discovered remote tool: playwright__browser_wait_for (Remote: browser_wait_for)
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Connected to MCP server: playwright
+2026-01-27 23:05:20 [INFO] ai_worker.mcp_client: Connecting to MCP server: duckduckgo (uvx duckduckgo-mcp-server)
+2026-01-27 23:05:21 [INFO] ai_worker.mcp_client: Discovered remote tool: duckduckgo__search (Remote: search)
+2026-01-27 23:05:21 [INFO] ai_worker.mcp_client: Discovered remote tool: duckduckgo__fetch_content (Remote: fetch_content)
+2026-01-27 23:05:21 [INFO] ai_worker.mcp_client: Connected to MCP server: duckduckgo
+2026-01-27 23:05:21 [INFO] ai_worker.mcp_client: Connecting to MCP server: brave_search (npx -y @brave/brave-search-mcp-server --brave-api-key BSArZFCXk0bGtdRxR6I2Y2NsEOpxyyg)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_web_search (Remote: brave_web_search)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_local_search (Remote: brave_local_search)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_video_search (Remote: brave_video_search)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_image_search (Remote: brave_image_search)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_news_search (Remote: brave_news_search)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Discovered remote tool: brave_search__brave_summarizer (Remote: brave_summarizer)
+2026-01-27 23:05:23 [INFO] ai_worker.mcp_client: Connected to MCP server: brave_search
+2026-01-27 23:05:23 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__fetch_market_data' instead of local 'fetch_market_data'
+2026-01-27 23:05:23 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__run_backtest' instead of local 'run_backtest'
+2026-01-27 23:05:23 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__read_pdf' instead of local 'read_pdf'
+2026-01-27 23:05:23 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__web_search' instead of local 'web_search'
+2026-01-27 23:05:23 [INFO] ai_worker.tools.registry: [MCP-First] Using 'self_hosted__web_search' instead of local 'web_search'
+2026-01-27 23:05:23 [INFO] ai_worker.workers.daily_brief_worker: Registered duckduckgo__search
+2026-01-27 23:05:23 [INFO] ai_worker.workers.daily_brief_worker: Registered playwright__browser_navigate
+2026-01-27 23:05:23 [INFO] ai_worker.workers.daily_brief_worker: Registered playwright__browser_snapshot
+2026-01-27 23:05:23 [INFO] ai_worker.workers.daily_brief_worker: Registered filesystem__write_file
+2026-01-27 23:05:23 [INFO] __main__: Initialized workers: ['default', 'intel', 'strategy', 'research', 'web_search', 'game', 'daily_brief']
+2026-01-27 23:05:23 [WARNING] discord.client: PyNaCl is not installed, voice will NOT be supported
+2026-01-27 23:05:23 [INFO] __main__: Daily brief DISABLED. Use !enablebrief to activate.
+2026-01-27 23:05:23 [INFO] apscheduler.scheduler: Scheduler started
+2026-01-27 23:05:23 [INFO] ai_worker.adapters.discord_adapter: Starting Discord adapter...
+2026-01-27 23:05:23 [INFO] discord.client: logging in using static token
+2026-01-27 23:05:24 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 4e8e1544b3983b2c2c2ca09b0f5badb3).
+2026-01-27 23:05:26 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-27 23:17:58 [INFO] __main__: [discord] kelvin.l9642: !aihelp
+2026-01-27 23:42:37 [INFO] discord.gateway: Shard ID None session has been invalidated.
+2026-01-27 23:42:43 [INFO] discord.gateway: Shard ID None has connected to Gateway (Session ID: 29eecd234056071f5d8e39ea1f09f849).
+2026-01-27 23:42:45 [INFO] ai_worker.adapters.discord_adapter: Discord bot logged in as AI Worker Bot#0523
+2026-01-27 23:47:22 [INFO] __main__: [discord] kelvin.l9642: !schedule
+2026-01-27 23:49:19 [INFO] __main__: [discord] kelvin.l9642: !brief
+2026-01-27 23:49:24 [INFO] ai_worker.workers.daily_brief_worker: Got results for AI/Tech News
+2026-01-27 23:49:26 [INFO] ai_worker.workers.daily_brief_worker: Got results for GitHub Trending
+2026-01-27 23:49:27 [INFO] ai_worker.workers.daily_brief_worker: Got results for ArXiv Papers
+2026-01-27 23:49:29 [INFO] ai_worker.workers.daily_brief_worker: Got results for Investment
+2026-01-27 23:49:43 [INFO] httpx: HTTP Request: POST http://127.0.0.1:8045/v1/chat/completions "HTTP/1.1 200 OK"
+2026-01-27 23:49:44 [INFO] ai_worker.workers.daily_brief_worker: Report saved to /Users/haojunliu/Easy/Projects/playground/ai_worker/reports/daily_brief_2026-01-27.md
+2026-01-28 00:07:54 [INFO] discord.gateway: Shard ID None has successfully RESUMED session 29eecd234056071f5d8e39ea1f09f849.
+2026-01-28 00:21:42 [INFO] __main__: Received signal 15
+2026-01-28 00:21:42 [INFO] __main__: Shutting down AI Worker...
+2026-01-28 00:21:42 [INFO] __main__: Scheduler stopped
+2026-01-28 00:21:42 [INFO] apscheduler.scheduler: Scheduler has been shut down
+2026-01-28 00:21:42 [INFO] ai_worker.adapters.discord_adapter: Stopping Discord adapter...

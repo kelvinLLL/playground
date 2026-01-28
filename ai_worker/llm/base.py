@@ -5,8 +5,17 @@ All LLM providers (OpenAI, Anthropic, etc.) inherit from this base class.
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Optional
+
+
+@dataclass
+class ToolCall:
+    """A tool/function call requested by the LLM."""
+
+    id: str
+    name: str
+    arguments: dict[str, Any]
 
 
 @dataclass
@@ -17,14 +26,28 @@ class LLMResponse:
     model: str
     usage: dict[str, int]  # token usage stats
     raw_response: Optional[Any] = None
+    tool_calls: list[ToolCall] = field(default_factory=list)
+    finish_reason: str = "stop"
+
+
+@dataclass
+class ToolDefinition:
+    """Definition of a tool/function for the LLM."""
+
+    name: str
+    description: str
+    parameters: dict[str, Any]  # JSON Schema format
 
 
 @dataclass
 class Message:
     """A single message in a conversation."""
 
-    role: str  # system, user, assistant
+    role: str  # system, user, assistant, tool
     content: str
+    tool_calls: Optional[list[ToolCall]] = None  # For assistant messages with tool calls
+    tool_call_id: Optional[str] = None  # For tool result messages
+    name: Optional[str] = None  # Tool name for tool result messages
 
 
 class BaseLLM(ABC):

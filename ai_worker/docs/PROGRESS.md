@@ -25,6 +25,7 @@
 | ResearchWorker | PDF/paper analysis | read_pdf |
 | IntelWorker | Market data fetching | fetch_market_data |
 | StrategyWorker | Backtesting | run_backtest |
+| **DailyBriefWorker** | **Daily intelligence reports** | **search, playwright, filesystem** |
 
 ## Phase 3: Memory System (Completed)
 
@@ -32,24 +33,7 @@
 - [x] PersistentMemory - Long-term SQLite storage
 - [x] Worker internal memory
 
-**Discord Commands:**
-- `!remember <key> <value>` - Store a fact
-- `!recall <key>` - Retrieve a fact
-- `!forget <key>` - Delete a fact
-- `!memory` - Show all memories
-- `!clearhistory` - Clear channel conversation
-- `!clearall` - **NEW** Clear ALL memory (conversation + persistent + worker)
-
-## Phase 4: MCP Integration (Completed - 2026-01-27)
-
-### MCP-First Architecture
-
-Workers automatically use MCP tools when available, falling back to local implementations.
-
-**Key Components:**
-- `ToolRegistry.prefer_mcp = True` - Auto-discovers MCP versions
-- `MCPProxyTool` - Wraps remote MCP tools for local use
-- `${VAR}` expansion in mcp_servers.json
+## Phase 4: MCP Integration (Completed)
 
 ### Connected MCP Servers (5 total, 48 tools)
 
@@ -61,62 +45,89 @@ Workers automatically use MCP tools when available, falling back to local implem
 | duckduckgo | duckduckgo-mcp-server (uvx) | 2 (search, fetch_content) |
 | brave_search | @brave/brave-search-mcp-server | 6 (web/news/image/video search) |
 
-### Configuration Files
+## Phase 5: Daily Briefing System (Completed - 2026-01-27)
 
-**mcp_servers.json:**
-```json
-{
-  "mcpServers": {
-    "self_hosted": { "command": "python", "args": ["-m", "ai_worker.mcp_server"] },
-    "filesystem": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "..."] },
-    "playwright": { "command": "npx", "args": ["-y", "@playwright/mcp@latest", "--headless"] },
-    "duckduckgo": { "command": "uvx", "args": ["duckduckgo-mcp-server"] },
-    "brave_search": { "command": "npx", "args": ["...", "${BRAVE_API_KEY}"] }
-  }
-}
-```
+### Features
 
-**.env:**
-```
-DISCORD_TOKEN=...
-OPENAI_API_KEY=sk-antigravity
-OPENAI_BASE_URL=http://127.0.0.1:8045/v1
-OPENAI_MODEL=gemini-3-flash
-TAVILY_API_KEY=...
-BRAVE_API_KEY=...
+- **4-Phase Pipeline:** Scouting → Deep Dive → Editorial → Delivery
+- **Configurable Schedule:** Via `.env` or Discord commands
+- **Opt-in Activation:** Disabled by default, requires `!enablebrief`
+- **Persistent Settings:** All settings survive restarts
+
+### Configuration (.env)
+
+```env
+DAILY_BRIEF_HOUR=8
+DAILY_BRIEF_MINUTE=0
+NOTIFICATION_CHANNEL_ID=
+DAILY_BRIEF_ENABLED=false
 ```
 
 ---
 
-## Current Architecture
+## Phase 6: Smart Routing & Experience Upgrade (Completed - 2026-01-28)
 
-```
-ai_worker/
-├── config/settings.py          # Settings with dotenv
-├── core/message.py             # StandardMessage abstraction
-├── adapters/discord_adapter.py # Discord bot
-├── workers/
-│   ├── base.py                 # BaseWorker with register_tool(as_name=)
-│   ├── default.py              # General chat
-│   ├── research_worker.py      # PDF analysis
-│   ├── web_search_worker.py    # Web search
-│   ├── game_worker.py          # Game guides
-│   └── quant/
-│       ├── intel_worker.py     # Market data
-│       └── strategy_worker.py  # Backtesting
-├── tools/
-│   ├── base.py                 # BaseTool, ToolResult
-│   ├── registry.py             # MCP-First ToolRegistry
-│   └── *.py                    # Local tool implementations
-├── memory/
-│   ├── conversation.py         # Short-term memory
-│   └── persistent.py           # SQLite long-term memory
-├── mcp_server.py               # FastMCP server (4 tools)
-├── mcp_client.py               # MCPClientManager
-├── mcp_servers.json            # MCP server configs
-├── reports/                    # Filesystem MCP sandbox
-└── main.py                     # Entry point
-```
+### Major Improvements
+- **Smart Routing:** Replaced hardcoded keyword matching with LLM-based routing (`DefaultWorker` as Router)
+- **Function Calling:** Added `chat_with_tools` support to OpenAIClient
+- **File Delivery:** Daily briefs now return the full markdown file as an attachment in Discord
+- **Model Upgrade:** Switched to `gemini-3-pro-high` for better reasoning
+
+### Routing Logic
+User Message → DefaultWorker (Smart Router)
+                    ↓
+              LLM decides (function calling)
+                    ↓
+        ┌──────────┼──────────┐
+        ↓          ↓          ↓
+  call_worker  call_mcp_tool  respond_directly
+        ↓          ↓          ↓
+   Specialized   MCP Tools   Direct LLM
+    Workers                   Response
+
+## Discord Commands Reference
+
+### 基础命令
+| Command | Description |
+|---------|-------------|
+| `!ping` | 检查响应延迟 |
+| `!hello` | 打招呼 |
+| `!aihelp` | 显示完整帮助 |
+
+### 记忆系统
+| Command | Description |
+|---------|-------------|
+| `!remember <key> <value>` | 记住事实 |
+| `!recall <key>` | 回忆事实 |
+| `!forget <key>` | 忘记事实 |
+| `!memory` | 显示所有记忆 |
+| `!clearhistory` | 清除频道对话 |
+| `!clearall` | 清除所有记忆 |
+
+### 每日简报
+| Command | Description |
+|---------|-------------|
+| `!brief` | 手动生成简报 |
+| `!enablebrief` | 启用定时简报 |
+| `!disablebrief` | 禁用定时简报 |
+| `!setchannel` | 设置通知频道 |
+| `!settime <h> <m>` | 设置时间 |
+| `!schedule` | 查看定时任务 |
+
+### 工具调试
+| Command | Description |
+|---------|-------------|
+| `!tools` | 列出所有工具 |
+| `!mcp_test <query>` | 测试 MCP 调用 |
+
+### 自然语言交互 (Smart Routing)
+No more hardcoded "search xxx" commands! Just talk naturally:
+- "Help me find the latest AI news" → Routes to Web Search
+- "How do I beat the final boss in Elden Ring?" → Routes to Game Worker
+- "Summarize this paper: [PDF Link]" → Routes to Research Worker
+- "Analyze TSLA stock" → Routes to Intel Worker
+- "Run a backtest for AAPL" → Routes to Strategy Worker
+- "Generate today's brief" → Routes to Daily Brief Worker
 
 ---
 
@@ -134,6 +145,38 @@ pkill -f "ai_worker.main"
 
 ---
 
+## Architecture
+
+```
+ai_worker/
+├── config/settings.py          # Settings with SchedulerConfig
+├── core/message.py             # StandardMessage abstraction
+├── adapters/discord_adapter.py # Discord bot
+├── workers/
+│   ├── base.py                 # BaseWorker
+│   ├── default.py              # General chat
+│   ├── daily_brief_worker.py   # Daily intelligence reports
+│   ├── research_worker.py      # PDF analysis
+│   ├── web_search_worker.py    # Web search
+│   ├── game_worker.py          # Game guides
+│   └── quant/
+│       ├── intel_worker.py     # Market data
+│       └── strategy_worker.py  # Backtesting
+├── tools/
+│   ├── registry.py             # MCP-First ToolRegistry
+│   └── *.py                    # Local tool implementations
+├── memory/
+│   ├── conversation.py         # Short-term memory
+│   └── persistent.py           # SQLite long-term memory
+├── mcp_server.py               # FastMCP server (4 tools)
+├── mcp_client.py               # MCPClientManager
+├── mcp_servers.json            # MCP server configs
+├── reports/                    # Daily brief output directory
+└── main.py                     # Entry point with APScheduler
+```
+
+---
+
 ## Known Issues
 
 1. **SSL Certificate:** Need `NODE_TLS_REJECT_UNAUTHORIZED=0` for npm packages
@@ -144,31 +187,19 @@ pkill -f "ai_worker.main"
 
 ## Next Phase: Planned Features
 
-### Option A: Daily Briefing Worker
-Scheduled worker that:
-1. Searches trending papers/GitHub repos
-2. Gathers daily news and investment insights
-3. Uses tiered search: DuckDuckGo → Brave → Tavily
-4. Scrapes with Playwright for deep content
-5. Writes markdown reports to `reports/`
-
-### Option B: Function Calling Integration
-Upgrade LLM client to support proper OpenAI function calling:
-- Workers can dynamically decide which tools to use
+### Option A: Function Calling Integration
+- LLM dynamically decides which tools to use
 - More natural multi-tool workflows
 
-### Option C: Multi-Platform Support
-Add adapters for:
+### Option B: Multi-Platform Support
 - Feishu (飞书)
-- Slack
-- Telegram
+- Slack / Telegram
 
-### Option D: Agent Orchestration
-Create a Manager/Dispatcher that:
-- Routes complex tasks to multiple workers
-- Coordinates multi-step workflows
-- Implements ReAct-style reasoning
+### Option C: Enhanced Daily Brief
+- Playwright scraping for full articles
+- Tiered search: DuckDuckGo → Brave → Tavily
+- Configurable topics via Discord
 
 ---
 
-*Last Updated: 2026-01-27 21:45*
+*Last Updated: 2026-01-27 22:45*

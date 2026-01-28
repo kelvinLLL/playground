@@ -52,6 +52,11 @@ class WebSearchTool(BaseTool):
                     "description": "Maximum number of results to return (1-10)",
                     "default": 5,
                 },
+                "timelimit": {
+                    "type": "string",
+                    "description": "Time filter: 'd' (day), 'w' (week), 'm' (month), or None for all time",
+                    "default": None,
+                },
             },
             "required": ["query"],
         }
@@ -59,6 +64,7 @@ class WebSearchTool(BaseTool):
     async def execute(self, **kwargs: Any) -> ToolResult:
         query = kwargs.get("query")
         max_results = min(kwargs.get("max_results", 5), 10)
+        timelimit = kwargs.get("timelimit")  # 'd', 'w', 'm', or None
 
         if not query:
             return ToolResult(
@@ -74,7 +80,7 @@ class WebSearchTool(BaseTool):
                     return result
                 logger.warning(f"Tavily search failed: {result.error}, falling back")
 
-            return await self._search_duckduckgo(query, max_results)
+            return await self._search_duckduckgo(query, max_results, timelimit)
 
         except Exception as e:
             logger.error(f"Web search error: {e}")
@@ -124,7 +130,15 @@ class WebSearchTool(BaseTool):
             formatted_output = self._format_results(query, results)
             return ToolResult(success=True, data=formatted_output)
 
-    async def _search_duckduckgo(self, query: str, max_results: int) -> ToolResult:
+    async def _search_duckduckgo(self, query: str, max_results: int, timelimit: str = None) -> ToolResult:
+        """
+        Search using DuckDuckGo.
+        
+        Args:
+            query: Search query
+            max_results: Max results to return
+            timelimit: Time filter - 'd' (day), 'w' (week), 'm' (month), or None
+        """
         try:
             from ddgs import DDGS
         except ImportError:
@@ -140,9 +154,16 @@ class WebSearchTool(BaseTool):
         try:
             import asyncio
             loop = asyncio.get_event_loop()
+            
+            # Build search kwargs with optional timelimit
+            search_kwargs = {"max_results": max_results}
+            if timelimit in ('d', 'w', 'm'):
+                search_kwargs["timelimit"] = timelimit
+                logger.info(f"DuckDuckGo search with timelimit='{timelimit}' for query: {query}")
+            
             search_results = await loop.run_in_executor(
                 None,
-                lambda: list(DDGS().text(query, max_results=max_results))
+                lambda: list(DDGS().text(query, **search_kwargs))
             )
 
             if not search_results:
