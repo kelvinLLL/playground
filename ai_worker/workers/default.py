@@ -1,11 +1,14 @@
 """
 Smart Router Worker - LLM-based intelligent routing.
 
-Uses function calling to decide which worker/tool to invoke.
+Uses function calling to decide whether to:
+1. Execute a Skill directly (atomic capability)
+2. Route to a specialized Worker (complex workflow)
+3. Respond directly
 """
 
 import logging
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from ai_worker.core.message import (
     MessageType,
@@ -15,138 +18,124 @@ from ai_worker.core.message import (
 from ai_worker.llm.base import BaseLLM, Message, ToolDefinition, ToolCall
 from ai_worker.llm.openai_client import OpenAIClient
 from ai_worker.workers.base import BaseWorker, WorkerConfig
-from ai_worker.tools.registry import ToolRegistry
+from ai_worker.tools.base import BaseTool
+
+# Skills
+from ai_worker.skills.base import BaseSkill, combine_skill_tools, combine_skill_instructions
+from ai_worker.skills.search import SearchSkill
+from ai_worker.skills.browser import BrowserSkill
+from ai_worker.skills.realtime_intel import RealtimeIntelSkill
+from ai_worker.skills.deep_research import DeepResearchSkill
 
 logger = logging.getLogger(__name__)
 
 
-ROUTER_SYSTEM_PROMPT = """You are an intelligent AI assistant router. You analyze user requests and decide how to handle them.
+ROUTER_BASE_PROMPT = """You are Sisyphus, an intelligent AI employee. 
+You have access to a suite of Tools (Skills) and Specialized Workers.
 
-You have access to the following capabilities:
+## Your Capabilities
+1. **Direct Action**: You can perform many tasks directly using your tools (Search, Browser, Analysis).
+   - "Search for X" -> Use search tool
+   - "Read this link" -> Use browser tool
+   - "What's trending" -> Use realtime intel tool
+   
+2. **Delegation**: For complex, multi-step workflows, delegate to a Specialist.
+   - "Generate a daily brief" -> Delegate to DailyBrief Worker
+   - "Help me beat Malenia in Elden Ring" -> Delegate to Game Worker
+   - "Analyze this PDF and write a report" -> Use your Browser Skill (read_pdf) directly
 
-## Workers (Sub-agents)
-- daily_brief: Generate daily intelligence reports with AI/tech news, GitHub trending, ArXiv papers
-- web_search: Search the web for current information using Tavily or DuckDuckGo
-- game: Game guides, walkthroughs, boss strategies, builds
-- research: Analyze PDFs, papers, documents (especially from ArXiv)
-- intel: Fetch market data and financial information
-- strategy: Run backtests and trading strategy analysis
-
-## MCP Servers (Direct tools)
-- self_hosted: web_search, read_pdf, fetch_market_data, run_backtest
-- filesystem: Read/write files in reports directory
-- playwright: Browser automation (navigate, click, screenshot)
-- duckduckgo: Free web search
-- brave_search: Brave search engine
-
-## How to decide:
-1. If the user asks for daily brief/news/summary → call worker "daily_brief"
-2. If the user asks to search something → call worker "web_search" OR tool "duckduckgo__search"
-3. If the user asks about game guides/strategies → call worker "game"
-4. If the user sends PDF/ArXiv link → call worker "research"
-5. If the user asks about stocks/market data → call worker "intel"
-6. If the user asks for backtest → call worker "strategy"
-7. For complex multi-step tasks → call appropriate workers in sequence
-8. For simple questions → respond directly without tools
-
-Always prefer workers for complex tasks. Use MCP tools directly for simple operations.
-Respond in the user's language (Chinese if they use Chinese).
+## Guidelines
+- **Prefer Direct Action**: If you can solve it with your tools, do it. Don't delegate trivial tasks.
+- **Complex Workflows**: Delegate tasks that require maintaining state or following a strict process.
+- **Language**: Respond in the same language as the user (default to Chinese for Chinese queries).
 """
-
-
-def get_router_tools() -> list[ToolDefinition]:
-    """Define tools for the router LLM."""
-    return [
-        ToolDefinition(
-            name="call_worker",
-            description="Call a specialized worker to handle the task",
-            parameters={
-                "type": "object",
-                "properties": {
-                    "worker_name": {
-                        "type": "string",
-                        "enum": ["daily_brief", "web_search", "game", "research", "intel", "strategy"],
-                        "description": "Name of the worker to call"
-                    },
-                    "task_description": {
-                        "type": "string",
-                        "description": "Description of what the worker should do"
-                    }
-                },
-                "required": ["worker_name", "task_description"]
-            }
-        ),
-        ToolDefinition(
-            name="call_mcp_tool",
-            description="Call an MCP tool directly for simple operations",
-            parameters={
-                "type": "object",
-                "properties": {
-                    "tool_name": {
-                        "type": "string",
-                        "description": "Full MCP tool name like 'duckduckgo__search' or 'playwright__browser_navigate'"
-                    },
-                    "arguments": {
-                        "type": "object",
-                        "description": "Arguments to pass to the tool"
-                    }
-                },
-                "required": ["tool_name", "arguments"]
-            }
-        ),
-        ToolDefinition(
-            name="respond_directly",
-            description="Respond directly to the user without calling other workers or tools",
-            parameters={
-                "type": "object",
-                "properties": {
-                    "response": {
-                        "type": "string",
-                        "description": "Direct response to the user"
-                    }
-                },
-                "required": ["response"]
-            }
-        )
-    ]
 
 
 class DefaultWorker(BaseWorker):
     """
-    Smart Router Worker - uses LLM function calling to route requests.
+    Smart Router Worker - The "Head" of the AI Agent.
     
-    This is the main entry point that decides which worker or tool to invoke
-    based on user intent, replacing hardcoded keyword matching.
+    It is both a Router and a Capable Agent.
+    - Loads common Skills (Search, Browser, etc.)
+    - Routes to specialized Workers when necessary
     """
 
     def __init__(self, llm: BaseLLM, workers: Optional[dict[str, BaseWorker]] = None):
         config = WorkerConfig(
             name="Router",
             description="Intelligent router that uses LLM to decide how to handle requests.",
-            system_prompt=ROUTER_SYSTEM_PROMPT,
+            system_prompt=ROUTER_BASE_PROMPT,
         )
         super().__init__(config)
         self.llm = llm
         self.workers = workers or {}
-        self.router_tools = get_router_tools()
+        
+        # Initialize Skills
+        self.skills: List[BaseSkill] = [
+            SearchSkill(),
+            BrowserSkill(),
+            RealtimeIntelSkill(),
+            DeepResearchSkill(),
+        ]
+        
+        # Load tools from skills
+        self._tools = {}
+        for skill in self.skills:
+            for tool in skill.get_tools():
+                self._tools[tool.name] = tool
+        
+        # Build tool definitions for LLM
+        self.router_tools = self._build_router_tools()
 
     def set_workers(self, workers: dict[str, BaseWorker]) -> None:
         """Set available workers for routing."""
         self.workers = workers
+        # Re-build tools to ensure worker list is up-to-date
+        self.router_tools = self._build_router_tools()
+
+    def _build_router_tools(self) -> List[ToolDefinition]:
+        """Combine Skill tools + Routing tools."""
+        tools = []
+        
+        # 1. Add tools from Skills
+        for tool in self._tools.values():
+            tools.append(ToolDefinition(
+                name=tool.name,
+                description=tool.description,
+                parameters=tool.parameters
+            ))
+        
+        # 2. Add routing tool
+        worker_names = list(self.workers.keys())
+        if worker_names:
+            tools.append(ToolDefinition(
+                name="call_worker",
+                description="Delegate a complex task to a specialized worker",
+                parameters={
+                    "type": "object",
+                    "properties": {
+                        "worker_name": {
+                            "type": "string",
+                            "enum": worker_names,
+                            "description": "Name of the worker to call"
+                        },
+                        "task_description": {
+                            "type": "string",
+                            "description": "Specific instruction for the worker"
+                        }
+                    },
+                    "required": ["worker_name", "task_description"]
+                }
+            ))
+            
+        return tools
 
     async def process(
         self, 
         message: StandardMessage, 
         notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
-        """
-        Process a message using LLM-based routing.
-
-        The LLM decides whether to:
-        1. Call a specialized worker
-        2. Call an MCP tool directly
-        3. Respond directly
-        """
+        """Process message with Skills + Routing."""
         try:
             return await self._route_with_llm(message, notifier)
         except Exception as e:
@@ -161,26 +150,44 @@ class DefaultWorker(BaseWorker):
         message: StandardMessage,
         notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
-        """Use LLM with function calling to route the request."""
+        """Use LLM to route or execute."""
         
-        system_content = self.system_prompt
+        # 1. Build System Prompt with Skill Instructions
+        skill_instructions = combine_skill_instructions(self.skills)
+        system_content = f"{self.system_prompt}\n\n## Skill Instructions\n{skill_instructions}"
+        
         user_context = message.metadata.get("user_context", "") if message.metadata else ""
         if user_context:
-            system_content += f"\n\nContext about this user:\n{user_context}"
+            system_content += f"\n\n## User Context\n{user_context}"
+        
+        # 2. Inject Context Links (for reference resolution)
+        context_links = message.metadata.get("context_links", []) if message.metadata else []
+        if context_links:
+            links_section = "\n\n## Active Context (Recent Links)\n"
+            links_section += "The user may refer to these items by number or description:\n"
+            for i, link in enumerate(context_links[:15], 1):  # Limit to 15
+                title = link.get("title", "Untitled")[:60]
+                url = link.get("url", "")
+                links_section += f"{i}. [{title}]({url})\n"
+            system_content += links_section
 
         messages = [Message(role="system", content=system_content)]
         
+        # 3. Add History
         conversation_history = message.metadata.get("conversation_history", []) if message.metadata else []
         for msg in conversation_history[:-1]:
             messages.append(Message(role=msg["role"], content=msg["content"]))
         
         messages.append(Message(role="user", content=message.content))
 
+        # 4. Call LLM
         if not isinstance(self.llm, OpenAIClient):
             logger.warning("LLM does not support function calling, falling back to direct response")
             response = await self.llm.chat(messages)
             return StandardResponse(content=response.content, message_type=MessageType.TEXT)
 
+        # Loop for multi-step tool execution
+        # (Simple implementation: 1 tool call -> result -> final answer)
         llm_response = await self.llm.chat_with_tools(
             messages=messages,
             tools=self.router_tools,
@@ -193,85 +200,95 @@ class DefaultWorker(BaseWorker):
                 message_type=MessageType.TEXT
             )
 
+        # 4. Execute Tool
+        # Handle the first tool call
         tool_call = llm_response.tool_calls[0]
-        return await self._execute_tool_call(tool_call, message, notifier)
+        
+        if tool_call.name == "call_worker":
+            return await self._execute_worker_call(tool_call, message, notifier)
+        else:
+            return await self._execute_local_tool(tool_call, messages, notifier)
 
-    async def _execute_tool_call(
+    async def _execute_worker_call(
         self,
         tool_call: ToolCall,
         original_message: StandardMessage,
         notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
-        """Execute the tool call decided by the LLM."""
+        """Delegate to another worker."""
+        worker_name = tool_call.arguments.get("worker_name")
+        task_desc = tool_call.arguments.get("task_description", original_message.content)
         
-        if tool_call.name == "respond_directly":
+        worker = self.workers.get(worker_name)
+        if not worker:
+            return StandardResponse(content=f"Worker '{worker_name}' not available.")
+        
+        if notifier:
+            await notifier(f"🔄 Delegating to **{worker_name}**...")
+        
+        logger.info(f"Delegating to worker: {worker_name}")
+        
+        routed_message = StandardMessage(
+            id=original_message.id,
+            content=task_desc,
+            message_type=original_message.message_type,
+            platform=original_message.platform,
+            author=original_message.author,
+            channel=original_message.channel,
+            timestamp=original_message.timestamp,
+            raw_data=original_message.raw_data,
+            metadata=original_message.metadata,
+            attachments=original_message.attachments,
+        )
+        
+        return await worker.process(routed_message, notifier=notifier)
+
+    async def _execute_local_tool(
+        self,
+        tool_call: ToolCall,
+        history: List[Message],
+        notifier: Optional[Callable[[str], Any]] = None
+    ) -> StandardResponse:
+        """Execute a local tool (from a Skill) and get final answer."""
+        tool_name = tool_call.name
+        tool_args = tool_call.arguments
+        
+        tool = self._tools.get(tool_name)
+        if not tool:
+            return StandardResponse(content=f"Error: Tool '{tool_name}' not found.")
+        
+        if notifier:
+            await notifier(f"🔧 Using tool: **{tool_name}**...")
+            
+        logger.info(f"Executing tool: {tool_name} args={tool_args}")
+        
+        try:
+            result = await tool.execute(**tool_args)
+            tool_output = str(result.data) if result.success else f"Error: {result.error}"
+            
+            # Feed result back to LLM for final answer
+            history.append(Message(
+                role="assistant",
+                content=None,
+                tool_calls=[tool_call]
+            ))
+            history.append(Message(
+                role="tool",
+                content=tool_output,
+                tool_call_id=tool_call.id
+            ))
+            
+            final_response = await self.llm.chat_with_tools(
+                messages=history,
+                tools=self.router_tools,
+                tool_choice="none" # Force text response
+            )
+            
             return StandardResponse(
-                content=tool_call.arguments.get("response", ""),
+                content=final_response.content,
                 message_type=MessageType.TEXT
             )
-
-        if tool_call.name == "call_worker":
-            worker_name = tool_call.arguments.get("worker_name")
-            task_desc = tool_call.arguments.get("task_description", original_message.content)
             
-            worker = self.workers.get(worker_name)
-            if not worker:
-                return StandardResponse(
-                    content=f"Worker '{worker_name}' not available.",
-                    message_type=MessageType.TEXT
-                )
-            
-            if notifier:
-                await notifier(f"🔄 Routing to **{worker_name}** worker...")
-            
-            logger.info(f"Routing to worker: {worker_name}")
-            
-            routed_message = StandardMessage(
-                id=original_message.id,
-                content=task_desc,
-                message_type=original_message.message_type,
-                platform=original_message.platform,
-                author=original_message.author,
-                channel=original_message.channel,
-                timestamp=original_message.timestamp,
-                raw_data=original_message.raw_data,
-                metadata=original_message.metadata,
-                attachments=original_message.attachments,
-            )
-            
-            return await worker.process(routed_message, notifier=notifier)
-
-        if tool_call.name == "call_mcp_tool":
-            tool_name = tool_call.arguments.get("tool_name")
-            tool_args = tool_call.arguments.get("arguments", {})
-            
-            if notifier:
-                await notifier(f"🔧 Calling MCP tool: **{tool_name}**...")
-            
-            logger.info(f"Calling MCP tool: {tool_name} with args: {tool_args}")
-            
-            try:
-                tool = ToolRegistry.create_tool(tool_name)
-                result = await tool.execute(**tool_args)
-                
-                if result.success:
-                    return StandardResponse(
-                        content=str(result.data),
-                        message_type=MessageType.TEXT
-                    )
-                else:
-                    return StandardResponse(
-                        content=f"Tool error: {result.error}",
-                        message_type=MessageType.TEXT
-                    )
-            except Exception as e:
-                logger.error(f"MCP tool call failed: {e}")
-                return StandardResponse(
-                    content=f"Failed to call tool '{tool_name}': {str(e)}",
-                    message_type=MessageType.TEXT
-                )
-
-        return StandardResponse(
-            content=f"Unknown action: {tool_call.name}",
-            message_type=MessageType.TEXT
-        )
+        except Exception as e:
+            logger.error(f"Tool execution failed: {e}")
+            return StandardResponse(content=f"Tool execution failed: {str(e)}")

@@ -20,8 +20,6 @@ import ai_worker.tools  # noqa: F401
 from ai_worker.workers.default import DefaultWorker
 from ai_worker.workers.quant.intel_worker import IntelWorker
 from ai_worker.workers.quant.strategy_worker import StrategyWorker
-from ai_worker.workers.research_worker import ResearchWorker
-from ai_worker.workers.web_search_worker import WebSearchWorker
 from ai_worker.workers.game_worker import GameWorker
 from ai_worker.workers.daily_brief_worker import DailyBriefWorker
 from ai_worker.config.curated_sources import (
@@ -80,6 +78,10 @@ class AIWorkerApp:
         self.workers = {}
         self.default_worker = None
         
+        # Context links cache: channel_id -> list of {title, url}
+        # Used for context-aware follow-up questions
+        self.context_links_cache: dict[str, list[dict[str, str]]] = {}
+        
         # Load notification channel from config (persisted in .env)
         self.notification_channel_id: Optional[str] = (
             self.settings.scheduler.notification_channel_id or None
@@ -99,11 +101,6 @@ class AIWorkerApp:
         # Initialize specialized workers
         intel_worker = IntelWorker(llm)
         strategy_worker = StrategyWorker(llm)
-        research_worker = ResearchWorker(llm)
-        web_search_worker = WebSearchWorker(
-            llm,
-            tavily_api_key=self.settings.search.tavily_api_key or None
-        )
         game_worker = GameWorker(
             llm,
             tavily_api_key=self.settings.search.tavily_api_key or None
@@ -114,8 +111,6 @@ class AIWorkerApp:
         self.workers = {
             "intel": intel_worker,
             "strategy": strategy_worker,
-            "research": research_worker,
-            "web_search": web_search_worker,
             "game": game_worker,
             "daily_brief": daily_brief_worker,
         }
@@ -205,6 +200,10 @@ class AIWorkerApp:
         message.metadata["conversation_history"] = conversation_context
         message.metadata["user_context"] = persistent_context
         
+        # Inject context links from recent interactions (e.g., daily brief)
+        if channel_id in self.context_links_cache:
+            message.metadata["context_links"] = self.context_links_cache[channel_id]
+        
         # Route via smart router (DefaultWorker with LLM function calling)
         response = await self.default_worker.process(message, notifier=progress_notifier)
         
@@ -212,6 +211,11 @@ class AIWorkerApp:
         self.conversation_memory.add_assistant_message(
             user_id, channel_id, response.content
         )
+        
+        # If response contains context_links (e.g., from DailyBrief), cache them
+        if response.extras and response.extras.get("context_links"):
+            self.context_links_cache[channel_id] = response.extras["context_links"]
+            logger.info(f"Cached {len(response.extras['context_links'])} context links for channel {channel_id}")
 
         # Send final response
         await current_adapter.reply(message, response)
@@ -318,16 +322,34 @@ class AIWorkerApp:
                 f"- Worker memory: all cleared"
             )
 
-        @adapter.bot.command(name="tools")
-        async def tools_command(ctx):
-            """List all registered tools (local + MCP)."""
-            from ai_worker.tools.registry import ToolRegistry
-            tools = ToolRegistry.list_tools()
-            local_tools = [t for t in tools if "__" not in t]
-            mcp_tools = [t for t in tools if "__" in t]
+        @adapter.bot.command(name="skills")
+        async def skills_command(ctx):
+            """List available skills and capabilities."""
+            from ai_worker.skills.base import SkillRegistry
             
-            msg = f"**Local Tools ({len(local_tools)}):** {', '.join(local_tools)}\n"
-            msg += f"**MCP Tools ({len(mcp_tools)}):** {', '.join(mcp_tools)}"
+            skills = SkillRegistry.list_skills()
+            
+            # Group by category
+            by_category = {}
+            for skill in skills:
+                cat = skill.category
+                if cat not in by_category:
+                    by_category[cat] = []
+                by_category[cat].append(skill)
+            
+            msg = "**🧠 AI Worker Skills Matrix**\n\n"
+            
+            for cat, cat_skills in by_category.items():
+                msg += f"**{cat}**\n"
+                for s in cat_skills:
+                    msg += f"{s.emoji} **{s.name}**: {s.description}\n"
+                msg += "\n"
+                
+            msg += "**Specialized Workers:**\n"
+            for name, worker in self.workers.items():
+                if name != "default":
+                    msg += f"🤖 **{name.title()}**: {worker.config.description[:50]}...\n"
+            
             await ctx.send(msg)
 
         @adapter.bot.command(name="mcp_test")
@@ -442,6 +464,12 @@ class AIWorkerApp:
                 
                 # Generate the brief
                 response = await worker.generate_brief(notifier=discord_notifier)
+                
+                # Cache context_links for follow-up queries
+                channel_id = str(ctx.channel.id)
+                if response.extras and response.extras.get("context_links"):
+                    self.context_links_cache[channel_id] = response.extras["context_links"]
+                    logger.info(f"[!brief] Cached {len(response.extras['context_links'])} context links for channel {channel_id}")
                 
                 # Send file attachment if available
                 file_path = response.extras.get("file_path")
@@ -624,7 +652,7 @@ class AIWorkerApp:
 **设置步骤**: 1️⃣ `!setchannel` → 2️⃣ `!settime 8 0` → 3️⃣ `!enablebrief`"""
 
             help3 = """**━━━ 工具调试 ━━━**
-`!tools` - 列出所有工具
+`!skills` - 列出所有技能和能力
 `!mcp_test <query>` - 测试 MCP 调用
 
 **━━━ 智能对话 (无需命令) ━━━**

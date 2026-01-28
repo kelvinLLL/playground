@@ -4,16 +4,21 @@ Daily Briefing Worker implementation.
 Generates daily intelligence reports by searching, scraping, and synthesizing
 information from multiple curated high-quality sources.
 
-Supports:
-- RSS feeds (official blogs, news sites)
-- Direct URL scraping (GitHub Trending, HuggingFace Papers)
-- Site-specific search (fallback)
+Architecture:
+- Worker = Workflow orchestrator (stateful, manages flow)
+- Skills = Capability packages (stateless, provides tools)
+
+Skills used:
+- SearchSkill: Web search with time filtering
+- BrowserSkill: Page navigation and PDF reading
+- RealtimeIntelSkill: HN, Reddit, GitHub Trending APIs
 """
 
 import asyncio
 import logging
+import re
 from datetime import datetime
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from ai_worker.core.message import (
     MessageType,
@@ -22,7 +27,13 @@ from ai_worker.core.message import (
 )
 from ai_worker.llm.base import BaseLLM
 from ai_worker.workers.base import BaseWorker, WorkerConfig
-from ai_worker.tools.registry import ToolRegistry
+from ai_worker.tools.base import BaseTool
+
+# Import Skills
+from ai_worker.skills.base import BaseSkill, combine_skill_tools, combine_skill_instructions
+from ai_worker.skills.search import SearchSkill
+from ai_worker.skills.browser import BrowserSkill
+from ai_worker.skills.realtime_intel import RealtimeIntelSkill
 
 # Import curated sources config
 from ai_worker.config.curated_sources import (
@@ -81,7 +92,7 @@ class DailyBriefWorker(BaseWorker):
                 "4. Use clear structure with headers\n"
                 "5. Cite sources when available"
             ),
-            tools=["search", "browser_navigate", "browser_snapshot", "write_file", "rss_feed"],
+            tools=[],  # Tools now come from Skills
         )
         super().__init__(config)
         self.llm = llm
@@ -94,63 +105,27 @@ class DailyBriefWorker(BaseWorker):
         else:
             self.sources = DEFAULT_PROFILE
         
-        # Register tools
-        self._init_tools()
+        # === NEW: Load Skills instead of individual tools ===
+        self._init_skills()
 
-    def _init_tools(self) -> None:
-        """Initialize tools from registry."""
-        # DuckDuckGo search (free, unlimited)
-        try:
-            search_tool = ToolRegistry.create_tool("duckduckgo__search")
-            self._tools["search"] = search_tool
-            logger.info("Registered duckduckgo__search")
-        except Exception as e:
-            logger.warning(f"Failed to register duckduckgo search: {e}")
-
-        # Playwright browser tools
-        try:
-            nav_tool = ToolRegistry.create_tool("playwright__browser_navigate")
-            self._tools["browser_navigate"] = nav_tool
-            logger.info("Registered playwright__browser_navigate")
-        except Exception as e:
-            logger.warning(f"Failed to register playwright navigate: {e}")
-
-        try:
-            snapshot_tool = ToolRegistry.create_tool("playwright__browser_snapshot")
-            self._tools["browser_snapshot"] = snapshot_tool
-            logger.info("Registered playwright__browser_snapshot")
-        except Exception as e:
-            logger.warning(f"Failed to register playwright snapshot: {e}")
-
-        # Filesystem write
-        try:
-            write_tool = ToolRegistry.create_tool("filesystem__write_file")
-            self._tools["write_file"] = write_tool
-            logger.info("Registered filesystem__write_file")
-        except Exception as e:
-            logger.warning(f"Failed to register filesystem write: {e}")
+    def _init_skills(self) -> None:
+        """Initialize Skills and extract their tools."""
+        # Load the Skills this Worker uses
+        self.skills: List[BaseSkill] = [
+            SearchSkill(),
+            BrowserSkill(),
+            RealtimeIntelSkill(),
+        ]
         
-        # RSS feed tool
-        try:
-            from ai_worker.tools.rss_feed import RSSFeedTool
-            self._tools["rss_feed"] = RSSFeedTool()
-            logger.info("Registered rss_feed tool")
-        except Exception as e:
-            logger.warning(f"Failed to register RSS feed tool: {e}")
+        # Combine tools from all Skills into self._tools dict
+        for skill in self.skills:
+            for tool in skill.get_tools():
+                self._tools[tool.name] = tool
+            logger.info(f"Loaded Skill: {skill.metadata.name} ({len(skill.get_tools())} tools)")
         
-        # === NEW: Real-time source tools (guaranteed fresh) ===
-        try:
-            from ai_worker.tools.realtime_sources import (
-                HackerNewsTodayTool,
-                RedditDailyTool,
-                GitHubTrendingTool,
-            )
-            self._tools["hackernews"] = HackerNewsTodayTool()
-            self._tools["reddit"] = RedditDailyTool()
-            self._tools["github_trending"] = GitHubTrendingTool()
-            logger.info("Registered real-time source tools (HN, Reddit, GitHub Trending)")
-        except Exception as e:
-            logger.warning(f"Failed to register real-time tools: {e}")
+        # Log skill instructions for debugging
+        instructions = combine_skill_instructions(self.skills)
+        logger.debug(f"Combined skill instructions:\n{instructions}")
 
     async def process(
         self,
@@ -210,14 +185,59 @@ class DailyBriefWorker(BaseWorker):
         
         file_path = await self._phase_delivery(report, today, notifier)
 
+        # Extract context links from the generated report for future reference
+        context_links = self._extract_links_from_report(report)
+        logger.info(f"Extracted {len(context_links)} context links from report")
+
         # Build response - return file as attachment instead of summary
         response_content = f"📋 **Daily Brief for {today}** generated!"
 
         return StandardResponse(
             content=response_content,
             message_type=MessageType.FILE,
-            extras={"file_path": file_path}
+            extras={
+                "file_path": file_path,
+                "context_links": context_links,  # For context-aware follow-up
+            }
         )
+
+    def _extract_links_from_report(self, report: str) -> List[Dict[str, str]]:
+        """
+        Extract links from the markdown report for context awareness.
+        
+        Returns:
+            List of dicts with 'title' and 'url' keys
+        """
+        links = []
+        
+        # Pattern 1: Markdown links [Title](URL)
+        md_pattern = r'\[([^\]]+)\]\((https?://[^\)]+)\)'
+        for match in re.finditer(md_pattern, report):
+            title = match.group(1).strip()
+            url = match.group(2).strip()
+            if url and title:
+                links.append({"title": title, "url": url})
+        
+        # Pattern 2: Bare URLs (not already in markdown format)
+        # Match URLs that are NOT preceded by ]( 
+        bare_pattern = r'(?<!\]\()https?://[^\s\)\]<>\"\']+(?<![,.\)])'
+        for match in re.finditer(bare_pattern, report):
+            url = match.group(0).strip()
+            # Skip if this URL is already in our list
+            if not any(l["url"] == url for l in links):
+                # Try to extract a title from nearby context
+                links.append({"title": url.split("/")[-1][:50], "url": url})
+        
+        # Deduplicate by URL, keep first occurrence
+        seen_urls = set()
+        unique_links = []
+        for link in links:
+            if link["url"] not in seen_urls:
+                seen_urls.add(link["url"])
+                unique_links.append(link)
+        
+        # Limit to top 20 links to avoid context bloat
+        return unique_links[:20]
 
     async def _phase_scouting(
         self,
