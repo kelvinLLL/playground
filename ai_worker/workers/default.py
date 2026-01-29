@@ -7,6 +7,7 @@ Uses function calling to decide whether to:
 3. Respond directly
 """
 
+import asyncio
 import logging
 from typing import Any, Callable, Dict, List, Optional
 
@@ -26,8 +27,13 @@ from ai_worker.skills.search import SearchSkill
 from ai_worker.skills.browser import BrowserSkill
 from ai_worker.skills.realtime_intel import RealtimeIntelSkill
 from ai_worker.skills.deep_research import DeepResearchSkill
+from ai_worker.skills.local_script import LocalScriptSkill
 
 logger = logging.getLogger(__name__)
+
+# Retry configuration
+LLM_MAX_RETRIES = 3
+LLM_RETRY_DELAY = 2.0  # seconds
 
 
 ROUTER_BASE_PROMPT = """You are Sisyphus, an intelligent AI employee. 
@@ -76,6 +82,7 @@ class DefaultWorker(BaseWorker):
             BrowserSkill(),
             RealtimeIntelSkill(),
             DeepResearchSkill(),
+            LocalScriptSkill(),
         ]
         
         # Load tools from skills
@@ -105,23 +112,37 @@ class DefaultWorker(BaseWorker):
                 parameters=tool.parameters
             ))
         
-        # 2. Add routing tool
+        # 2. Add routing tool with detailed worker descriptions
         worker_names = list(self.workers.keys())
         if worker_names:
+            # Build worker descriptions for LLM to understand routing
+            worker_descriptions = {
+                "daily_brief": "Generate a comprehensive daily intelligence briefing with news, research papers, and tech trends",
+                "game": "Help with video game strategies, boss fights, builds, and gaming questions",
+                "intel": "Analyze stocks, market data, and investment opportunities",
+                "strategy": "Design and backtest quantitative trading strategies",
+            }
+            
+            # Build description with worker capabilities
+            worker_info = ", ".join([
+                f"{name}: {worker_descriptions.get(name, 'General tasks')}"
+                for name in worker_names if name != "default"
+            ])
+            
             tools.append(ToolDefinition(
                 name="call_worker",
-                description="Delegate a complex task to a specialized worker",
+                description=f"Delegate to a specialized worker. Available workers: {worker_info}",
                 parameters={
                     "type": "object",
                     "properties": {
                         "worker_name": {
                             "type": "string",
-                            "enum": worker_names,
-                            "description": "Name of the worker to call"
+                            "enum": [n for n in worker_names if n != "default"],
+                            "description": "Name of the specialized worker to delegate to"
                         },
                         "task_description": {
                             "type": "string",
-                            "description": "Specific instruction for the worker"
+                            "description": "Specific instruction for the worker (in user's language)"
                         }
                     },
                     "required": ["worker_name", "task_description"]
@@ -180,19 +201,39 @@ class DefaultWorker(BaseWorker):
         
         messages.append(Message(role="user", content=message.content))
 
-        # 4. Call LLM
+        # 4. Call LLM with retry logic
         if not isinstance(self.llm, OpenAIClient):
             logger.warning("LLM does not support function calling, falling back to direct response")
             response = await self.llm.chat(messages)
             return StandardResponse(content=response.content, message_type=MessageType.TEXT)
 
-        # Loop for multi-step tool execution
-        # (Simple implementation: 1 tool call -> result -> final answer)
-        llm_response = await self.llm.chat_with_tools(
-            messages=messages,
-            tools=self.router_tools,
-            tool_choice="auto"
-        )
+        # Call LLM with retries for connection errors
+        llm_response = None
+        last_error = None
+        for attempt in range(LLM_MAX_RETRIES):
+            try:
+                llm_response = await self.llm.chat_with_tools(
+                    messages=messages,
+                    tools=self.router_tools,
+                    tool_choice="auto"
+                )
+                break  # Success
+            except Exception as e:
+                last_error = e
+                error_str = str(e).lower()
+                # Only retry on connection/network errors
+                if any(keyword in error_str for keyword in ["connection", "timeout", "network", "refused"]):
+                    logger.warning(f"LLM connection error (attempt {attempt + 1}/{LLM_MAX_RETRIES}): {e}")
+                    if attempt < LLM_MAX_RETRIES - 1:
+                        await asyncio.sleep(LLM_RETRY_DELAY * (attempt + 1))
+                    continue
+                else:
+                    # Non-retryable error, raise immediately
+                    raise
+        
+        if llm_response is None:
+            logger.error(f"LLM call failed after {LLM_MAX_RETRIES} retries: {last_error}")
+            raise last_error  # type: ignore
 
         if not llm_response.tool_calls:
             return StandardResponse(

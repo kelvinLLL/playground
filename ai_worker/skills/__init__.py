@@ -16,6 +16,7 @@ from .search import SearchSkill
 from .browser import BrowserSkill
 from .realtime_intel import RealtimeIntelSkill
 from .deep_research import DeepResearchSkill
+from .local_script import LocalScriptSkill
 
 __all__ = [
     "BaseSkill",
@@ -24,4 +25,5 @@ __all__ = [
     "BrowserSkill",
     "RealtimeIntelSkill",
     "DeepResearchSkill",
+    "LocalScriptSkill",
 ]
