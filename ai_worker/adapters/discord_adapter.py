@@ -6,7 +6,7 @@ Handles all Discord-specific message conversion and API interaction.
 
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 
 import discord
 from discord.ext import commands
@@ -220,7 +220,7 @@ class DiscordAdapter(BaseAdapter):
         self,
         original_message: StandardMessage,
         response: StandardResponse,
-    ) -> bool:
+    ) -> Optional[discord.Message]:
         """
         Reply to a Discord message.
 
@@ -229,7 +229,7 @@ class DiscordAdapter(BaseAdapter):
             response: StandardResponse to send as reply
 
         Returns:
-            True if successful, False otherwise
+            Sent message object if successful, None otherwise
         """
         try:
             # Get the original Discord message from raw_data
@@ -240,7 +240,7 @@ class DiscordAdapter(BaseAdapter):
                     return await self.send_message(
                         original_message.channel.id, response
                     )
-                return False
+                return None
 
             # Build the reply
             content = response.content
@@ -262,22 +262,40 @@ class DiscordAdapter(BaseAdapter):
                     content += f"\n\n📁 File saved to: `{file_path}`"
 
             # Split message if too long (Discord limit is 2000 chars)
+            sent_msg = None
             if len(content) > 2000:
                 chunks = [content[i:i+2000] for i in range(0, len(content), 2000)]
                 
                 # Reply to the first chunk
-                await discord_msg.reply(content=chunks[0], embed=embed, file=file_obj)
+                sent_msg = await discord_msg.reply(content=chunks[0], embed=embed, file=file_obj)
                 
                 # Send remaining chunks to the same channel
                 for chunk in chunks[1:]:
                     await discord_msg.channel.send(content=chunk)
             else:
-                await discord_msg.reply(content=content, embed=embed, file=file_obj)
+                sent_msg = await discord_msg.reply(content=content, embed=embed, file=file_obj)
                 
-            return True
+            return sent_msg
 
         except Exception as e:
             logger.error(f"Failed to reply: {e}")
+            return None
+
+    async def edit_message(
+        self,
+        message_handle: Any,
+        new_content: str,
+    ) -> bool:
+        """
+        Edit a previously sent message.
+        """
+        try:
+            if isinstance(message_handle, discord.Message):
+                await message_handle.edit(content=new_content)
+                return True
+            return False
+        except Exception as e:
+            logger.error(f"Failed to edit message: {e}")
             return False
 
     def add_command(

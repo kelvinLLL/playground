@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "self_hosted": {
-      "command": "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv/bin/python",
+      "command": "/Users/haojunliu/Easy/Projects/playground/ai_worker/.venv-313/bin/python",
       "args": [
         "-m",
         "ai_worker.mcp_server"

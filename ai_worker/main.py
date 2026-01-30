@@ -31,6 +31,7 @@ from ai_worker.config.curated_sources import (
     DEVELOPER_PROFILE,
 )
 from ai_worker.memory import ConversationMemory, PersistentMemory
+from ai_worker.memory.base import BaseMemoryProvider
 from ai_worker.mcp_client import MCPClientManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -42,7 +43,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("ai_worker.log", encoding="utf-8")
+        logging.FileHandler("logs/ai_worker.log", encoding="utf-8")
     ]
 )
 logger = logging.getLogger(__name__)
@@ -90,7 +91,7 @@ class AIWorkerApp:
         # Daily brief enabled flag
         self.daily_brief_enabled: bool = self.settings.scheduler.daily_brief_enabled
 
-    def setup_workers(self) -> None:
+    def setup_workers(self, memory_provider: Optional[BaseMemoryProvider] = None) -> None:
         """Set up all AI workers."""
         if not self.settings.openai.api_key:
             logger.warning("OpenAI API key missing! Workers will be disabled.")
@@ -116,7 +117,11 @@ class AIWorkerApp:
         }
         
         # Initialize the smart router (DefaultWorker) with access to other workers
-        self.default_worker = DefaultWorker(llm, workers=self.workers)
+        self.default_worker = DefaultWorker(
+            llm, 
+            workers=self.workers,
+            memory_provider=memory_provider
+        )
         self.workers["default"] = self.default_worker
         
         logger.info(f"Initialized workers: {list(self.workers.keys())}")
@@ -171,10 +176,28 @@ class AIWorkerApp:
             logger.error(f"No adapter found for platform {message.platform}")
             return
 
+        # Initialize status message
+        status_message_handle = None
+        # Send initial status
+        try:
+            status_message_handle = await current_adapter.reply(
+                message, 
+                StandardResponse(content="🔄 AI Worker is processing...")
+            )
+        except Exception as e:
+            logger.warning(f"Failed to send status message: {e}")
+
         # Define progress notifier
         async def progress_notifier(text: str):
-            response = StandardResponse(content=text)
-            await current_adapter.reply(message, response)
+            nonlocal status_message_handle
+            if status_message_handle:
+                # Try to edit the existing status message
+                # Note: Discord has rate limits on edits, but tool execution usually takes time
+                await current_adapter.edit_message(status_message_handle, f"🔄 {text}")
+            else:
+                # Fallback: send new message if we couldn't create/track status message
+                response = StandardResponse(content=text)
+                await current_adapter.reply(message, response)
 
         # --- SMART ROUTING via DefaultWorker (LLM-based) ---
         if not self.default_worker:
@@ -207,6 +230,14 @@ class AIWorkerApp:
         # Route via smart router (DefaultWorker with LLM function calling)
         response = await self.default_worker.process(message, notifier=progress_notifier)
         
+        # Cleanup status message
+        if status_message_handle:
+            try:
+                # Update to show completion, or could delete it
+                await current_adapter.edit_message(status_message_handle, "✅ Task processing complete.")
+            except Exception:
+                pass
+
         # Store assistant response in memory
         self.conversation_memory.add_assistant_message(
             user_id, channel_id, response.content
@@ -684,8 +715,19 @@ class AIWorkerApp:
         except Exception as e:
             logger.error(f"Failed to start MCP Client Manager: {e}")
 
+        # Initialize Memory System
+        try:
+            from ai_worker.memory.factory import MemoryFactory
+            memory_provider = await MemoryFactory.create(
+                provider_name=self.settings.memory.provider
+            )
+            logger.info(f"Initialized memory provider: {self.settings.memory.provider}")
+        except Exception as e:
+            logger.error(f"Failed to initialize memory provider: {e}")
+            memory_provider = None
+
         # Set up workers (now they can use MCP tools via ToolRegistry)
-        self.setup_workers()
+        self.setup_workers(memory_provider=memory_provider)
 
         # Set up adapters
         discord_adapter = self.setup_discord()

@@ -106,6 +106,70 @@ class RunLocalScriptTool(BaseTool):
             return ToolResult(success=False, data=None, error=f"Execution failed: {str(e)}")
 
 
+class InspectSkillTool(BaseTool):
+    name = "inspect_skill"
+    description = "Read the full documentation and usage instructions for a specific local skill."
+    parameters = {
+        "type": "object",
+        "properties": {
+            "skill_name": {
+                "type": "string",
+                "description": "Name of the skill to inspect (e.g. 'duckduckgo')"
+            }
+        },
+        "required": ["skill_name"]
+    }
+
+    def __init__(self, script_dir: str):
+        super().__init__(self.name, self.description)
+        self.script_dir = script_dir
+
+    async def execute(self, skill_name: str) -> ToolResult:
+        # Security check
+        if ".." in skill_name or skill_name.startswith("/") or "\\" in skill_name:
+            return ToolResult(success=False, data=None, error="Invalid skill name.")
+            
+        # Determine path (support both folder and flat file conventions)
+        # Priority 1: Folder (skills/local/skill_name/*.md)
+        folder_path = os.path.join(self.script_dir, skill_name)
+        
+        content = []
+        found = False
+        
+        if os.path.isdir(folder_path):
+            # It's a folder, read all MD files
+            md_files = glob.glob(os.path.join(folder_path, "*.md"))
+            md_files.sort()
+            
+            if md_files:
+                found = True
+                for md_file in md_files:
+                    try:
+                        filename = os.path.basename(md_file)
+                        with open(md_file, "r") as f:
+                            file_content = f.read().strip()
+                        content.append(f"\n### File: {filename}\n{file_content}\n")
+                    except Exception as e:
+                        content.append(f"Error reading {md_file}: {e}")
+        
+        if not found:
+            # Priority 2: Flat file (skills/local/skill_name.md)
+            file_path = os.path.join(self.script_dir, f"{skill_name}.md")
+            if os.path.exists(file_path):
+                found = True
+                try:
+                    with open(file_path, "r") as f:
+                        file_content = f.read().strip()
+                    content.append(f"\n### File: {skill_name}.md\n{file_content}\n")
+                except Exception as e:
+                    return ToolResult(success=False, data=None, error=f"Error reading file: {e}")
+
+        if not found:
+            return ToolResult(success=False, data=None, error=f"Skill '{skill_name}' not found.")
+            
+        return ToolResult(success=True, data="\n".join(content))
+
+
 @SkillRegistry.register
 class LocalScriptSkill(BaseSkill):
     """
@@ -132,9 +196,12 @@ class LocalScriptSkill(BaseSkill):
         
     def get_tools(self) -> List[BaseTool]:
         if self._tools is None:
-            self._tools = [RunLocalScriptTool(self.local_dir)]
+            self._tools = [
+                RunLocalScriptTool(self.local_dir),
+                InspectSkillTool(self.local_dir)
+            ]
         return self._tools
-        
+
     def _check_requirements(self, md_path: str) -> Optional[str]:
         """Check for requirements.txt and verify installation."""
         req_path = os.path.join(os.path.dirname(md_path), "requirements.txt")
@@ -148,7 +215,7 @@ class LocalScriptSkill(BaseSkill):
                 for line in f:
                     line = line.strip()
                     if line and not line.startswith("#"):
-                        # Extract package name (ignore version constraints for simple check)
+                        # Extract package name
                         pkg = line.split("=")[0].split(">")[0].split("<")[0].strip()
                         requirements.append(pkg)
                 
@@ -168,41 +235,66 @@ class LocalScriptSkill(BaseSkill):
 
     def get_instructions(self) -> str:
         """
-        Dynamically build instructions from all .md files in skills/local/
-        Supports:
-        - Flat files: skills/local/myskill.md
-        - Folders: skills/local/myskill/skill.md (or README.md)
+        Dynamically build instructions from local skills (Manifest Only).
+        Only lists available skills. LLM must use `inspect_skill` to get full docs.
         """
         instructions = ["### Local Custom Skills\n"]
-        instructions.append("You have access to the following local scripts via `run_local_script`:\n")
+        instructions.append("You have access to the following local skills.\n")
+        instructions.append("⚠️ **IMPORTANT**: To use a skill, you MUST first call `inspect_skill(skill_name)` to read its manual.\n")
         
-        # Recursive scan for .md files
-        # Note: glob(recursive=True) requires ** pattern
-        md_files = glob.glob(os.path.join(self.local_dir, "**/*.md"), recursive=True)
+        skills_map = {} # name -> description
+
+        # Recursive scan
+        all_md = glob.glob(os.path.join(self.local_dir, "**/*.md"), recursive=True)
         
-        if not md_files:
+        for md_file in sorted(all_md):
+            rel_path = os.path.relpath(md_file, self.local_dir)
+            parts = rel_path.split(os.sep)
+            
+            skill_name = None
+            is_entry_point = False
+            
+            # Case 1: Folder/skill.md or Folder/README.md
+            if len(parts) >= 2 and parts[-1].lower() in ["skill.md", "readme.md"]:
+                # Use the immediate parent folder as skill name
+                skill_name = parts[-2]
+                is_entry_point = True
+            # Case 2: Top-level file (myskill.md)
+            elif len(parts) == 1:
+                skill_name = os.path.splitext(parts[0])[0]
+                is_entry_point = True
+                
+            if is_entry_point and skill_name and skill_name not in skills_map:
+                desc = self._extract_description(md_file)
+                # Check requirements too
+                req_warning = self._check_requirements(md_file)
+                if req_warning:
+                    desc += f" {req_warning}"
+                skills_map[skill_name] = desc
+        
+        if not skills_map:
             instructions.append("(No local skills found)")
             return "\n".join(instructions)
             
-        for md_file in sorted(md_files):
-            try:
-                # Calculate relative path for display/logic
-                rel_path = os.path.relpath(md_file, self.local_dir)
-                filename = os.path.basename(md_file)
-                
-                with open(md_file, "r") as f:
-                    content = f.read().strip()
-                
-                # Check for dependencies
-                req_warning = self._check_requirements(md_file)
-                if req_warning:
-                    content += req_warning
-                    
-                instructions.append(f"\n#### {rel_path}")
-                instructions.append(content)
-                instructions.append("-" * 30)
-                
-            except Exception as e:
-                logger.warning(f"Failed to load local skill {md_file}: {e}")
-                
+        for name, desc in sorted(skills_map.items()):
+            instructions.append(f"- **{name}**: {desc}")
+            
         return "\n".join(instructions)
+
+    def _extract_description(self, file_path: str) -> str:
+        """Extract a short description from the skill file."""
+        try:
+            with open(file_path, "r") as f:
+                # Read first 20 lines max
+                for _ in range(20):
+                    line = f.readline().strip()
+                    if not line: continue
+                    # Check explicit description field
+                    if line.lower().startswith("description:"):
+                        return line.split(":", 1)[1].strip()
+                    # Check first paragraph (not header, not frontmatter delimiters)
+                    if not line.startswith("#") and not line.startswith("---") and not line.startswith("name:"):
+                        return line[:150] + ("..." if len(line) > 150 else "")
+            return "No description available."
+        except Exception:
+            return "Error reading description."

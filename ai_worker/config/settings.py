@@ -59,6 +59,13 @@ class SchedulerConfig:
 
 
 @dataclass
+class MemoryConfig:
+    """Memory system configuration."""
+    
+    provider: str = "local"  # 'local' or 'memu'
+
+
+@dataclass
 class Settings:
     """
     Main settings class for AI Worker.
@@ -71,6 +78,7 @@ class Settings:
     openai: OpenAIConfig = field(default_factory=OpenAIConfig)
     search: SearchConfig = field(default_factory=SearchConfig)
     scheduler: SchedulerConfig = field(default_factory=SchedulerConfig)
+    memory: MemoryConfig = field(default_factory=MemoryConfig)
     debug: bool = False
 
     @classmethod
@@ -117,6 +125,9 @@ class Settings:
                 notification_channel_id=os.getenv("NOTIFICATION_CHANNEL_ID", ""),
                 daily_brief_enabled=os.getenv("DAILY_BRIEF_ENABLED", "false").lower() == "true",
                 timezone=os.getenv("SCHEDULER_TIMEZONE", "Asia/Shanghai"),
+            ),
+            memory=MemoryConfig(
+                provider=os.getenv("MEMORY_PROVIDER", "local"),
             ),
             debug=os.getenv("DEBUG", "false").lower() == "true",
         )

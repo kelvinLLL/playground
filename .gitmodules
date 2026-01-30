@@ -1,0 +1,3 @@
+[submodule "memU"]
+	path = memU
+	url = https://github.com/NevaMind-AI/memU.git

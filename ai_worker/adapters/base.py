@@ -8,7 +8,7 @@ and implement the required abstract methods.
 from abc import ABC, abstractmethod
 import asyncio
 import inspect
-from typing import Awaitable, Callable, Optional, Union
+from typing import Any, Awaitable, Callable, Optional, Union
 
 from ai_worker.core.message import StandardMessage, StandardResponse
 
@@ -100,7 +100,7 @@ class BaseAdapter(ABC):
         self,
         original_message: StandardMessage,
         response: StandardResponse,
-    ) -> bool:
+    ) -> Any:
         """
         Reply to a specific message.
 
@@ -109,9 +109,27 @@ class BaseAdapter(ABC):
             response: StandardResponse to send as reply
 
         Returns:
-            True if reply was sent successfully, False otherwise
+            The sent message object/ID if successful, None otherwise
         """
         pass
+
+    async def edit_message(
+        self,
+        message_handle: Any,
+        new_content: str,
+    ) -> bool:
+        """
+        Edit a previously sent message.
+        
+        Args:
+            message_handle: The handle returned by reply() or send_message()
+            new_content: New text content
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        # Default implementation does nothing (for backward compat)
+        return False
 
     async def on_message(self, message: StandardMessage) -> None:
         """

@@ -20,6 +20,7 @@ from ai_worker.llm.base import BaseLLM, Message, ToolDefinition, ToolCall
 from ai_worker.llm.openai_client import OpenAIClient
 from ai_worker.workers.base import BaseWorker, WorkerConfig
 from ai_worker.tools.base import BaseTool
+from ai_worker.memory.base import BaseMemoryProvider
 
 # Skills
 from ai_worker.skills.base import BaseSkill, combine_skill_tools, combine_skill_instructions
@@ -51,6 +52,7 @@ You have access to a suite of Tools (Skills) and Specialized Workers.
    - "Analyze this PDF and write a report" -> Use your Browser Skill (read_pdf) directly
 
 ## Guidelines
+- **ACTION OVER SPEECH**: When you want to perform a task, USE A TOOL immediately. Do not just say "I will do X".
 - **Prefer Direct Action**: If you can solve it with your tools, do it. Don't delegate trivial tasks.
 - **Complex Workflows**: Delegate tasks that require maintaining state or following a strict process.
 - **Language**: Respond in the same language as the user (default to Chinese for Chinese queries).
@@ -66,7 +68,12 @@ class DefaultWorker(BaseWorker):
     - Routes to specialized Workers when necessary
     """
 
-    def __init__(self, llm: BaseLLM, workers: Optional[dict[str, BaseWorker]] = None):
+    def __init__(
+        self, 
+        llm: BaseLLM, 
+        workers: Optional[dict[str, BaseWorker]] = None,
+        memory_provider: Optional[BaseMemoryProvider] = None
+    ):
         config = WorkerConfig(
             name="Router",
             description="Intelligent router that uses LLM to decide how to handle requests.",
@@ -75,6 +82,7 @@ class DefaultWorker(BaseWorker):
         super().__init__(config)
         self.llm = llm
         self.workers = workers or {}
+        self.memory = memory_provider
         
         # Initialize Skills
         self.skills: List[BaseSkill] = [
@@ -180,6 +188,18 @@ class DefaultWorker(BaseWorker):
         user_context = message.metadata.get("user_context", "") if message.metadata else ""
         if user_context:
             system_content += f"\n\n## User Context\n{user_context}"
+            
+        # 1.5 RAG: Retrieve Memory
+        if self.memory:
+            try:
+                # Search for context relevant to the user query
+                # Use message content as query
+                mem_results = await self.memory.search(message.content, user_id=message.author.id)
+                if mem_results:
+                    mem_context = "\n".join([f"- {m.content}" for m in mem_results])
+                    system_content += f"\n\n## Long Term Memory (Related Facts)\n{mem_context}"
+            except Exception as e:
+                logger.warning(f"Memory search failed: {e}")
         
         # 2. Inject Context Links (for reference resolution)
         context_links = message.metadata.get("context_links", []) if message.metadata else []
@@ -201,102 +221,91 @@ class DefaultWorker(BaseWorker):
         
         messages.append(Message(role="user", content=message.content))
 
-        # 4. Call LLM with retry logic
-        if not isinstance(self.llm, OpenAIClient):
-            logger.warning("LLM does not support function calling, falling back to direct response")
-            response = await self.llm.chat(messages)
-            return StandardResponse(content=response.content, message_type=MessageType.TEXT)
+        # 4. Agent Loop (ReAct)
+        MAX_TURNS = 5
+        
+        for turn in range(MAX_TURNS):
+            # Call LLM
+            llm_response = await self._call_llm_with_retry(messages)
+            
+            # 4a. Handle Tool Calls
+            if llm_response.tool_calls:
+                # Add assistant message with tool calls to history
+                messages.append(Message(
+                    role="assistant",
+                    content=llm_response.content,
+                    tool_calls=llm_response.tool_calls
+                ))
+                
+                # Execute first tool (simplify to 1 tool per turn for now)
+                # TODO: Support parallel tool execution
+                tool_call = llm_response.tool_calls[0]
+                
+                # Special Case: Delegation
+                if tool_call.name == "call_worker":
+                    return await self._execute_worker_call(tool_call, message, notifier)
+                
+                # Execute Local Tool
+                tool_result = await self._execute_tool_internally(tool_call, notifier)
+                
+                # Add tool output to history
+                messages.append(Message(
+                    role="tool",
+                    content=tool_result,
+                    tool_call_id=tool_call.id
+                ))
+                
+                # Continue loop to let LLM decide next step
+                continue
+                
+            # 4b. Handle Final Response (No tools)
+            # If we have content, return it. 
+            # If empty content (rare), continue or error?
+            if llm_response.content:
+                return StandardResponse(
+                    content=llm_response.content,
+                    message_type=MessageType.TEXT
+                )
+            
+            logger.warning(f"Empty response from LLM in turn {turn}")
+            
+        return StandardResponse(content="I hit my maximum thought limit before completing the task.")
 
-        # Call LLM with retries for connection errors
-        llm_response = None
-        last_error = None
+    async def _call_llm_with_retry(self, messages: List[Message]) -> Any:
+        """Helper to call LLM with retry logic."""
+        if not isinstance(self.llm, OpenAIClient):
+            # Fallback for non-function-calling LLMs
+            response = await self.llm.chat(messages)
+            return response
+
         for attempt in range(LLM_MAX_RETRIES):
             try:
-                llm_response = await self.llm.chat_with_tools(
+                return await self.llm.chat_with_tools(
                     messages=messages,
                     tools=self.router_tools,
                     tool_choice="auto"
                 )
-                break  # Success
             except Exception as e:
-                last_error = e
                 error_str = str(e).lower()
-                # Only retry on connection/network errors
-                if any(keyword in error_str for keyword in ["connection", "timeout", "network", "refused"]):
-                    logger.warning(f"LLM connection error (attempt {attempt + 1}/{LLM_MAX_RETRIES}): {e}")
+                if any(k in error_str for k in ["connection", "timeout", "network", "refused"]):
                     if attempt < LLM_MAX_RETRIES - 1:
                         await asyncio.sleep(LLM_RETRY_DELAY * (attempt + 1))
                     continue
-                else:
-                    # Non-retryable error, raise immediately
-                    raise
-        
-        if llm_response is None:
-            logger.error(f"LLM call failed after {LLM_MAX_RETRIES} retries: {last_error}")
-            raise last_error  # type: ignore
+                raise
+        raise RuntimeError("LLM call failed after retries")
 
-        if not llm_response.tool_calls:
-            return StandardResponse(
-                content=llm_response.content or "I'm not sure how to help with that.",
-                message_type=MessageType.TEXT
-            )
-
-        # 4. Execute Tool
-        # Handle the first tool call
-        tool_call = llm_response.tool_calls[0]
-        
-        if tool_call.name == "call_worker":
-            return await self._execute_worker_call(tool_call, message, notifier)
-        else:
-            return await self._execute_local_tool(tool_call, messages, notifier)
-
-    async def _execute_worker_call(
+    async def _execute_tool_internally(
         self,
         tool_call: ToolCall,
-        original_message: StandardMessage,
         notifier: Optional[Callable[[str], Any]] = None
-    ) -> StandardResponse:
-        """Delegate to another worker."""
-        worker_name = tool_call.arguments.get("worker_name")
-        task_desc = tool_call.arguments.get("task_description", original_message.content)
-        
-        worker = self.workers.get(worker_name)
-        if not worker:
-            return StandardResponse(content=f"Worker '{worker_name}' not available.")
-        
-        if notifier:
-            await notifier(f"🔄 Delegating to **{worker_name}**...")
-        
-        logger.info(f"Delegating to worker: {worker_name}")
-        
-        routed_message = StandardMessage(
-            id=original_message.id,
-            content=task_desc,
-            message_type=original_message.message_type,
-            platform=original_message.platform,
-            author=original_message.author,
-            channel=original_message.channel,
-            timestamp=original_message.timestamp,
-            raw_data=original_message.raw_data,
-            metadata=original_message.metadata,
-            attachments=original_message.attachments,
-        )
-        
-        return await worker.process(routed_message, notifier=notifier)
-
-    async def _execute_local_tool(
-        self,
-        tool_call: ToolCall,
-        history: List[Message],
-        notifier: Optional[Callable[[str], Any]] = None
-    ) -> StandardResponse:
-        """Execute a local tool (from a Skill) and get final answer."""
+    ) -> str:
+        """Execute a tool and return the output string."""
         tool_name = tool_call.name
         tool_args = tool_call.arguments
         
         tool = self._tools.get(tool_name)
         if not tool:
-            return StandardResponse(content=f"Error: Tool '{tool_name}' not found.")
+            return f"Error: Tool '{tool_name}' not found."
         
         if notifier:
             await notifier(f"🔧 Using tool: **{tool_name}**...")
@@ -305,31 +314,10 @@ class DefaultWorker(BaseWorker):
         
         try:
             result = await tool.execute(**tool_args)
-            tool_output = str(result.data) if result.success else f"Error: {result.error}"
-            
-            # Feed result back to LLM for final answer
-            history.append(Message(
-                role="assistant",
-                content=None,
-                tool_calls=[tool_call]
-            ))
-            history.append(Message(
-                role="tool",
-                content=tool_output,
-                tool_call_id=tool_call.id
-            ))
-            
-            final_response = await self.llm.chat_with_tools(
-                messages=history,
-                tools=self.router_tools,
-                tool_choice="none" # Force text response
-            )
-            
-            return StandardResponse(
-                content=final_response.content,
-                message_type=MessageType.TEXT
-            )
-            
+            if result.success:
+                return str(result.data)
+            else:
+                return f"Error: {result.error}"
         except Exception as e:
             logger.error(f"Tool execution failed: {e}")
-            return StandardResponse(content=f"Tool execution failed: {str(e)}")
+            return f"Tool execution exception: {str(e)}"
