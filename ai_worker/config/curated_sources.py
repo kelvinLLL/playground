@@ -51,7 +51,7 @@ class Source:
     priority: int = 1
     rss_url: Optional[str] = None
     search_query: Optional[str] = None
-    max_items: int = 10
+    max_items: int = 5
     enabled: bool = True
 
 

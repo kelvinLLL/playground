@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<body style="width: 720pt; height: 405pt; margin: 0; padding: 40pt; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+  <h1 style="color: #333; text-align: center; margin-bottom: 30pt;">AI 驱动的智能客服系统架构设计</h1>
+  <h2 style="color: #555; border-bottom: 2px solid #ccc; padding-bottom: 10pt; margin-bottom: 20pt;">3. 系统架构</h2>
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 70%;">
+    <p style="text-align: center; font-size: 14pt; color: #777;">
+      (此处应为系统架构图，包含以下模块：)
+    </p>
+    <ul style="list-style-type: none; padding: 0; text-align: left; font-size: 12pt; color: #555;">
+      <li><strong>用户交互层:</strong> 多渠道接入 (Web, App, 微信, 电话)</li>
+      <li><strong>核心AI层:</strong>
+        <ul>
+          <li>自然语言理解 (NLU)</li>
+          <li>对话管理 (DM)</li>
+          <li>自然语言生成 (NLG)</li>
+          <li>知识图谱 (KG) & 检索增强生成 (RAG)</li>
+          <li>情感分析</li>
+        </ul>
+      </li>
+      <li><strong>数据服务层:</strong>
+        <ul>
+          <li>用户数据管理</li>
+          <li>知识库管理</li>
+          <li>会话历史</li>
+          <li>模型训练数据</li>
+        </ul>
+      </li>
+      <li><strong>运营管理层:</strong>
+        <ul>
+          <li>人工协作平台</li>
+          <li>数据统计分析</li>
+          <li>模型管理与调优</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -461,8 +461,8 @@ class DailyBriefWorker(BaseWorker):
         """
         import asyncio
 
-        hn_tool = self._tools.get("hackernews")
-        reddit_tool = self._tools.get("reddit")
+        hn_tool = self._tools.get("hackernews_today")
+        reddit_tool = self._tools.get("reddit_daily")
         github_tool = self._tools.get("github_trending")
 
         tasks = []
@@ -474,7 +474,7 @@ class DailyBriefWorker(BaseWorker):
                     "Hacker News",
                     "Tech Community",
                     hn_tool.execute(
-                        query="AI OR LLM OR machine learning OR GPT", max_results=15
+                        query="AI OR LLM OR machine learning OR GPT", max_results=12
                     ),
                 )
             )
@@ -485,14 +485,14 @@ class DailyBriefWorker(BaseWorker):
                 (
                     "r/MachineLearning",
                     "Tech Community",
-                    reddit_tool.execute(subreddit="MachineLearning", max_results=10),
+                    reddit_tool.execute(subreddit="MachineLearning", max_results=6),
                 )
             )
             tasks.append(
                 (
                     "r/LocalLLaMA",
                     "Tech Community",
-                    reddit_tool.execute(subreddit="LocalLLaMA", max_results=8),
+                    reddit_tool.execute(subreddit="LocalLLaMA", max_results=6),
                 )
             )
             tasks.append(
@@ -523,7 +523,7 @@ class DailyBriefWorker(BaseWorker):
                 (
                     "GitHub Trending (All)",
                     "GitHub Trending",
-                    github_tool.execute(language="", max_results=15),
+                    github_tool.execute(language="", max_results=10),
                 )
             )
             tasks.append(
@@ -657,8 +657,8 @@ class DailyBriefWorker(BaseWorker):
 
         # Truncate if too long for prompt
         prompt_context = raw_context
-        if len(prompt_context) > 50000:
-            prompt_context = prompt_context[:50000] + "\n\n[Content truncated...]"
+        if len(prompt_context) > 40000:
+            prompt_context = prompt_context[:40000] + "\n\n[Content truncated...]"
 
         prompt = f"""Based on the following search results from today ({date}), create a comprehensive Daily Intelligence Brief.
 

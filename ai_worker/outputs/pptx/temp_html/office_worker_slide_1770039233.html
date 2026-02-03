@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    * { box-sizing: border-box; }
+    body { 
+      width: 720pt; 
+      height: 405pt; 
+      margin: 0; 
+      padding: 30pt; 
+      font-family: 'Segoe UI', Arial, sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      background: #f4f7f9; 
+      color: #333;
+    }
+    .header {
+      border-bottom: 3px solid #05478a; 
+      padding-bottom: 10px; 
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .title { color: #05478a; font-size: 24pt; margin: 0; font-weight: bold; }
+    .subtitle { color: #666; font-size: 12pt; }
+    
+    .main-container {
+      display: flex; 
+      flex: 1; 
+      gap: 15px;
+    }
+    
+    .column { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+    
+    .card {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-left: 4px solid #05478a;
+    }
+    
+    h2 { font-size: 13pt; color: #05478a; margin: 0 0 8px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    ul { margin: 0; padding-left: 18px; font-size: 10.5pt; line-height: 1.5; }
+    li { margin-bottom: 4px; }
+    
+    .arch-box {
+      background: #eef4fb;
+      border: 1px dashed #05478a;
+      padding: 8px;
+      margin-top: 5px;
+      text-align: center;
+      font-size: 9pt;
+      border-radius: 4px;
+    }
+    
+    .highlight { color: #d32f2f; font-weight: bold; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1 class="title">AI 驱动的智能客服系统架构设计</h1>
+    <div class="subtitle">技术方案执行摘要 (Executive Summary)</div>
+  </div>
+
+  <div class="main-container">
+    <!-- Left Column: Background & Strategy -->
+    <div class="column">
+      <div class="card">
+        <h2>1. 问题背景 (Background)</h2>
+        <ul>
+          <li><b>成本压力：</b> 人工客服人力成本逐年上升，重复性问题占比高达 70%。</li>
+          <li><b>响应速度：</b> 高峰期排队严重，无法提供 24/7 即时响应。</li>
+          <li><b>质量波动：</b> 业务知识库更新慢，人工服务水平参差不齐。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>2. 技术方案 (Solution)</h2>
+        <ul>
+          <li><b>大模型驱动：</b> 采用 LLM (如 GPT-4/Claude) 作为核心理解引擎。</li>
+          <li><b>RAG 架构：</b> 检索增强生成，确保回答基于企业私有知识库。</li>
+          <li><b>多模态支持：</b> 集成语音转文字 (ASR) 与文字转语音 (TTS)。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Middle Column: Architecture -->
+    <div class="column" style="flex: 1.2;">
+      <div class="card" style="height: 100%;">
+        <h2>3. 系统架构 (Architecture)</h2>
+        <div class="arch-box" style="background: #05478a; color: white;">接入层 (Web/App/WeChat/Phone)</div>
+        <div style="text-align: center; font-size: 12pt;">↓</div>
+        <div class="arch-box">
+          <b>智能对话引擎 (Agent 层)</b><br>
+          意图识别 | 任务编排 | 记忆管理
+        </div>
+        <div style="text-align: center; font-size: 12pt;">↓</div>
+        <div class="arch-box" style="background: #fff; border: 2px solid #05478a;">
+          <b>核心能力层 (LLM + RAG)</b><br>
+          向量数据库 (Milvus) | 提示词工程
+        </div>
+        <div style="text-align: center; font-size: 12pt;">↓</div>
+        <div class="arch-box">
+          <b>基础数据层</b><br>
+          业务数据库 | 知识文档 | 历史日志
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Plan & Effects -->
+    <div class="column">
+      <div class="card">
+        <h2>4. 实施计划 (Plan)</h2>
+        <ul>
+          <li><b>阶段一 (M1):</b> 知识库数字化与向量化，LLM 模型选型。</li>
+          <li><b>阶段二 (M2-M3

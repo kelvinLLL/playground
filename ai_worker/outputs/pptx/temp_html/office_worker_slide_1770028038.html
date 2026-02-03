@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="width: 720pt; height: 405pt; margin: 0; padding: 30pt; font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif; display: flex; flex-direction: column; box-sizing: border-box; background-color: #ffffff; color: #333;">
+  
+  <!-- Header -->
+  <div style="border-left: 5px solid #05478a; padding-left: 15pt; margin-bottom: 20pt;">
+    <h1 style="color: #05478a; font-size: 24pt; margin: 0; line-height: 1.2;">AI 驱动的智能客服系统架构设计</h1>
+    <p style="font-size: 12pt; color: #666; margin: 5pt 0 0 0;">技术方案执行摘要 (Executive Summary)</p>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; flex: 1;">
+    
+    <!-- Left Column: Background & Tech -->
+    <div style="display: flex; flex-direction: column; gap: 15pt;">
+      <section>
+        <h2 style="font-size: 14pt; color: #05478a; border-bottom: 1px solid #eee; padding-bottom: 5pt; margin-bottom: 8pt;">1. 问题背景与挑战</h2>
+        <ul style="font-size: 10.5pt; line-height: 1.6; padding-left: 15pt; margin: 0;">
+          <li><b>成本压力：</b> 人工客服人力成本高，人员流失率大。</li>
+          <li><b>响应时效：</b> 传统客服难以实现 7x24 小时即时响应。</li>
+          <li><b>知识孤岛：</b> 业务知识更新快，传统 FAQ 维护困难且不准确。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 style="font-size: 14pt; color: #05478a; border-bottom: 1px solid #eee; padding-bottom: 5pt; margin-bottom: 8pt;">2. 核心技术方案</h2>
+        <div style="background: #f4f7fa; padding: 10pt; border-radius: 4pt;">
+          <ul style="font-size: 10.5pt; line-height: 1.6; padding-left: 15pt; margin: 0;">
+            <li><b>LLM + RAG：</b> 大模型结合检索增强生成，确保回复专业准确。</li>
+            <li><b>向量数据库：</b> Milvus/Pinecone 存储企业私有知识库。</li>
+            <li><b>多模态交互：</b> 支持文本、语音及图像识别输入。</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column: Architecture & Plan -->
+    <div style="display: flex; flex-direction: column; gap: 15pt;">
+      <section>
+        <h2 style="font-size: 14pt; color: #05478a; border-bottom: 1px solid #eee; padding-bottom: 5pt; margin-bottom: 8pt;">3. 系统架构层次</h2>
+        <div style="font-size: 10pt; background: #fff; border: 1px dashed #05478a; padding: 8pt; border-radius: 4pt;">
+          <div style="background: #e1ecf7; margin-bottom: 3pt; padding: 3pt; text-align: center;"><b>应用层：</b> Web/App/微信/钉钉/API</div>
+          <div style="background: #d1e3f3; margin-bottom: 3pt; padding: 3pt; text-align: center;"><b>能力层：</b> 意图识别、RAG 检索、LLM 推理、人工接管</div>
+          <div style="background: #c1daef; margin-bottom: 3pt; padding: 3pt; text-align: center;"><b>数据层：</b> 向量库、CRM/ERP 接口、业务数据库</div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="font-size: 14pt; color: #05478a; border-bottom: 1px solid #eee; padding-bottom: 5pt; margin-bottom: 8pt;">4. 实施路线图</h2>
+        <div style="display: flex; font-size: 9pt; gap: 5pt;">
+          <div style="flex: 1; background: #eee; padding: 5pt; border-radius: 3pt; text-align: center;"><b>P1: 基础建设</b><br>环境搭建与原型</div>
+          <div style="flex: 1; background: #eee; padding: 5pt; border-radius: 3pt; text-align: center;"><b>P2: 知识对齐</b><br>数据清洗与精调</div>
+          <div style="flex: 1; background: #eee; padding: 5pt; border-radius: 3pt; text-align: center;"><b>P3: 集成上线</b><br>灰度测试与发布</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Footer: Expected Results -->
+  <div style="margin-top: 20pt; background: #05478a; color: #fff; padding: 12pt; border-radius: 5pt; display: flex; justify-content: space-around; align-items: center;">
+    <div style="text-align: center;">
+      <div style="font-size: 18pt; font

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+    * { box-sizing: border-box; }
+    body { 
+      width: 720pt; 
+      height: 405pt; 
+      margin: 0; 
+      padding: 35pt 45pt; 
+      font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      background: white;
+    }
+    .header {
+      border-bottom: 3px solid #4285f4;
+      padding-bottom: 12pt;
+      margin-bottom: 20pt;
+    }
+    h1 {
+      color: #1a73e8;
+      font-size: 32pt;
+      margin: 0;
+      font-weight: 600;
+    }
+    .subtitle {
+      color: #5f6368;
+      font-size: 13pt;
+      margin-top: 5pt;
+    }
+    .content {
+      display: flex;
+      gap: 25pt;
+      flex: 1;
+    }
+    .column {
+      flex: 1;
+    }
+    h2 {
+      font-size: 16pt;
+      color: #1a73e8;
+      margin: 0 0 12pt 0;
+      font-weight: 600;
+      border-left: 4px solid #4285f4;
+      padding-left: 10pt;
+    }
+    ul {
+      margin: 0;
+      padding-left: 20pt;
+      list-style: none;
+    }
+    li {
+      font-size: 11pt;
+      line-height: 1.8;
+      color: #202124;
+      margin-bottom: 8pt;
+      position: relative;
+    }
+    li:before {
+      content: "▸";
+      color: #4285f4;
+      font-weight: bold;
+      position: absolute;
+      left: -15pt;
+    }
+    .highlight-box {
+      background: linear-gradient(135deg, #e8f0fe 0%, #f1f8ff 100%);
+      padding: 18pt;
+      border-radius: 8pt;
+      border-left: 4px solid #4285f4;
+      margin-top: 15pt;
+    }
+    .highlight-box h3 {
+      font-size: 13pt;
+      color: #1a73e8;
+      margin: 0 0 10pt 0;
+      font-weight: 600;
+    }
+    .highlight-box p {
+      font-size: 10.5pt;
+      color: #5f6368;
+      margin: 5pt 0;
+      line-height: 1.6;
+    }
+    strong {
+      color: #1a73e8;
+      font-weight: 600;
+    }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Kimi 2.5 模型调研</h1>
+    <div class="subtitle">核心功能 · 性能亮点 · 应用场景</div>
+  </div>
+  
+  <div class="content">
+    <div class="column">
+      <h2>核心功能</h2>
+      <ul>
+        <li><strong>超长上下文</strong>：支持200万字符输入，处理长文档、代码库分析</li>
+        <li><strong>多模态能力</strong>：文本、图像理解与生成，支持复杂视觉推理</li>
+        <li><strong>联网搜索</strong>：实时信息检索，确保答案时效性与准确性</li>
+        <li><strong>深度推理</strong>：强化学习优化，复杂问题分步解决能力提升</li>
+      </ul>
+      
+      <h2 style="margin-top: 20pt;">性能亮点</h2>
+      <ul>
+        <li><strong>数学推理</strong>：AIME 2024达到90%准确率，超越GPT-4</li>
+        <li><strong>代码能力</strong>：HumanEval基准测试达到92.3分</li>
+        <li><strong>响应速度</strong>：优化推理引擎，平均延迟降低40%</li>
+      </ul>
+    </div>
+    
+    <div class="column">
+      <h2>应用场景</h2>
+      <ul>
+        <li><strong>企业知识管理</strong>：长文档分析、合规审查、智能问答系统</li>
+        <li><strong>软件开发</strong>：代码审查、Bug修复、架构设计辅助</li>
+        <li><strong>学术研究</strong>：文献综述、数据分析、论文撰写支持</li>
+        <li><strong>内容创作</strong>：市场报告、技术文档、多语言翻译</li>
+      </ul>
+      
+      <div class="highlight-box">
+        <h3>🎯 核心竞争优势</h3>
+        <p><strong>超长上下文处理</strong> - 行业领先的200万字符窗口</p>
+        <p><strong>中文优化</strong> - 针对中文场景深度调优，理解更精准</p>
+        <p><strong>成本效益</strong> - 相比国际模型，部署成本降低60%</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

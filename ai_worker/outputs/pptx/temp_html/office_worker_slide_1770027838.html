@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AI 驱动的智能客服系统架构设计</title>
+</head>
+<body style="width: 720pt; height: 405pt; margin: 0; padding: 30pt; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; box-sizing: border-box; background-color: #ffffff; color: #333;">
+  
+  <!-- Header -->
+  <header style="border-bottom: 3px solid #0056b3; padding-bottom: 10px; margin-bottom: 20px;">
+    <h1 style="color: #0056b3; font-size: 26pt; margin: 0;">AI 驱动的智能客服系统架构设计</h1>
+    <p style="font-size: 12pt; color: #666; margin: 5px 0 0 0;">技术方案执行摘要 | 2024年</p>
+  </header>
+
+  <!-- Content Grid -->
+  <div style="display: flex; flex: 1; gap: 20px;">
+     
+     <!-- Left Column: Context & Tech -->
+     <div style="flex: 1.2; display: flex; flex-direction: column; gap: 15px;">
+        <section>
+           <h2 style="font-size: 14pt; color: #0056b3; margin-bottom: 8px; border-left: 4px solid #0056b3; padding-left: 8px;">问题背景 (Problem Background)</h2>
+           <ul style="font-size: 10.5pt; line-height: 1.6; padding-left: 20px; margin: 0;">
+              <li><strong>成本痛点：</strong>人工客服团队规模大，高峰期响应不及时。</li>
+              <li><strong>效率瓶颈：</strong>传统关键词匹配机器人理解力差，转人工率高。</li>
+              <li><strong>知识孤岛：</strong>业务知识分散，难以快速更新并统一输出。</li>
+           </ul>
+        </section>
+
+        <section>
+           <h2 style="font-size: 14pt; color: #0056b3; margin-bottom: 8px; border-left: 4px solid #0056b3; padding-left: 8px;">技术方案 (Technical Solution)</h2>
+           <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; border: 1px solid #e9ecef;">
+              <p style="font-size: 10.5pt; margin: 0; font-weight: bold; color: #444;">核心：LLM + RAG 架构</p>
+              <ul style="font-size: 10pt; line-height: 1.4; padding-left: 20px; margin-top: 5px;">
+                 <li><strong>LLM:</strong> 采用大语言模型作为意图理解与文本生成引擎。</li>
+                 <li><strong>RAG:</strong> 检索增强生成，通过向量数据库实时检索最新业务知识。</li>
+                 <li><strong>Prompt Engineering:</strong> 精细化提示词工程，约束回复风格与准确性。</li>
+              </ul>
+           </div>
+        </section>
+     </div>
+
+     <!-- Right Column: Architecture & Plan -->
+     <div style="flex: 1.8; background: #f4f7fa; padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 15px;">
+        <section>
+           <h2 style="font-size: 14pt; color: #0056b3; margin-bottom: 10px;">系统架构 (System Architecture)</h2>
+           <div style="display: grid; grid-template-rows: repeat(4, 1fr); gap: 5px; text-align: center; font-size: 9pt; font-weight: bold;">
+              <div style="background: #0056b3; color: white; padding: 5px; border-radius: 3px;">接入层：Web, App, 微信, 电话拨入</div>
+              <div style="background: #28a745; color: white; padding: 5px; border-radius: 3px;">逻辑层：意图识别 → 知识检索 (Vector DB) → 提示词编排</div>
+              <div style="background: #ffc107; color: #333; padding: 5px; border-radius: 3px;">模型层：LLM Core (API/私有化部署) + 插件工具 (Tools)</div>
+              <div style="background: #6c757d; color: white; padding: 5px; border-radius: 3px;">数据层：结构化数据库 + 向量知识库 + 日志审计</div>
+           </div>
+        </section>
+
+        <div style="display: flex; gap: 15px;">
+           <div style="flex: 1;">
+              <h2 style="font-size: 12pt; color: #0056b3; margin-bottom: 5px;">实施计划</h2>
+              <ul style="font-size: 9pt; line-height: 1.4; padding-left: 15px;">
+                 <li><strong>T+1月:</strong> 知识库清理与向量化部署</li>
+                 <li><strong>T+2月:</strong> 模型微调与多轮对话调优</li>
+                 <li><strong>T+3月:</strong> 全渠道灰度上线与闭环优化</li>
+              </ul>
+           </div>
+           <div style="flex: 1;">
+              <h2 style="font-size: 12pt; color: #0056b3; margin-bottom: 5px;">预期效果</h2>
+              <div style="background: white; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                 <p style="font-size:
