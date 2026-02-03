@@ -495,6 +495,27 @@ class DailyBriefWorker(BaseWorker):
                     reddit_tool.execute(subreddit="LocalLLaMA", max_results=8),
                 )
             )
+            tasks.append(
+                (
+                    "r/algotrading",
+                    "Tech Community",
+                    reddit_tool.execute(subreddit="algotrading", max_results=5),
+                )
+            )
+            tasks.append(
+                (
+                    "r/ChatGPT",
+                    "Tech Community",
+                    reddit_tool.execute(subreddit="ChatGPT", max_results=6),
+                )
+            )
+            tasks.append(
+                (
+                    "r/startups",
+                    "Tech Community",
+                    reddit_tool.execute(subreddit="startups", max_results=5),
+                )
+            )
 
         # GitHub Trending - today's trending repos
         if github_tool:
@@ -628,20 +649,21 @@ class DailyBriefWorker(BaseWorker):
         for source, content in detailed_content.items():
             context_parts.append(f"## Additional: {source}\n{content}\n")
 
-        full_context = "\n".join(context_parts)
+        raw_context = "\n".join(context_parts)
 
         # DEBUG: Log context before LLM call
-        logger.info(f"[DEBUG] full_context length: {len(full_context)} chars")
-        logger.debug(f"[DEBUG] full_context preview: {full_context[:500]}...")
+        logger.info(f"[DEBUG] raw_context length: {len(raw_context)} chars")
+        logger.debug(f"[DEBUG] raw_context preview: {raw_context[:500]}...")
 
-        # Truncate if too long
-        if len(full_context) > 50000:
-            full_context = full_context[:50000] + "\n\n[Content truncated...]"
+        # Truncate if too long for prompt
+        prompt_context = raw_context
+        if len(prompt_context) > 50000:
+            prompt_context = prompt_context[:50000] + "\n\n[Content truncated...]"
 
         prompt = f"""Based on the following search results from today ({date}), create a comprehensive Daily Intelligence Brief.
 
 RAW DATA:
-{full_context}
+{prompt_context}
 
 Generate a well-structured report in Markdown format.
 
@@ -689,15 +711,32 @@ Be concise but informative. Focus on actionable insights."""
                     f"[DEBUG] LLM response preview: {response.content[:300]}..."
                 )
 
-            content = response.content.strip() if response.content else ""
+            brief = response.content.strip() if response.content else ""
 
             # Check if LLM returned empty content (API limit or error)
-            if not content:
+            if not brief:
                 logger.warning("LLM returned empty content, using fallback report")
                 return self._build_fallback_report(date, search_results)
 
-            logger.info(f"LLM generated report with {len(content)} characters")
-            return content
+            logger.info(f"LLM generated brief with {len(brief)} characters")
+
+            # === Construct Appendix ===
+            appendix = f"# 📚 Appendix: Raw Data\n\n> 以下是原始采集数据，供深入阅读\n\n{raw_context}"
+
+            # === Construct Sources ===
+            # Extract links from the brief to list as primary sources
+            # We use the brief's links to ensure we list what was actually used/cited
+            # (Optionally include appendix links too if comprehensive coverage is needed)
+            brief_links = self._extract_links_from_report(brief)
+
+            sources_section = "# 📎 Sources\n\n"
+            for i, link in enumerate(brief_links, 1):
+                sources_section += f"{i}. [{link['title']}]({link['url']})\n"
+
+            # Combine all parts
+            final_report = f"{brief}\n\n---\n\n{appendix}\n\n---\n\n{sources_section}"
+
+            return final_report
 
         except Exception as e:
             logger.error(f"LLM synthesis failed: {e}")
