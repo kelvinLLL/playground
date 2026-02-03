@@ -66,6 +66,14 @@ class MemoryConfig:
 
 
 @dataclass
+class ProjectConfig:
+    """Project workspace configuration."""
+    
+    workspace_root: str = "workspace"
+    active_project: str = ""
+
+
+@dataclass
 class Settings:
     """
     Main settings class for AI Worker.
@@ -79,6 +87,7 @@ class Settings:
     search: SearchConfig = field(default_factory=SearchConfig)
     scheduler: SchedulerConfig = field(default_factory=SchedulerConfig)
     memory: MemoryConfig = field(default_factory=MemoryConfig)
+    project: ProjectConfig = field(default_factory=ProjectConfig)
     debug: bool = False
 
     @classmethod
@@ -129,6 +138,10 @@ class Settings:
             memory=MemoryConfig(
                 provider=os.getenv("MEMORY_PROVIDER", "local"),
             ),
+    project=ProjectConfig(
+        workspace_root=os.getenv("WORKSPACE_ROOT", os.path.join("ai_worker", "workspace")),
+        active_project=os.getenv("ACTIVE_PROJECT", ""),
+    ),
             debug=os.getenv("DEBUG", "false").lower() == "true",
         )
 

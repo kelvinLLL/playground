@@ -9,6 +9,8 @@ import asyncio
 import logging
 import signal
 import sys
+import subprocess
+import os
 from typing import Optional
 
 from ai_worker.config import get_settings
@@ -178,6 +180,8 @@ class AIWorkerApp:
 
         # Initialize status message
         status_message_handle = None
+        log_buffer = [] # Keep track of progress steps
+        
         # Send initial status
         try:
             status_message_handle = await current_adapter.reply(
@@ -190,12 +194,21 @@ class AIWorkerApp:
         # Define progress notifier
         async def progress_notifier(text: str):
             nonlocal status_message_handle
+            
+            # Add timestamp
+            import datetime
+            time_str = datetime.datetime.now().strftime("%H:%M:%S")
+            log_entry = f"`{time_str}` {text}"
+            log_buffer.append(log_entry)
+            
+            # Keep last 15 lines to stay within limits
+            display_log = "\n".join(log_buffer[-15:])
+            status_content = f"**🔄 Processing Status:**\n{display_log}"
+            
             if status_message_handle:
-                # Try to edit the existing status message
-                # Note: Discord has rate limits on edits, but tool execution usually takes time
-                await current_adapter.edit_message(status_message_handle, f"🔄 {text}")
+                await current_adapter.edit_message(status_message_handle, status_content)
             else:
-                # Fallback: send new message if we couldn't create/track status message
+                # Fallback: send new message
                 response = StandardResponse(content=text)
                 await current_adapter.reply(message, response)
 
@@ -226,6 +239,10 @@ class AIWorkerApp:
         # Inject context links from recent interactions (e.g., daily brief)
         if channel_id in self.context_links_cache:
             message.metadata["context_links"] = self.context_links_cache[channel_id]
+            
+        # Inject active project context
+        if self.settings.project.active_project:
+            message.metadata["active_project"] = self.settings.project.active_project
         
         # Route via smart router (DefaultWorker with LLM function calling)
         response = await self.default_worker.process(message, notifier=progress_notifier)
@@ -233,8 +250,9 @@ class AIWorkerApp:
         # Cleanup status message
         if status_message_handle:
             try:
-                # Update to show completion, or could delete it
-                await current_adapter.edit_message(status_message_handle, "✅ Task processing complete.")
+                # Update to show completion, keeping the log
+                display_log = "\n".join(log_buffer[-15:])
+                await current_adapter.edit_message(status_message_handle, f"✅ **Task Completed**\n{display_log}")
             except Exception:
                 pass
 
@@ -374,6 +392,20 @@ class AIWorkerApp:
                 msg += f"**{cat}**\n"
                 for s in cat_skills:
                     msg += f"{s.emoji} **{s.name}**: {s.description}\n"
+                    
+                    # Special handling for LocalScripts to list available scripts
+                    if s.name == "LocalScripts" and hasattr(s, "_scan_skills"):
+                        try:
+                            local_map = s._scan_skills()
+                            if local_map:
+                                for lname, ldesc in sorted(local_map.items()):
+                                    # Take first sentence or 50 chars
+                                    short_desc = ldesc.split(".")[0].strip()[:60]
+                                    if len(ldesc) > 60: short_desc += "..."
+                                    msg += f"  └ 📜 `{lname}`: {short_desc}\n"
+                        except Exception:
+                            pass
+                            
                 msg += "\n"
                 
             msg += "**Specialized Workers:**\n"
@@ -642,6 +674,61 @@ class AIWorkerApp:
                 "You can still use `!brief` for manual generation."
             )
 
+        @adapter.bot.command(name="workon")
+        async def workon_command(ctx, repo: str):
+            """Switch active project context. Usage: !workon owner/repo"""
+            if "/" not in repo:
+                await ctx.send("❌ Invalid repo format. Use `owner/repo` (e.g. `kelvinLLL/ai_native`)")
+                return
+            
+            status_msg = await ctx.send(f"🔄 Setting up workspace for **{repo}**...")
+            
+            repo_name = repo.split("/")[-1]
+            workspace_root = self.settings.project.workspace_root
+            project_path = os.path.join(workspace_root, repo_name)
+            
+            # Ensure workspace dir exists
+            try:
+                os.makedirs(workspace_root, exist_ok=True)
+            except Exception as e:
+                await status_msg.edit(content=f"❌ Failed to create workspace: {e}")
+                return
+            
+            action = ""
+            
+            if os.path.exists(project_path):
+                # Pull
+                await status_msg.edit(content=f"🔄 Updating **{repo}** (git pull)...")
+                try:
+                    # Use asyncio.to_thread for blocking IO
+                    await asyncio.to_thread(subprocess.run, ["git", "pull"], cwd=project_path, check=True, capture_output=True)
+                    action = "updated"
+                except Exception as e:
+                    await status_msg.edit(content=f"❌ Git pull failed: {e}")
+                    return
+            else:
+                # Clone
+                await status_msg.edit(content=f"🔄 Cloning **{repo}**...")
+                token = os.environ.get("GITHUB_TOKEN")
+                if token:
+                    clone_url = f"https://{token}@github.com/{repo}.git"
+                else:
+                    clone_url = f"https://github.com/{repo}.git"
+                
+                try:
+                    await asyncio.to_thread(subprocess.run, ["git", "clone", clone_url, project_path], check=True, capture_output=True)
+                    action = "cloned"
+                except Exception as e:
+                    await status_msg.edit(content=f"❌ Git clone failed: {e}")
+                    return
+            
+            # Set Context
+            self.settings.project.active_project = project_path
+            # Persist
+            self._update_env_file("ACTIVE_PROJECT", project_path)
+            
+            await status_msg.edit(content=f"✅ Project **{repo}** {action} and active!\n📂 Path: `{project_path}`")
+
         @adapter.bot.command(name="aihelp")
         async def help_command(ctx):
             """Show all available commands and features."""
@@ -693,9 +780,14 @@ class AIWorkerApp:
 • "分析这篇论文 [链接]"
 • "生成今天的日报" """
 
+            help4 = """**━━━ 开发者模式 (ChatOps) ━━━**
+`!workon <owner/repo>` - 克隆并激活 GitHub 项目 (设置 Active Project Context)
+  └ 例: `!workon kelvinLLL/ai_native`"""
+
             await ctx.send(help1)
             await ctx.send(help2)
             await ctx.send(help3)
+            await ctx.send(help4)
 
         return adapter
 

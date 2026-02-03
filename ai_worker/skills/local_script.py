@@ -233,18 +233,9 @@ class LocalScriptSkill(BaseSkill):
             return f"\n\n⚠️ **WARNING**: Missing Python dependencies: {', '.join(missing)}. Scripts may fail."
         return None
 
-    def get_instructions(self) -> str:
-        """
-        Dynamically build instructions from local skills (Manifest Only).
-        Only lists available skills. LLM must use `inspect_skill` to get full docs.
-        """
-        instructions = ["### Local Custom Skills\n"]
-        instructions.append("You have access to the following local skills.\n")
-        instructions.append("⚠️ **IMPORTANT**: To use a skill, you MUST first call `inspect_skill(skill_name)` to read its manual.\n")
-        
-        skills_map = {} # name -> description
-
-        # Recursive scan
+    def _scan_skills(self) -> Dict[str, str]:
+        """Scan local directory for available skills and descriptions."""
+        skills_map = {}
         all_md = glob.glob(os.path.join(self.local_dir, "**/*.md"), recursive=True)
         
         for md_file in sorted(all_md):
@@ -256,7 +247,6 @@ class LocalScriptSkill(BaseSkill):
             
             # Case 1: Folder/skill.md or Folder/README.md
             if len(parts) >= 2 and parts[-1].lower() in ["skill.md", "readme.md"]:
-                # Use the immediate parent folder as skill name
                 skill_name = parts[-2]
                 is_entry_point = True
             # Case 2: Top-level file (myskill.md)
@@ -266,15 +256,31 @@ class LocalScriptSkill(BaseSkill):
                 
             if is_entry_point and skill_name and skill_name not in skills_map:
                 desc = self._extract_description(md_file)
-                # Check requirements too
                 req_warning = self._check_requirements(md_file)
                 if req_warning:
                     desc += f" {req_warning}"
                 skills_map[skill_name] = desc
+        return skills_map
+
+    def get_instructions(self) -> str:
+        """
+        Dynamically build instructions from local skills (Manifest Only).
+        Only lists available skills. LLM must use `inspect_skill` to get full docs.
+        """
+        instructions = ["### Local Custom Skills\n"]
+        instructions.append("You have access to the following local skills.\n")
+        instructions.append("⚠️ **IMPORTANT**: To use a skill, you MUST first call `inspect_skill(skill_name)` to read its manual.\n")
+        
+        skills_map = self._scan_skills()
         
         if not skills_map:
             instructions.append("(No local skills found)")
             return "\n".join(instructions)
+            
+        for name, desc in sorted(skills_map.items()):
+            instructions.append(f"- **{name}**: {desc}")
+            
+        return "\n".join(instructions)
             
         for name, desc in sorted(skills_map.items()):
             instructions.append(f"- **{name}**: {desc}")

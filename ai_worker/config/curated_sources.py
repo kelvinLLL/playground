@@ -16,17 +16,18 @@ from typing import Optional, List
 
 class SourceType(Enum):
     """Type of source determines how to fetch content."""
-    RSS = "rss"           # RSS/Atom feed - use feedparser
-    SCRAPE = "scrape"     # Direct URL scraping - use Playwright
-    SEARCH = "search"     # Site-specific search - use DuckDuckGo
-    API = "api"           # API endpoint - custom handler
+
+    RSS = "rss"  # RSS/Atom feed - use feedparser
+    SCRAPE = "scrape"  # Direct URL scraping - use Playwright
+    SEARCH = "search"  # Site-specific search - use DuckDuckGo
+    API = "api"  # API endpoint - custom handler
 
 
 @dataclass
 class Source:
     """
     Represents a single information source.
-    
+
     Attributes:
         name: Display name of the source
         url: Main URL of the source
@@ -40,6 +41,7 @@ class Source:
         max_items: Maximum items to fetch from this source
         enabled: Whether to include this source
     """
+
     name: str
     url: str
     source_type: SourceType
@@ -107,7 +109,6 @@ AI_NEWS_SOURCES = [
         language="en",
         priority=1,
     ),
-    
     # --- Medium Priority (News Sites) ---
     Source(
         name="VentureBeat AI",
@@ -149,7 +150,6 @@ AI_NEWS_SOURCES = [
         language="en",
         priority=2,
     ),
-    
     # --- Low Priority (Newsletters/Blogs) ---
     Source(
         name="The Batch (Andrew Ng)",
@@ -357,6 +357,40 @@ COMMUNITY_SOURCES = [
         emoji="💬",
         language="en",
         priority=2,
+        max_items=8,
+    ),
+    Source(
+        name="Reddit r/algotrading",
+        url="https://www.reddit.com/r/algotrading/",
+        source_type=SourceType.RSS,
+        rss_url="https://www.reddit.com/r/algotrading/top/.rss?t=day",
+        category="Tech Community",
+        emoji="📈",
+        language="en",
+        priority=2,
+        max_items=6,
+    ),
+    Source(
+        name="Reddit r/ChatGPT",
+        url="https://www.reddit.com/r/ChatGPT/",
+        source_type=SourceType.RSS,
+        rss_url="https://www.reddit.com/r/ChatGPT/top/.rss?t=day",
+        category="Tech Community",
+        emoji="🤖",
+        language="en",
+        priority=2,
+        max_items=6,
+    ),
+    Source(
+        name="Reddit r/startups",
+        url="https://www.reddit.com/r/startups/",
+        source_type=SourceType.RSS,
+        rss_url="https://www.reddit.com/r/startups/top/.rss?t=day",
+        category="Tech Community",
+        emoji="🚀",
+        language="en",
+        priority=2,
+        max_items=6,
     ),
     Source(
         name="Product Hunt AI",
@@ -412,15 +446,16 @@ INVESTMENT_SOURCES = [
 # Source Profiles (Preset Combinations)
 # ============================================================
 
+
 def get_all_sources() -> List[Source]:
     """Get all defined sources."""
     return (
-        AI_NEWS_SOURCES +
-        CHINESE_SOURCES +
-        GITHUB_SOURCES +
-        RESEARCH_SOURCES +
-        COMMUNITY_SOURCES +
-        INVESTMENT_SOURCES
+        AI_NEWS_SOURCES
+        + CHINESE_SOURCES
+        + GITHUB_SOURCES
+        + RESEARCH_SOURCES
+        + COMMUNITY_SOURCES
+        + INVESTMENT_SOURCES
     )
 
 
@@ -451,22 +486,21 @@ QUICK_PROFILE: List[Source] = get_sources_by_priority(1)
 
 # Chinese-focused profile
 CHINESE_PROFILE: List[Source] = (
-    CHINESE_SOURCES +
-    [s for s in GITHUB_SOURCES if s.priority == 1] +
-    [s for s in RESEARCH_SOURCES if s.priority == 1]
+    CHINESE_SOURCES
+    + [s for s in GITHUB_SOURCES if s.priority == 1]
+    + [s for s in RESEARCH_SOURCES if s.priority == 1]
 )
 
 # Research-focused profile
-RESEARCH_PROFILE: List[Source] = (
-    RESEARCH_SOURCES +
-    [s for s in AI_NEWS_SOURCES if "Research" in s.category]
-)
+RESEARCH_PROFILE: List[Source] = RESEARCH_SOURCES + [
+    s for s in AI_NEWS_SOURCES if "Research" in s.category
+]
 
 # Developer-focused profile
 DEVELOPER_PROFILE: List[Source] = (
-    GITHUB_SOURCES +
-    COMMUNITY_SOURCES +
-    [s for s in AI_NEWS_SOURCES if s.priority == 1][:3]
+    GITHUB_SOURCES
+    + COMMUNITY_SOURCES
+    + [s for s in AI_NEWS_SOURCES if s.priority == 1][:3]
 )
 
 
@@ -474,27 +508,32 @@ DEVELOPER_PROFILE: List[Source] = (
 # Legacy SEARCH_TOPICS compatibility
 # ============================================================
 
+
 def sources_to_search_topics(sources: List[Source]) -> List[dict]:
     """
     Convert Source objects to legacy SEARCH_TOPICS format for backward compatibility.
-    
+
     This allows gradual migration - you can use either the new Source-based system
     or fall back to the old search-based approach.
     """
     topics = []
     for source in sources:
         if source.source_type == SourceType.SEARCH:
-            query = source.search_query or f"site:{source.url.split('//')[1].split('/')[0]}"
+            query = (
+                source.search_query or f"site:{source.url.split('//')[1].split('/')[0]}"
+            )
         else:
             # For RSS/SCRAPE sources, create a site-specific search as fallback
             domain = source.url.split("//")[1].split("/")[0]
             query = f"site:{domain} latest news today"
-        
-        topics.append({
-            "category": source.category,
-            "query": query,
-            "emoji": source.emoji,
-            "source": source,  # Include source object for enhanced processing
-        })
-    
+
+        topics.append(
+            {
+                "category": source.category,
+                "query": query,
+                "emoji": source.emoji,
+                "source": source,  # Include source object for enhanced processing
+            }
+        )
+
     return topics

@@ -30,7 +30,11 @@ from ai_worker.workers.base import BaseWorker, WorkerConfig
 from ai_worker.tools.base import BaseTool
 
 # Import Skills
-from ai_worker.skills.base import BaseSkill, combine_skill_tools, combine_skill_instructions
+from ai_worker.skills.base import (
+    BaseSkill,
+    combine_skill_tools,
+    combine_skill_instructions,
+)
 from ai_worker.skills.search import SearchSkill
 from ai_worker.skills.browser import BrowserSkill
 from ai_worker.skills.realtime_intel import RealtimeIntelSkill
@@ -56,7 +60,7 @@ class DailyBriefWorker(BaseWorker):
     2. Deep Dive - Scrape high-value URLs (Playwright)
     3. Editorial - LLM synthesis
     4. Delivery - Write report + notify
-    
+
     Supports two modes:
     - Curated Sources (NEW): Uses predefined high-quality sources from curated_sources.py
     - Search Topics (LEGACY): Falls back to generic search queries
@@ -64,16 +68,34 @@ class DailyBriefWorker(BaseWorker):
 
     # Legacy search topics (fallback if curated sources fail)
     SEARCH_TOPICS = [
-        {"category": "AI/Tech News", "query": "AI artificial intelligence news today", "emoji": "🤖"},
-        {"category": "GitHub Trending", "query": "site:github.com trending repositories stars today", "emoji": "📊"},
-        {"category": "HuggingFace Trending", "query": "site:huggingface.co trending models papers daily", "emoji": "🤗"},
-        {"category": "Investment", "query": "tech stock market news today investment", "emoji": "💡"},
+        {
+            "category": "AI/Tech News",
+            "query": "AI artificial intelligence news today",
+            "emoji": "🤖",
+        },
+        {
+            "category": "GitHub Trending",
+            "query": "site:github.com trending repositories stars today",
+            "emoji": "📊",
+        },
+        {
+            "category": "HuggingFace Trending",
+            "query": "site:huggingface.co trending models papers daily",
+            "emoji": "🤗",
+        },
+        {
+            "category": "Investment",
+            "query": "tech stock market news today investment",
+            "emoji": "💡",
+        },
     ]
 
-    def __init__(self, llm: BaseLLM, use_curated_sources: bool = True, quick_mode: bool = False):
+    def __init__(
+        self, llm: BaseLLM, use_curated_sources: bool = True, quick_mode: bool = False
+    ):
         """
         Initialize the Daily Brief Worker.
-        
+
         Args:
             llm: LLM client for synthesis
             use_curated_sources: Use new curated sources system (default True)
@@ -90,7 +112,10 @@ class DailyBriefWorker(BaseWorker):
                 "2. Highlight key trends and patterns\n"
                 "3. Provide actionable takeaways\n"
                 "4. Use clear structure with headers\n"
-                "5. Cite sources when available"
+                "5. Cite sources when available\n"
+                "6. STRICTLY prioritize news from the last 24 hours\n"
+                "7. Ignore and filter out any outdated information\n"
+                "8. When in doubt about freshness, exclude the item"
             ),
             tools=[],  # Tools now come from Skills
         )
@@ -98,13 +123,13 @@ class DailyBriefWorker(BaseWorker):
         self.llm = llm
         self.use_curated_sources = use_curated_sources
         self.quick_mode = quick_mode
-        
+
         # Select source profile based on mode
         if quick_mode:
             self.sources = QUICK_PROFILE
         else:
             self.sources = DEFAULT_PROFILE
-        
+
         # === NEW: Load Skills instead of individual tools ===
         self._init_skills()
 
@@ -116,25 +141,25 @@ class DailyBriefWorker(BaseWorker):
             BrowserSkill(),
             RealtimeIntelSkill(),
         ]
-        
+
         # Combine tools from all Skills into self._tools dict
         for skill in self.skills:
             for tool in skill.get_tools():
                 self._tools[tool.name] = tool
-            logger.info(f"Loaded Skill: {skill.metadata.name} ({len(skill.get_tools())} tools)")
-        
+            logger.info(
+                f"Loaded Skill: {skill.metadata.name} ({len(skill.get_tools())} tools)"
+            )
+
         # Log skill instructions for debugging
         instructions = combine_skill_instructions(self.skills)
         logger.debug(f"Combined skill instructions:\n{instructions}")
 
     async def process(
-        self,
-        message: StandardMessage,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, message: StandardMessage, notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
         """
         Process a request to generate daily brief.
-        
+
         Can be triggered manually via Discord or by scheduler.
         """
         try:
@@ -144,45 +169,48 @@ class DailyBriefWorker(BaseWorker):
             return StandardResponse(content=f"Brief generation failed: {str(e)}")
 
     async def generate_brief(
-        self,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
         """
         Generate the daily intelligence brief.
-        
+
         Args:
             notifier: Optional callback for progress updates
-            
+
         Returns:
             StandardResponse with the brief content
         """
         today = datetime.now().strftime("%Y-%m-%d")
-        
+
         if notifier:
             await notifier(f"📋 Starting Daily Brief generation for {today}...")
 
         # Phase 1: Scouting - Search for information
         if notifier:
-            await notifier("🔍 **Phase 1/4**: Scouting - Searching for trending topics...")
-        
+            await notifier(
+                "🔍 **Phase 1/4**: Scouting - Searching for trending topics..."
+            )
+
         search_results = await self._phase_scouting(notifier)
 
         # Phase 2: Deep Dive - Scrape detailed content (optional, can be slow)
         if notifier:
             await notifier("🌐 **Phase 2/4**: Deep Dive - Analyzing top sources...")
-        
+
         detailed_content = await self._phase_deep_dive(search_results, notifier)
 
         # Phase 3: Editorial - LLM synthesis
         if notifier:
             await notifier("✍️ **Phase 3/4**: Editorial - Synthesizing insights...")
-        
-        report = await self._phase_editorial(search_results, detailed_content, today, notifier)
+
+        report = await self._phase_editorial(
+            search_results, detailed_content, today, notifier
+        )
 
         # Phase 4: Delivery - Save and notify
         if notifier:
             await notifier("📤 **Phase 4/4**: Delivery - Saving report...")
-        
+
         file_path = await self._phase_delivery(report, today, notifier)
 
         # Extract context links from the generated report for future reference
@@ -198,36 +226,36 @@ class DailyBriefWorker(BaseWorker):
             extras={
                 "file_path": file_path,
                 "context_links": context_links,  # For context-aware follow-up
-            }
+            },
         )
 
     def _extract_links_from_report(self, report: str) -> List[Dict[str, str]]:
         """
         Extract links from the markdown report for context awareness.
-        
+
         Returns:
             List of dicts with 'title' and 'url' keys
         """
         links = []
-        
+
         # Pattern 1: Markdown links [Title](URL)
-        md_pattern = r'\[([^\]]+)\]\((https?://[^\)]+)\)'
+        md_pattern = r"\[([^\]]+)\]\((https?://[^\)]+)\)"
         for match in re.finditer(md_pattern, report):
             title = match.group(1).strip()
             url = match.group(2).strip()
             if url and title:
                 links.append({"title": title, "url": url})
-        
+
         # Pattern 2: Bare URLs (not already in markdown format)
-        # Match URLs that are NOT preceded by ]( 
-        bare_pattern = r'(?<!\]\()https?://[^\s\)\]<>\"\']+(?<![,.\)])'
+        # Match URLs that are NOT preceded by ](
+        bare_pattern = r"(?<!\]\()https?://[^\s\)\]<>\"\']+(?<![,.\)])"
         for match in re.finditer(bare_pattern, report):
             url = match.group(0).strip()
             # Skip if this URL is already in our list
             if not any(l["url"] == url for l in links):
                 # Try to extract a title from nearby context
                 links.append({"title": url.split("/")[-1][:50], "url": url})
-        
+
         # Deduplicate by URL, keep first occurrence
         seen_urls = set()
         unique_links = []
@@ -235,77 +263,83 @@ class DailyBriefWorker(BaseWorker):
             if link["url"] not in seen_urls:
                 seen_urls.add(link["url"])
                 unique_links.append(link)
-        
+
         # Limit to top 20 links to avoid context bloat
         return unique_links[:20]
 
     async def _phase_scouting(
-        self,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, notifier: Optional[Callable[[str], Any]] = None
     ) -> dict[str, str]:
         """
         Phase 1: Fetch content from curated sources or search.
-        
+
         Uses the new curated sources system if enabled, otherwise falls back
         to legacy search-based approach.
-        
+
         Returns:
             Dict mapping category to content
         """
         results = {}
-        
+
         if self.use_curated_sources:
             results = await self._fetch_curated_sources(notifier)
-            
+
             # If curated sources yielded no results, fall back to search
             if not results or all(not v for v in results.values()):
-                logger.warning("Curated sources returned no data, falling back to search")
+                logger.warning(
+                    "Curated sources returned no data, falling back to search"
+                )
                 results = await self._fetch_via_search(notifier)
         else:
             results = await self._fetch_via_search(notifier)
-        
+
         return results
 
     async def _fetch_curated_sources(
-        self,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, notifier: Optional[Callable[[str], Any]] = None
     ) -> dict[str, str]:
         """
         Fetch content from curated sources (RSS, scrape, search) + real-time APIs.
-        
+
         Returns:
             Dict mapping category to formatted content
         """
         results = {}
         rss_tool = self._tools.get("rss_feed")
         search_tool = self._tools.get("search")
-        
+
         # === NEW: Fetch from real-time APIs FIRST (guaranteed fresh) ===
         if notifier:
-            await notifier("  🚀 Fetching real-time sources (HN, Reddit, GitHub Trending)...")
-        
+            await notifier(
+                "  🚀 Fetching real-time sources (HN, Reddit, GitHub Trending)..."
+            )
+
         await self._fetch_realtime_sources(results, notifier)
-        
+
         # Group sources by type for efficient processing
-        rss_sources = [s for s in self.sources if s.source_type == SourceType.RSS and s.enabled]
-        scrape_sources = [s for s in self.sources if s.source_type == SourceType.SCRAPE and s.enabled]
-        search_sources = [s for s in self.sources if s.source_type == SourceType.SEARCH and s.enabled]
-        
+        rss_sources = [
+            s for s in self.sources if s.source_type == SourceType.RSS and s.enabled
+        ]
+        scrape_sources = [
+            s for s in self.sources if s.source_type == SourceType.SCRAPE and s.enabled
+        ]
+        search_sources = [
+            s for s in self.sources if s.source_type == SourceType.SEARCH and s.enabled
+        ]
+
         # === Fetch RSS feeds in parallel ===
         if rss_sources and rss_tool:
             if notifier:
                 await notifier(f"  📡 Fetching {len(rss_sources)} RSS feeds...")
-            
+
             rss_tasks = []
             for source in rss_sources:
                 rss_url = source.rss_url or source.url
                 task = rss_tool.execute(
-                    url=rss_url,
-                    max_items=source.max_items,
-                    source_name=source.name
+                    url=rss_url, max_items=source.max_items, source_name=source.name
                 )
                 rss_tasks.append((source, task))
-            
+
             # Gather all RSS results
             for source, task in rss_tasks:
                 try:
@@ -315,173 +349,205 @@ class DailyBriefWorker(BaseWorker):
                         category = source.category
                         if category not in results:
                             results[category] = ""
-                        results[category] += f"\n\n### {source.emoji} {source.name}\n{formatted}"
-                        logger.info(f"RSS: Got {result.data.get('item_count', 0)} items from {source.name}")
+                        results[category] += (
+                            f"\n\n### {source.emoji} {source.name}\n{formatted}"
+                        )
+                        logger.info(
+                            f"RSS: Got {result.data.get('item_count', 0)} items from {source.name}"
+                        )
                     else:
-                        logger.warning(f"RSS fetch failed for {source.name}: {result.error}")
+                        logger.warning(
+                            f"RSS fetch failed for {source.name}: {result.error}"
+                        )
                 except Exception as e:
                     logger.error(f"RSS error for {source.name}: {e}")
-                
+
                 await asyncio.sleep(0.1)  # Small delay
-        
+
         # === Scrape sources (use timelimit='d' search for freshness) ===
         if scrape_sources and search_tool:
             if notifier:
                 await notifier(f"  🌐 Fetching {len(scrape_sources)} web sources...")
-            
+
             for source in scrape_sources:
                 # Skip GitHub Trending - already fetched via dedicated tool
                 if "github.com/trending" in source.url:
                     continue
-                    
+
                 try:
                     # Use site-specific search with time filter
                     domain = source.url.split("//")[1].split("/")[0]
                     query = f"site:{domain} latest"
-                    
+
                     if notifier:
                         await notifier(f"    {source.emoji} {source.name}...")
-                    
+
                     # Add timelimit='d' for freshness
                     result = await search_tool.execute(
-                        query=query, 
+                        query=query,
                         max_results=source.max_items,
-                        timelimit='d'  # Last 24 hours
+                        timelimit="d",  # Last 24 hours
                     )
-                    
+
                     if result.success and result.data:
                         category = source.category
                         if category not in results:
                             results[category] = ""
-                        results[category] += f"\n\n### {source.emoji} {source.name}\n{result.data}"
-                        logger.info(f"Scrape (via search): Got results for {source.name}")
+                        results[category] += (
+                            f"\n\n### {source.emoji} {source.name}\n{result.data}"
+                        )
+                        logger.info(
+                            f"Scrape (via search): Got results for {source.name}"
+                        )
                     else:
-                        logger.warning(f"Scrape failed for {source.name}: {result.error}")
-                        
+                        logger.warning(
+                            f"Scrape failed for {source.name}: {result.error}"
+                        )
+
                 except Exception as e:
                     logger.error(f"Scrape error for {source.name}: {e}")
-                
+
                 await asyncio.sleep(0.3)  # Delay between scrapes
-        
+
         # === Site-specific searches (with time filter) ===
         if search_sources and search_tool:
             if notifier:
                 await notifier(f"  🔍 Running {len(search_sources)} site searches...")
-            
+
             for source in search_sources:
                 # Skip Hacker News - already fetched via dedicated tool
                 if "news.ycombinator.com" in source.url:
                     continue
-                    
+
                 try:
-                    query = source.search_query or f"site:{source.url.split('//')[1].split('/')[0]}"
-                    
+                    query = (
+                        source.search_query
+                        or f"site:{source.url.split('//')[1].split('/')[0]}"
+                    )
+
                     # Add timelimit='d' for freshness
                     result = await search_tool.execute(
-                        query=query, 
+                        query=query,
                         max_results=source.max_items,
-                        timelimit='d'  # Last 24 hours
+                        timelimit="d",  # Last 24 hours
                     )
-                    
+
                     if result.success and result.data:
                         category = source.category
                         if category not in results:
                             results[category] = ""
-                        results[category] += f"\n\n### {source.emoji} {source.name}\n{result.data}"
+                        results[category] += (
+                            f"\n\n### {source.emoji} {source.name}\n{result.data}"
+                        )
                         logger.info(f"Search: Got results for {source.name}")
-                        
+
                 except Exception as e:
                     logger.error(f"Search error for {source.name}: {e}")
-                
+
                 await asyncio.sleep(0.3)
-        
+
         return results
 
     async def _fetch_realtime_sources(
-        self,
-        results: dict[str, str],
-        notifier: Optional[Callable[[str], Any]] = None
+        self, results: dict[str, str], notifier: Optional[Callable[[str], Any]] = None
     ) -> None:
         """
         Fetch from real-time APIs with guaranteed freshness.
-        
+
         These sources have server-side time filtering:
         - Hacker News Algolia API (timestamp filter)
         - Reddit JSON API (t=day parameter)
         - GitHub Trending (daily since=daily)
         """
         import asyncio
-        
+
         hn_tool = self._tools.get("hackernews")
         reddit_tool = self._tools.get("reddit")
         github_tool = self._tools.get("github_trending")
-        
+
         tasks = []
-        
+
         # Hacker News - today's AI/ML stories
         if hn_tool:
-            tasks.append(("Hacker News", "Tech Community", hn_tool.execute(
-                query="AI OR LLM OR machine learning OR GPT",
-                max_results=15
-            )))
-        
+            tasks.append(
+                (
+                    "Hacker News",
+                    "Tech Community",
+                    hn_tool.execute(
+                        query="AI OR LLM OR machine learning OR GPT", max_results=15
+                    ),
+                )
+            )
+
         # Reddit - today's top from r/MachineLearning and r/LocalLLaMA
         if reddit_tool:
-            tasks.append(("r/MachineLearning", "Tech Community", reddit_tool.execute(
-                subreddit="MachineLearning",
-                max_results=10
-            )))
-            tasks.append(("r/LocalLLaMA", "Tech Community", reddit_tool.execute(
-                subreddit="LocalLLaMA",
-                max_results=8
-            )))
-        
+            tasks.append(
+                (
+                    "r/MachineLearning",
+                    "Tech Community",
+                    reddit_tool.execute(subreddit="MachineLearning", max_results=10),
+                )
+            )
+            tasks.append(
+                (
+                    "r/LocalLLaMA",
+                    "Tech Community",
+                    reddit_tool.execute(subreddit="LocalLLaMA", max_results=8),
+                )
+            )
+
         # GitHub Trending - today's trending repos
         if github_tool:
-            tasks.append(("GitHub Trending (All)", "GitHub Trending", github_tool.execute(
-                language="",
-                max_results=15
-            )))
-            tasks.append(("GitHub Trending (Python)", "GitHub Trending", github_tool.execute(
-                language="python",
-                max_results=10
-            )))
-        
+            tasks.append(
+                (
+                    "GitHub Trending (All)",
+                    "GitHub Trending",
+                    github_tool.execute(language="", max_results=15),
+                )
+            )
+            tasks.append(
+                (
+                    "GitHub Trending (Python)",
+                    "GitHub Trending",
+                    github_tool.execute(language="python", max_results=10),
+                )
+            )
+
         # Execute all in parallel
         if tasks:
             task_results = await asyncio.gather(
-                *[t[2] for t in tasks],
-                return_exceptions=True
+                *[t[2] for t in tasks], return_exceptions=True
             )
-            
+
             for i, result in enumerate(task_results):
                 name, category, _ = tasks[i]
-                
+
                 if isinstance(result, Exception):
                     logger.warning(f"Real-time source {name} failed: {result}")
                     continue
-                
+
                 if result.success and result.data:
                     if category not in results:
                         results[category] = ""
                     results[category] += f"\n\n{result.data}"
                     logger.info(f"Real-time: Got fresh data from {name}")
                 else:
-                    logger.warning(f"Real-time source {name} returned no data: {result.error}")
+                    logger.warning(
+                        f"Real-time source {name} returned no data: {result.error}"
+                    )
 
     async def _fetch_via_search(
-        self,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, notifier: Optional[Callable[[str], Any]] = None
     ) -> dict[str, str]:
         """
         Legacy: Fetch content via generic search queries.
-        
+
         Returns:
             Dict mapping category to search results
         """
         results = {}
         search_tool = self._tools.get("search")
-        
+
         if not search_tool:
             logger.warning("Search tool not available")
             return results
@@ -490,24 +556,24 @@ class DailyBriefWorker(BaseWorker):
             category = topic["category"]
             query = topic["query"]
             emoji = topic["emoji"]
-            
+
             try:
                 if notifier:
                     await notifier(f"  {emoji} Searching: {category}...")
-                
+
                 result = await search_tool.execute(query=query, max_results=5)
-                
+
                 if result.success and result.data:
                     results[category] = result.data
                     logger.info(f"Got results for {category}")
                 else:
                     results[category] = f"No results found. Error: {result.error}"
                     logger.warning(f"No results for {category}: {result.error}")
-                    
+
             except Exception as e:
                 logger.error(f"Search failed for {category}: {e}")
                 results[category] = f"Search failed: {str(e)}"
-            
+
             # Small delay to be nice to the API
             await asyncio.sleep(0.5)
 
@@ -516,21 +582,21 @@ class DailyBriefWorker(BaseWorker):
     async def _phase_deep_dive(
         self,
         search_results: dict[str, str],
-        notifier: Optional[Callable[[str], Any]] = None
+        notifier: Optional[Callable[[str], Any]] = None,
     ) -> dict[str, str]:
         """
         Phase 2: Scrape detailed content from top URLs.
-        
+
         For now, we'll use the search results directly.
         Playwright scraping can be added for specific high-value URLs.
-        
+
         Returns:
             Dict with additional detailed content
         """
         # TODO: Implement Playwright scraping for top URLs
         # For MVP, we return empty dict and rely on search results
         detailed = {}
-        
+
         # Example: Could scrape GitHub trending page
         # nav_tool = self._tools.get("browser_navigate")
         # snapshot_tool = self._tools.get("browser_snapshot")
@@ -538,7 +604,7 @@ class DailyBriefWorker(BaseWorker):
         #     await nav_tool.execute(url="https://github.com/trending")
         #     result = await snapshot_tool.execute()
         #     detailed["github_trending"] = result.data
-        
+
         return detailed
 
     async def _phase_editorial(
@@ -546,11 +612,11 @@ class DailyBriefWorker(BaseWorker):
         search_results: dict[str, str],
         detailed_content: dict[str, str],
         date: str,
-        notifier: Optional[Callable[[str], Any]] = None
+        notifier: Optional[Callable[[str], Any]] = None,
     ) -> str:
         """
         Phase 3: LLM synthesis of all gathered information.
-        
+
         Returns:
             Formatted markdown report
         """
@@ -558,16 +624,16 @@ class DailyBriefWorker(BaseWorker):
         context_parts = []
         for category, content in search_results.items():
             context_parts.append(f"## {category}\n{content}\n")
-        
+
         for source, content in detailed_content.items():
             context_parts.append(f"## Additional: {source}\n{content}\n")
-        
+
         full_context = "\n".join(context_parts)
-        
+
         # DEBUG: Log context before LLM call
         logger.info(f"[DEBUG] full_context length: {len(full_context)} chars")
         logger.debug(f"[DEBUG] full_context preview: {full_context[:500]}...")
-        
+
         # Truncate if too long
         if len(full_context) > 50000:
             full_context = full_context[:50000] + "\n\n[Content truncated...]"
@@ -577,12 +643,19 @@ class DailyBriefWorker(BaseWorker):
 RAW DATA:
 {full_context}
 
-Generate a well-structured report in Markdown format with:
+Generate a well-structured report in Markdown format.
+
+IMPORTANT FRESHNESS RULES:
+1. STRICTLY filter out any results that appear to be older than {date} or from previous days.
+2. Only include content published TODAY or within the last 24 hours.
+3. If a news item is from last week or last month, DO NOT include it.
+
+Report Structure:
 
 # Daily Brief - {date}
 
 ## 🔥 Today's Highlights
-(3-5 bullet points of the most important takeaways)
+(3-5 bullet points of the most important takeaways from TODAY)
 
 ## 🤖 AI/Tech News
 (Summarize the top AI and technology news with source links if available)
@@ -604,24 +677,28 @@ Be concise but informative. Focus on actionable insights."""
         try:
             logger.info(f"[DEBUG] Calling LLM with prompt length: {len(prompt)} chars")
             response = await self.llm.complete(prompt, max_tokens=3000)
-            
+
             # DEBUG: Log raw LLM response
             logger.info(f"[DEBUG] LLM response object: {type(response)}")
             logger.info(f"[DEBUG] LLM response.content type: {type(response.content)}")
-            logger.info(f"[DEBUG] LLM response.content length: {len(response.content) if response.content else 0}")
+            logger.info(
+                f"[DEBUG] LLM response.content length: {len(response.content) if response.content else 0}"
+            )
             if response.content:
-                logger.debug(f"[DEBUG] LLM response preview: {response.content[:300]}...")
-            
+                logger.debug(
+                    f"[DEBUG] LLM response preview: {response.content[:300]}..."
+                )
+
             content = response.content.strip() if response.content else ""
-            
+
             # Check if LLM returned empty content (API limit or error)
             if not content:
                 logger.warning("LLM returned empty content, using fallback report")
                 return self._build_fallback_report(date, search_results)
-            
+
             logger.info(f"LLM generated report with {len(content)} characters")
             return content
-            
+
         except Exception as e:
             logger.error(f"LLM synthesis failed: {e}")
             return self._build_fallback_report(date, search_results)
@@ -629,41 +706,44 @@ Be concise but informative. Focus on actionable insights."""
     def _build_fallback_report(self, date: str, search_results: dict[str, str]) -> str:
         """Build a fallback report from raw search results."""
         fallback_report = f"# Daily Brief - {date}\n\n"
-        fallback_report += "⚠️ *LLM synthesis unavailable, showing raw search results*\n\n"
+        fallback_report += (
+            "⚠️ *LLM synthesis unavailable, showing raw search results*\n\n"
+        )
         for category, content in search_results.items():
             fallback_report += f"## {category}\n{content}\n\n"
         return fallback_report
 
     async def _phase_delivery(
-        self,
-        report: str,
-        date: str,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, report: str, date: str, notifier: Optional[Callable[[str], Any]] = None
     ) -> str:
         """
         Phase 4: Save report to filesystem.
-        
+
         Returns:
             File path where report was saved
         """
         # DEBUG: Log report content before saving
-        logger.info(f"[DEBUG] _phase_delivery received report length: {len(report) if report else 0}")
+        logger.info(
+            f"[DEBUG] _phase_delivery received report length: {len(report) if report else 0}"
+        )
         if report:
             logger.debug(f"[DEBUG] Report preview: {report[:300]}...")
-        
+
         # Use timestamp to avoid overwriting previous reports
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"daily_brief_{timestamp}.md"
-        file_path = f"/Users/haojunliu/Easy/Projects/playground/ai_worker/reports/{filename}"
-        
+        file_path = (
+            f"/Users/haojunliu/Easy/Projects/playground/ai_worker/reports/{filename}"
+        )
+
         # Validate report content
         if not report or not report.strip():
             logger.error("Report content is empty, cannot save")
             report = f"# Daily Brief - {date}\n\n⚠️ Report generation failed - no content available."
-        
+
         saved = False
         write_tool = self._tools.get("write_file")
-        
+
         # Try MCP tool first
         if write_tool:
             try:
@@ -675,17 +755,17 @@ Be concise but informative. Focus on actionable insights."""
                     logger.warning(f"MCP write failed: {result.error}")
             except Exception as e:
                 logger.warning(f"MCP write exception: {e}")
-        
+
         # Fallback to local file write
         if not saved:
             try:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(report)
                 logger.info(f"Report saved locally to {file_path}")
                 saved = True
             except Exception as e:
                 logger.error(f"Local file write failed: {e}")
-        
+
         return file_path
 
     def _extract_summary(self, report: str) -> str:
@@ -693,7 +773,7 @@ Be concise but informative. Focus on actionable insights."""
         lines = report.split("\n")
         summary_lines = []
         in_highlights = False
-        
+
         for line in lines:
             if "Highlights" in line or "highlights" in line:
                 in_highlights = True
@@ -703,9 +783,9 @@ Be concise but informative. Focus on actionable insights."""
                     break
                 if line.strip():
                     summary_lines.append(line)
-        
+
         if summary_lines:
             return "\n".join(summary_lines[:5])  # First 5 lines max
-        
+
         # Fallback: first 500 chars
         return report[:500] + "..."

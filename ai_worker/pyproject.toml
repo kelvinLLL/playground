@@ -23,6 +23,7 @@ dependencies = [
     "playwright>=1.40.0",
     "pytdx>=1.72",
     "mcp>=0.1.0",
+    "PyGithub>=2.1.1",
 ]
 
 [project.optional-dependencies]

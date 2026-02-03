@@ -23,12 +23,17 @@ from ai_worker.tools.base import BaseTool
 from ai_worker.memory.base import BaseMemoryProvider
 
 # Skills
-from ai_worker.skills.base import BaseSkill, combine_skill_tools, combine_skill_instructions
+from ai_worker.skills.base import (
+    BaseSkill,
+    combine_skill_tools,
+    combine_skill_instructions,
+)
 from ai_worker.skills.search import SearchSkill
 from ai_worker.skills.browser import BrowserSkill
 from ai_worker.skills.realtime_intel import RealtimeIntelSkill
 from ai_worker.skills.deep_research import DeepResearchSkill
 from ai_worker.skills.local_script import LocalScriptSkill
+from ai_worker.skills.pptx import PPTXSkill
 
 logger = logging.getLogger(__name__)
 
@@ -62,17 +67,17 @@ You have access to a suite of Tools (Skills) and Specialized Workers.
 class DefaultWorker(BaseWorker):
     """
     Smart Router Worker - The "Head" of the AI Agent.
-    
+
     It is both a Router and a Capable Agent.
     - Loads common Skills (Search, Browser, etc.)
     - Routes to specialized Workers when necessary
     """
 
     def __init__(
-        self, 
-        llm: BaseLLM, 
+        self,
+        llm: BaseLLM,
         workers: Optional[dict[str, BaseWorker]] = None,
-        memory_provider: Optional[BaseMemoryProvider] = None
+        memory_provider: Optional[BaseMemoryProvider] = None,
     ):
         config = WorkerConfig(
             name="Router",
@@ -83,7 +88,7 @@ class DefaultWorker(BaseWorker):
         self.llm = llm
         self.workers = workers or {}
         self.memory = memory_provider
-        
+
         # Initialize Skills
         self.skills: List[BaseSkill] = [
             SearchSkill(),
@@ -91,14 +96,15 @@ class DefaultWorker(BaseWorker):
             RealtimeIntelSkill(),
             DeepResearchSkill(),
             LocalScriptSkill(),
+            PPTXSkill(),
         ]
-        
+
         # Load tools from skills
         self._tools = {}
         for skill in self.skills:
             for tool in skill.get_tools():
                 self._tools[tool.name] = tool
-        
+
         # Build tool definitions for LLM
         self.router_tools = self._build_router_tools()
 
@@ -111,15 +117,17 @@ class DefaultWorker(BaseWorker):
     def _build_router_tools(self) -> List[ToolDefinition]:
         """Combine Skill tools + Routing tools."""
         tools = []
-        
+
         # 1. Add tools from Skills
         for tool in self._tools.values():
-            tools.append(ToolDefinition(
-                name=tool.name,
-                description=tool.description,
-                parameters=tool.parameters
-            ))
-        
+            tools.append(
+                ToolDefinition(
+                    name=tool.name,
+                    description=tool.description,
+                    parameters=tool.parameters,
+                )
+            )
+
         # 2. Add routing tool with detailed worker descriptions
         worker_names = list(self.workers.keys())
         if worker_names:
@@ -130,39 +138,42 @@ class DefaultWorker(BaseWorker):
                 "intel": "Analyze stocks, market data, and investment opportunities",
                 "strategy": "Design and backtest quantitative trading strategies",
             }
-            
+
             # Build description with worker capabilities
-            worker_info = ", ".join([
-                f"{name}: {worker_descriptions.get(name, 'General tasks')}"
-                for name in worker_names if name != "default"
-            ])
-            
-            tools.append(ToolDefinition(
-                name="call_worker",
-                description=f"Delegate to a specialized worker. Available workers: {worker_info}",
-                parameters={
-                    "type": "object",
-                    "properties": {
-                        "worker_name": {
-                            "type": "string",
-                            "enum": [n for n in worker_names if n != "default"],
-                            "description": "Name of the specialized worker to delegate to"
+            worker_info = ", ".join(
+                [
+                    f"{name}: {worker_descriptions.get(name, 'General tasks')}"
+                    for name in worker_names
+                    if name != "default"
+                ]
+            )
+
+            tools.append(
+                ToolDefinition(
+                    name="call_worker",
+                    description=f"Delegate to a specialized worker. Available workers: {worker_info}",
+                    parameters={
+                        "type": "object",
+                        "properties": {
+                            "worker_name": {
+                                "type": "string",
+                                "enum": [n for n in worker_names if n != "default"],
+                                "description": "Name of the specialized worker to delegate to",
+                            },
+                            "task_description": {
+                                "type": "string",
+                                "description": "Specific instruction for the worker (in user's language)",
+                            },
                         },
-                        "task_description": {
-                            "type": "string",
-                            "description": "Specific instruction for the worker (in user's language)"
-                        }
+                        "required": ["worker_name", "task_description"],
                     },
-                    "required": ["worker_name", "task_description"]
-                }
-            ))
-            
+                )
+            )
+
         return tools
 
     async def process(
-        self, 
-        message: StandardMessage, 
-        notifier: Optional[Callable[[str], Any]] = None
+        self, message: StandardMessage, notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
         """Process message with Skills + Routing."""
         try:
@@ -175,37 +186,52 @@ class DefaultWorker(BaseWorker):
             )
 
     async def _route_with_llm(
-        self,
-        message: StandardMessage,
-        notifier: Optional[Callable[[str], Any]] = None
+        self, message: StandardMessage, notifier: Optional[Callable[[str], Any]] = None
     ) -> StandardResponse:
         """Use LLM to route or execute."""
-        
+
         # 1. Build System Prompt with Skill Instructions
         skill_instructions = combine_skill_instructions(self.skills)
-        system_content = f"{self.system_prompt}\n\n## Skill Instructions\n{skill_instructions}"
-        
-        user_context = message.metadata.get("user_context", "") if message.metadata else ""
+        system_content = (
+            f"{self.system_prompt}\n\n## Skill Instructions\n{skill_instructions}"
+        )
+
+        user_context = (
+            message.metadata.get("user_context", "") if message.metadata else ""
+        )
         if user_context:
             system_content += f"\n\n## User Context\n{user_context}"
-            
+
+        # Active Project Context
+        active_project = message.metadata.get("active_project")
+        if active_project:
+            system_content += f"\n\n## Active Project\nYou are actively developing: `{active_project}`.\nWhen using file tools (Read/Edit), use absolute paths or paths relative to this root if tools support it."
+
         # 1.5 RAG: Retrieve Memory
         if self.memory:
             try:
                 # Search for context relevant to the user query
                 # Use message content as query
-                mem_results = await self.memory.search(message.content, user_id=message.author.id)
+                mem_results = await self.memory.search(
+                    message.content, user_id=message.author.id
+                )
                 if mem_results:
                     mem_context = "\n".join([f"- {m.content}" for m in mem_results])
-                    system_content += f"\n\n## Long Term Memory (Related Facts)\n{mem_context}"
+                    system_content += (
+                        f"\n\n## Long Term Memory (Related Facts)\n{mem_context}"
+                    )
             except Exception as e:
                 logger.warning(f"Memory search failed: {e}")
-        
+
         # 2. Inject Context Links (for reference resolution)
-        context_links = message.metadata.get("context_links", []) if message.metadata else []
+        context_links = (
+            message.metadata.get("context_links", []) if message.metadata else []
+        )
         if context_links:
             links_section = "\n\n## Active Context (Recent Links)\n"
-            links_section += "The user may refer to these items by number or description:\n"
+            links_section += (
+                "The user may refer to these items by number or description:\n"
+            )
             for i, link in enumerate(context_links[:15], 1):  # Limit to 15
                 title = link.get("title", "Untitled")[:60]
                 url = link.get("url", "")
@@ -213,63 +239,66 @@ class DefaultWorker(BaseWorker):
             system_content += links_section
 
         messages = [Message(role="system", content=system_content)]
-        
+
         # 3. Add History
-        conversation_history = message.metadata.get("conversation_history", []) if message.metadata else []
+        conversation_history = (
+            message.metadata.get("conversation_history", []) if message.metadata else []
+        )
         for msg in conversation_history[:-1]:
             messages.append(Message(role=msg["role"], content=msg["content"]))
-        
+
         messages.append(Message(role="user", content=message.content))
 
         # 4. Agent Loop (ReAct)
         MAX_TURNS = 5
-        
+
         for turn in range(MAX_TURNS):
             # Call LLM
             llm_response = await self._call_llm_with_retry(messages)
-            
+
             # 4a. Handle Tool Calls
             if llm_response.tool_calls:
                 # Add assistant message with tool calls to history
-                messages.append(Message(
-                    role="assistant",
-                    content=llm_response.content,
-                    tool_calls=llm_response.tool_calls
-                ))
-                
+                messages.append(
+                    Message(
+                        role="assistant",
+                        content=llm_response.content,
+                        tool_calls=llm_response.tool_calls,
+                    )
+                )
+
                 # Execute first tool (simplify to 1 tool per turn for now)
                 # TODO: Support parallel tool execution
                 tool_call = llm_response.tool_calls[0]
-                
+
                 # Special Case: Delegation
                 if tool_call.name == "call_worker":
                     return await self._execute_worker_call(tool_call, message, notifier)
-                
+
                 # Execute Local Tool
                 tool_result = await self._execute_tool_internally(tool_call, notifier)
-                
+
                 # Add tool output to history
-                messages.append(Message(
-                    role="tool",
-                    content=tool_result,
-                    tool_call_id=tool_call.id
-                ))
-                
+                messages.append(
+                    Message(role="tool", content=tool_result, tool_call_id=tool_call.id)
+                )
+
                 # Continue loop to let LLM decide next step
                 continue
-                
+
             # 4b. Handle Final Response (No tools)
-            # If we have content, return it. 
+            # If we have content, return it.
             # If empty content (rare), continue or error?
             if llm_response.content:
                 return StandardResponse(
-                    content=llm_response.content,
-                    message_type=MessageType.TEXT
+                    content=llm_response.content, message_type=MessageType.TEXT
                 )
-            
+
             logger.warning(f"Empty response from LLM in turn {turn}")
-            
-        return StandardResponse(content="I hit my maximum thought limit before completing the task.")
+
+        return StandardResponse(
+            content="I hit my maximum thought limit before completing the task."
+        )
 
     async def _call_llm_with_retry(self, messages: List[Message]) -> Any:
         """Helper to call LLM with retry logic."""
@@ -281,37 +310,72 @@ class DefaultWorker(BaseWorker):
         for attempt in range(LLM_MAX_RETRIES):
             try:
                 return await self.llm.chat_with_tools(
-                    messages=messages,
-                    tools=self.router_tools,
-                    tool_choice="auto"
+                    messages=messages, tools=self.router_tools, tool_choice="auto"
                 )
             except Exception as e:
                 error_str = str(e).lower()
-                if any(k in error_str for k in ["connection", "timeout", "network", "refused"]):
+                if any(
+                    k in error_str
+                    for k in ["connection", "timeout", "network", "refused"]
+                ):
                     if attempt < LLM_MAX_RETRIES - 1:
                         await asyncio.sleep(LLM_RETRY_DELAY * (attempt + 1))
                     continue
                 raise
         raise RuntimeError("LLM call failed after retries")
 
-    async def _execute_tool_internally(
+    async def _execute_worker_call(
         self,
         tool_call: ToolCall,
-        notifier: Optional[Callable[[str], Any]] = None
+        original_message: StandardMessage,
+        notifier: Optional[Callable[[str], Any]] = None,
+    ) -> StandardResponse:
+        """Delegate to another worker."""
+        worker_name = tool_call.arguments.get("worker_name")
+        task_desc = tool_call.arguments.get(
+            "task_description", original_message.content
+        )
+
+        worker = self.workers.get(worker_name)
+        if not worker:
+            return StandardResponse(content=f"Worker '{worker_name}' not available.")
+
+        if notifier:
+            await notifier(f"🔄 Delegating to **{worker_name}**...")
+
+        logger.info(f"Delegating to worker: {worker_name}")
+
+        routed_message = StandardMessage(
+            id=original_message.id,
+            content=task_desc,
+            message_type=original_message.message_type,
+            platform=original_message.platform,
+            author=original_message.author,
+            channel=original_message.channel,
+            timestamp=original_message.timestamp,
+            raw_data=original_message.raw_data,
+            metadata=original_message.metadata,
+            attachments=original_message.attachments,
+        )
+
+        return await worker.process(routed_message, notifier=notifier)
+
+    async def _execute_tool_internally(
+        self, tool_call: ToolCall, notifier: Optional[Callable[[str], Any]] = None
     ) -> str:
         """Execute a tool and return the output string."""
         tool_name = tool_call.name
         tool_args = tool_call.arguments
-        
+
         tool = self._tools.get(tool_name)
         if not tool:
             return f"Error: Tool '{tool_name}' not found."
-        
+
         if notifier:
             await notifier(f"🔧 Using tool: **{tool_name}**...")
-            
+
         logger.info(f"Executing tool: {tool_name} args={tool_args}")
-        
+
         try:
             result = await tool.execute(**tool_args)
             if result.success:
