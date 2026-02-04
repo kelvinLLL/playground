@@ -1,0 +1,136 @@
+🚀 Starting MemU Server...
+   Host: 0.0.0.0
+   Port: 8000
+   Debug: False
+   Memory Dir: memu/server/memory
+   LLM Provider: openai
+   Embeddings: True
+
+INFO:     Started server process [30373]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.001s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.001s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/delete - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/delete
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/delete HTTP/1.1" 404 Not Found
+2026-02-03 22:02:19 | memu.server.middleware:26 | INFO | Request: POST /api/v2/memory/memorize - Client: 127.0.0.1
+2026-02-03 22:02:19 | memu.server.middleware:38 | INFO | Response: 404 - Time: 0.000s - Path: /api/v2/memory/memorize
+INFO:     127.0.0.1:52031 - "POST /api/v2/memory/memorize HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30373]

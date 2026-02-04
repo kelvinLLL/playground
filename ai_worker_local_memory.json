@@ -1,1 +1,622 @@
-{}
+{
+  "dd74052f-42be-4457-9401-47e2320d369e": {
+    "id": "dd74052f-42be-4457-9401-47e2320d369e",
+    "content": "The user's favorite color is blue.",
+    "user_id": "user_loc_ret_001",
+    "timestamp": 1770126930.648382,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "486cacd5-3e77-4b13-bc7a-06274fc2fcd6": {
+    "id": "486cacd5-3e77-4b13-bc7a-06274fc2fcd6",
+    "content": "The user lives in San Francisco.",
+    "user_id": "user_loc_ret_001",
+    "timestamp": 1770126930.6489449,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "035a2015-08a7-446d-a641-d699c556c466": {
+    "id": "035a2015-08a7-446d-a641-d699c556c466",
+    "content": "The user works as a software engineer.",
+    "user_id": "user_loc_ret_001",
+    "timestamp": 1770126930.6510358,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "85976fdd-4992-4aeb-8d5c-cf9a2be4f9da": {
+    "id": "85976fdd-4992-4aeb-8d5c-cf9a2be4f9da",
+    "content": "Shopping list: Apples, Bananas, Milk.",
+    "user_id": "user_loc_ret_002",
+    "timestamp": 1770126933.6743739,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "1c4e9ad6-1395-4137-bed3-6af6b549ea30": {
+    "id": "1c4e9ad6-1395-4137-bed3-6af6b549ea30",
+    "content": "Todo list: Walk dog, Pay bills.",
+    "user_id": "user_loc_ret_002",
+    "timestamp": 1770126933.674912,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "3de952a1-5549-4875-87fc-8c955219351d": {
+    "id": "3de952a1-5549-4875-87fc-8c955219351d",
+    "content": "Added Eggs to shopping list.",
+    "user_id": "user_loc_ret_002",
+    "timestamp": 1770126933.6754482,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "7f760e1e-9933-489e-a20f-5b90ab98d746": {
+    "id": "7f760e1e-9933-489e-a20f-5b90ab98d746",
+    "content": "My cousin's name is Vinny.",
+    "user_id": "user_loc_ret_003",
+    "timestamp": 1770126933.676588,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "b796f54f-34d9-447b-81c5-f6a163c0ec86": {
+    "id": "b796f54f-34d9-447b-81c5-f6a163c0ec86",
+    "content": "My sister's name is Sarah.",
+    "user_id": "user_loc_ret_003",
+    "timestamp": 1770126933.6770859,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "90cbe9b5-3e3d-4db2-85e9-c853556d2eaa": {
+    "id": "90cbe9b5-3e3d-4db2-85e9-c853556d2eaa",
+    "content": "My dog's name is Rover.",
+    "user_id": "user_loc_ret_003",
+    "timestamp": 1770126933.677588,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "0aad241f-495a-4a98-bc1c-1b5e2a81d3ad": {
+    "id": "0aad241f-495a-4a98-bc1c-1b5e2a81d3ad",
+    "content": "function calculateTotal(price, tax) { return price * (1 + tax); }",
+    "user_id": "user_loc_ret_004",
+    "timestamp": 1770126933.6786728,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "45772aba-0dbb-49ab-ab4e-661d0202768a": {
+    "id": "45772aba-0dbb-49ab-ab4e-661d0202768a",
+    "content": "const TAX_RATE = 0.08;",
+    "user_id": "user_loc_ret_004",
+    "timestamp": 1770126933.679158,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "0fba93fa-c631-420e-a278-15d2ef1d9860": {
+    "id": "0fba93fa-c631-420e-a278-15d2ef1d9860",
+    "content": "console.log('Starting calculation...');",
+    "user_id": "user_loc_ret_004",
+    "timestamp": 1770126933.67965,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "33272933-0d16-47a3-89c6-e8462f485195": {
+    "id": "33272933-0d16-47a3-89c6-e8462f485195",
+    "content": "User: I need help with Python.",
+    "user_id": "user_loc_ret_005",
+    "timestamp": 1770126933.680705,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "f9d97b31-70ff-440a-bbca-37e6b82ddd81": {
+    "id": "f9d97b31-70ff-440a-bbca-37e6b82ddd81",
+    "content": "Assistant: Sure, what specific library?",
+    "user_id": "user_loc_ret_005",
+    "timestamp": 1770126933.6811981,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "7649f540-f5e5-4dbd-8c90-52f511a9f612": {
+    "id": "7649f540-f5e5-4dbd-8c90-52f511a9f612",
+    "content": "User: I'm trying to use Pandas for dataframes.",
+    "user_id": "user_loc_ret_005",
+    "timestamp": 1770126933.681827,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "3c28c79e-7c9c-4a08-a5a4-888f016af686": {
+    "id": "3c28c79e-7c9c-4a08-a5a4-888f016af686",
+    "content": "User scheduled meeting for Monday 9am.",
+    "user_id": "user_loc_temp_001",
+    "timestamp": 1770126933.683156,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "70216f98-f01b-4959-8aca-4e9e54eb0fbc": {
+    "id": "70216f98-f01b-4959-8aca-4e9e54eb0fbc",
+    "content": "User rescheduled meeting to Tuesday 2pm.",
+    "user_id": "user_loc_temp_001",
+    "timestamp": 1770126933.683655,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "de75a939-38a3-46c5-a1f6-a9b188fa2b06": {
+    "id": "de75a939-38a3-46c5-a1f6-a9b188fa2b06",
+    "content": "User confirmed final time: Wednesday 10am.",
+    "user_id": "user_loc_temp_001",
+    "timestamp": 1770126933.684163,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "ede9988d-ecb5-4853-b65c-2e94fc67f1c5": {
+    "id": "ede9988d-ecb5-4853-b65c-2e94fc67f1c5",
+    "content": "I love eating pizza.",
+    "user_id": "user_loc_temp_002",
+    "timestamp": 1770126933.685235,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "e334ea7e-bf1c-483d-8f81-99c3ab8a7c48": {
+    "id": "e334ea7e-bf1c-483d-8f81-99c3ab8a7c48",
+    "content": "I'm going on a diet, no more pizza for me.",
+    "user_id": "user_loc_temp_002",
+    "timestamp": 1770126933.685725,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "4b66c08f-983c-4ef5-9618-39cc4c0e7832": {
+    "id": "4b66c08f-983c-4ef5-9618-39cc4c0e7832",
+    "content": "I prefer salads now.",
+    "user_id": "user_loc_temp_002",
+    "timestamp": 1770126933.6862268,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "21451251-a1a1-4ec9-86e5-bbf236836c0b": {
+    "id": "21451251-a1a1-4ec9-86e5-bbf236836c0b",
+    "content": "Project Alpha is in planning phase.",
+    "user_id": "user_loc_temp_003",
+    "timestamp": 1770126933.687274,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "d5191fc8-f832-42a9-ae94-9f8e46a6802d": {
+    "id": "d5191fc8-f832-42a9-ae94-9f8e46a6802d",
+    "content": "Project Alpha has moved to development.",
+    "user_id": "user_loc_temp_003",
+    "timestamp": 1770126933.6877708,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "9a42f082-da38-462d-8329-247c37da6390": {
+    "id": "9a42f082-da38-462d-8329-247c37da6390",
+    "content": "Project Alpha is now deployed to production.",
+    "user_id": "user_loc_temp_003",
+    "timestamp": 1770126933.688273,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "dafc47a7-549e-43cd-b447-b108f1252eb0": {
+    "id": "dafc47a7-549e-43cd-b447-b108f1252eb0",
+    "content": "x = 10",
+    "user_id": "user_loc_temp_004",
+    "timestamp": 1770126933.689348,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "59fbaa3e-4a88-42b2-b877-f50a22781266": {
+    "id": "59fbaa3e-4a88-42b2-b877-f50a22781266",
+    "content": "x = 20",
+    "user_id": "user_loc_temp_004",
+    "timestamp": 1770126933.689836,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "ad591716-c069-47c8-8f35-67ae36929aa8": {
+    "id": "ad591716-c069-47c8-8f35-67ae36929aa8",
+    "content": "x = x + 5",
+    "user_id": "user_loc_temp_004",
+    "timestamp": 1770126933.6903412,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "72a5868c-6e4b-41ac-832a-08d3c6b5a867": {
+    "id": "72a5868c-6e4b-41ac-832a-08d3c6b5a867",
+    "content": "User is in New York.",
+    "user_id": "user_loc_temp_005",
+    "timestamp": 1770126933.691395,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "20a41b15-1e5a-4b22-83d6-00ccd81df3d5": {
+    "id": "20a41b15-1e5a-4b22-83d6-00ccd81df3d5",
+    "content": "User flew to London.",
+    "user_id": "user_loc_temp_005",
+    "timestamp": 1770126933.691883,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "9e9ac4aa-4b19-4180-99b2-1d3a12c63ba0": {
+    "id": "9e9ac4aa-4b19-4180-99b2-1d3a12c63ba0",
+    "content": "User took a train to Paris.",
+    "user_id": "user_loc_temp_005",
+    "timestamp": 1770126933.692385,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "e9554c10-be26-42aa-b38f-c5226d38be86": {
+    "id": "e9554c10-be26-42aa-b38f-c5226d38be86",
+    "content": "2024-01-15: BGP session to AS64512 flapped 3 times. Root cause: MTU mismatch on PE-Router-01 interface Gi0/0/1.",
+    "user_id": "user_tel_001",
+    "timestamp": 1770126933.693692,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "ee8ff882-22ae-4da2-b9ff-9c36f7b6ebb7": {
+    "id": "ee8ff882-22ae-4da2-b9ff-9c36f7b6ebb7",
+    "content": "2024-02-20: Core switch CPU spike caused OSPF adjacency drops on distribution layer.",
+    "user_id": "user_tel_001",
+    "timestamp": 1770126933.694286,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "6351e36b-4417-48c8-b70e-85f838a9be47": {
+    "id": "6351e36b-4417-48c8-b70e-85f838a9be47",
+    "content": "2024-03-10: BGP session unstable after firmware upgrade on PE-Router-02. Neighbor AS64512 reported hold timer expiry.",
+    "user_id": "user_tel_001",
+    "timestamp": 1770126933.694793,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "ed09a6c4-9017-4f1c-b127-e39de2ddbe31": {
+    "id": "ed09a6c4-9017-4f1c-b127-e39de2ddbe31",
+    "content": "INC-1001: Link down on Metro-Ring-A. Cause: Fiber cut at construction site near Main St.",
+    "user_id": "user_tel_002",
+    "timestamp": 1770126933.6958961,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "353c7d2b-0647-49a6-95c1-649d207651f7": {
+    "id": "353c7d2b-0647-49a6-95c1-649d207651f7",
+    "content": "INC-1002: High bit error rate on Transponder-5. Cause: Dirty fiber connector, cleaned and resolved.",
+    "user_id": "user_tel_002",
+    "timestamp": 1770126933.696404,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "478b61ca-c73e-48b4-b9dd-1de1a99bb64f": {
+    "id": "478b61ca-c73e-48b4-b9dd-1de1a99bb64f",
+    "content": "INC-1003: Optical power low alarm on amplified span. Cause: Amplifier gain saturation.",
+    "user_id": "user_tel_002",
+    "timestamp": 1770126933.696908,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "f81dea85-d845-493c-9ea2-9b9b8ea2a356": {
+    "id": "f81dea85-d845-493c-9ea2-9b9b8ea2a356",
+    "content": "2024-04-01: Postgres DB latency spike correlated with nightly backup job running at 2 AM.",
+    "user_id": "user_tel_003",
+    "timestamp": 1770126933.698004,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "0a5b9b3e-463f-4e4d-b8e2-dd4924b4eb37": {
+    "id": "0a5b9b3e-463f-4e4d-b8e2-dd4924b4eb37",
+    "content": "2024-04-05: Web server 502 errors due to Nginx configuration syntax error.",
+    "user_id": "user_tel_003",
+    "timestamp": 1770126933.698503,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "98c43b53-d728-4a04-b86e-a546c57130fc": {
+    "id": "98c43b53-d728-4a04-b86e-a546c57130fc",
+    "content": "2024-04-10: High IO wait on DB server caused query timeouts during peak load.",
+    "user_id": "user_tel_003",
+    "timestamp": 1770126933.699008,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "a6f99524-7eff-4d8e-8266-0199a8ef4064": {
+    "id": "a6f99524-7eff-4d8e-8266-0199a8ef4064",
+    "content": "CR-500: Allowed SSH access from Mgmt-VLAN to Core-Routers.",
+    "user_id": "user_tel_004",
+    "timestamp": 1770126933.700052,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "1b831d06-718e-4830-bd11-ea6d63fab3a0": {
+    "id": "1b831d06-718e-4830-bd11-ea6d63fab3a0",
+    "content": "CR-501: Blocked ICMP on external firewall interface to mitigate ping flood.",
+    "user_id": "user_tel_004",
+    "timestamp": 1770126933.700535,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "3268fedc-1754-4fd7-bc95-592df176800a": {
+    "id": "3268fedc-1754-4fd7-bc95-592df176800a",
+    "content": "INC-2001: Monitoring system lost reachability to DMZ hosts after CR-501.",
+    "user_id": "user_tel_004",
+    "timestamp": 1770126933.7010188,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "ec2d44ef-b06d-47d6-bf93-c524867d7716": {
+    "id": "ec2d44ef-b06d-47d6-bf93-c524867d7716",
+    "content": "Log: Interface Te0/0/1 changed state to down.",
+    "user_id": "user_tel_005",
+    "timestamp": 1770126933.702101,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "51df004d-455a-4768-9a20-93758bbb0d06": {
+    "id": "51df004d-455a-4768-9a20-93758bbb0d06",
+    "content": "Log: Interface Te0/0/1 changed state to up.",
+    "user_id": "user_tel_005",
+    "timestamp": 1770126933.7025878,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "de4c727d-f624-4349-a92d-1c1d294cb723": {
+    "id": "de4c727d-f624-4349-a92d-1c1d294cb723",
+    "content": "Log: Interface Te0/0/1 changed state to down.",
+    "user_id": "user_tel_005",
+    "timestamp": 1770126933.7030761,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "5273139e-0044-47e3-99ff-9e5827decb32": {
+    "id": "5273139e-0044-47e3-99ff-9e5827decb32",
+    "content": "Log: Interface Te0/0/1 changed state to up.",
+    "user_id": "user_tel_005",
+    "timestamp": 1770126933.703688,
+    "metadata": {
+      "original_id": "m4"
+    },
+    "memory_type": "long_term"
+  },
+  "1ca2177a-df97-417f-9247-a07b40a92c13": {
+    "id": "1ca2177a-df97-417f-9247-a07b40a92c13",
+    "content": "MW-300: Upgrade Core-Switch-A firmware on Saturday 23:00-04:00.",
+    "user_id": "user_tel_006",
+    "timestamp": 1770126933.70491,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "919484a8-0246-4203-b532-ab9a33f52c59": {
+    "id": "919484a8-0246-4203-b532-ab9a33f52c59",
+    "content": "MW-301: Replace line card on Edge-Router-B on Sunday 01:00-03:00.",
+    "user_id": "user_tel_006",
+    "timestamp": 1770126933.7054179,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "0dc08289-7e21-4ff9-b719-7b7da69bd7cf": {
+    "id": "0dc08289-7e21-4ff9-b719-7b7da69bd7cf",
+    "content": "Policy: No redundant path maintenance allowed simultaneously.",
+    "user_id": "user_tel_006",
+    "timestamp": 1770126933.705927,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "19fa49e4-14a1-4381-a89b-7a86ff137230": {
+    "id": "19fa49e4-14a1-4381-a89b-7a86ff137230",
+    "content": "Cust-A VPN: Peer 1.1.1.1, PSK 'secret123', Phase 2 AES-256.",
+    "user_id": "user_tel_007",
+    "timestamp": 1770126933.7072058,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "dd10026d-2091-47f1-8ae3-9ccf7a1e81ec": {
+    "id": "dd10026d-2091-47f1-8ae3-9ccf7a1e81ec",
+    "content": "Cust-B VPN: Peer 2.2.2.2, PSK 'secure456', Phase 2 AES-128.",
+    "user_id": "user_tel_007",
+    "timestamp": 1770126933.7076979,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "c0cda7a9-1302-4b60-89e2-518722cd1edf": {
+    "id": "c0cda7a9-1302-4b60-89e2-518722cd1edf",
+    "content": "Cust-A requested change: Updated Phase 2 to AES-GCM on ticket #999.",
+    "user_id": "user_tel_007",
+    "timestamp": 1770126933.708205,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "5a1af4dd-b90e-49e7-89df-663489551bc2": {
+    "id": "5a1af4dd-b90e-49e7-89df-663489551bc2",
+    "content": "Server-01 uptime: 45 days.",
+    "user_id": "user_tel_008",
+    "timestamp": 1770126933.709764,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "27ad903a-3de4-4f86-9254-45fc26f7f73a": {
+    "id": "27ad903a-3de4-4f86-9254-45fc26f7f73a",
+    "content": "Server-02 rebooted unexpectedly at 03:15 UTC due to kernel panic.",
+    "user_id": "user_tel_008",
+    "timestamp": 1770126933.7102568,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "d2b12d60-3ed5-457d-bc69-bf23746fc2d3": {
+    "id": "d2b12d60-3ed5-457d-bc69-bf23746fc2d3",
+    "content": "Server-03 rebooted for scheduled patch at 04:00 UTC.",
+    "user_id": "user_tel_008",
+    "timestamp": 1770126933.710763,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "4e8ee975-c0cb-468c-968d-35fd6a72fe44": {
+    "id": "4e8ee975-c0cb-468c-968d-35fd6a72fe44",
+    "content": "DHCP Log: Assigned 192.168.1.50 to MAC AA:BB:CC:00:01.",
+    "user_id": "user_tel_009",
+    "timestamp": 1770126933.711818,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "3888fad0-76dc-4874-93c1-c8666667b6b4": {
+    "id": "3888fad0-76dc-4874-93c1-c8666667b6b4",
+    "content": "Syslog: Duplicate IP 192.168.1.50 detected from source MAC AA:BB:CC:00:02.",
+    "user_id": "user_tel_009",
+    "timestamp": 1770126933.7123148,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "91364b3d-5081-4ae9-bb14-4a8e72cc821c": {
+    "id": "91364b3d-5081-4ae9-bb14-4a8e72cc821c",
+    "content": "Static Assignment: Printer-01 configured with static IP 192.168.1.50.",
+    "user_id": "user_tel_009",
+    "timestamp": 1770126933.712808,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "8f4ebe81-b821-4fc0-91ff-99e04aa06908": {
+    "id": "8f4ebe81-b821-4fc0-91ff-99e04aa06908",
+    "content": "Service 'Web-Frontend' depends on 'Auth-Service'.",
+    "user_id": "user_tel_010",
+    "timestamp": 1770126933.713872,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  },
+  "634b3326-82a7-452b-9eed-633b181647ac": {
+    "id": "634b3326-82a7-452b-9eed-633b181647ac",
+    "content": "Service 'Auth-Service' depends on 'User-DB'.",
+    "user_id": "user_tel_010",
+    "timestamp": 1770126933.714755,
+    "metadata": {
+      "original_id": "m2"
+    },
+    "memory_type": "long_term"
+  },
+  "402327dd-a1f5-4b4b-b0b7-219f7489e7d2": {
+    "id": "402327dd-a1f5-4b4b-b0b7-219f7489e7d2",
+    "content": "Service 'User-DB' is currently degraded due to high disk usage.",
+    "user_id": "user_tel_010",
+    "timestamp": 1770126933.715256,
+    "metadata": {
+      "original_id": "m3"
+    },
+    "memory_type": "long_term"
+  },
+  "bf96fadd-df43-4bfe-9402-b5d86f637985": {
+    "id": "bf96fadd-df43-4bfe-9402-b5d86f637985",
+    "content": "The project deadline is October 15th.",
+    "user_id": "user_tiny_001",
+    "timestamp": 1770137938.323782,
+    "metadata": {
+      "original_id": "m1"
+    },
+    "memory_type": "long_term"
+  }
+}

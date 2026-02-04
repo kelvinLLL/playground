@@ -1,0 +1,1 @@
+{"id": "tiny_001", "name": "Single Fact Retrieval", "memories": [{"id": "m1", "content": "The project deadline is October 15th."}], "query": "When is the project deadline?", "relevant_ids": ["m1"], "category": "retrieval"}
